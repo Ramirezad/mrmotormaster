@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Vehicle Information</title>
+</head>
+<body>
+    <h2>Vehicle Added to the Database</h2>
+    <p>Number Plate: <span th:text="${vehicle.numberPlate}"></span></p>
+    <p>Brand: <span th:text="${vehicle.brand}"></span></p>
+    <p>Model: <span th:text="${vehicle.model}"></span></p>
+    <p>Color: <span th:text="${vehicle.color}"></span></p>
+    <p>Fabrication Year: <span th:text="${vehicle.fabricationYear}"></span></p>
+    <p>Km: <span th:text="${vehicle.km}"></span></p>
+</body>
+</html>

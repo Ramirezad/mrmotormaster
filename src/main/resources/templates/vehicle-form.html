@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Vehicle Information</title>
+    </head>
+    <body>
+        <h2>Add Vehicle</h2>
+        <form th:object="${vehicle}" th:action="@{/vehicle}" method="post">
+
+            
+
+            <label for="numberPlate">Number Plate:</label>
+            <input type="text" id="numberPlate" th:field="*{numberPlate}" required>
+            <br>
+
+            <label for="brand">Brand:</label>
+            <input type="text" id="brand" th:field="*{brand}" required>
+            <br>
+
+            <label for="model">Model:</label>
+            <input type="text" id="pmodel" th:field="*{model}" required>
+            <br>
+
+            <label for="color">Color:</label>
+            <input type="text" id="color" th:field="*{color}" >
+            <br>
+            
+            <label for="fabricationYear">FabricationYear</label>
+            <input type="text" id="fabricationYear" th:field="*{fabricationYear}" >
+           <br>
+            <label for="km">Km</label>
+            <input type="text" id="km" th:field="*{km}" >
+           <br>
+
+            <button type="submit">Submit</button>
+        </form>
+    </body>
+</html>

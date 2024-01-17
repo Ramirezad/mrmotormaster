@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Vehicle Details</title>
+</head>
+<body>
+    <h2>Vehicle Details</h2>
+
+    <dl>
+        <dt>Number Plate:</dt>
+        <dd th:text="${vehicle.numberPlate}"></dd>
+
+        <dt>Brand:</dt>
+        <dd th:text="${vehicle.brand}"></dd>
+
+        <dt>Model:</dt>
+        <dd th:text="${vehicle.model}"></dd>
+
+        <dt>Color:</dt>
+        <dd th:text="${vehicle.color}"></dd>
+
+        <dt>Fabrication Year:</dt>
+        <dd th:text="${vehicle.fabricationYear}"></dd>
+
+        <dt>Km:</dt>
+        <dd th:text="${vehicle.km}"></dd>
+    </dl>
+
+    <!-- Enlaces de Update y Delete -->
+    <p>
+        <a th:href="@{'/update/' + ${vehicle.numberPlate}}">Update</a>
+        <a th:href="@{'/delete/' + ${vehicle.numberPlate}}" onclick="return confirm('Are you sure to delete this vehicle?');">Delete</a>
+    </p>
+</body>
+</html>

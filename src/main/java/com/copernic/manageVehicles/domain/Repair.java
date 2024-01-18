@@ -13,12 +13,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.Set;
+import lombok.Data;
 
 /**
  *
  * @author enricledo
  */
-
+@Data
 @Entity
 @Table(name = "repair")
 public class Repair {

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Generar PDF</title>
+</head>
+<body>
+    <h2>Generar PDF</h2>
+    <p>¡Hola, <span th:text="${nombre}"></span> !Haz Click en el Boton Para Generar tu Orden Reparación</p>
+
+    <!-- Agregar un botón de descarga -->
+    <form th:action="@{/generate-pdf}" method="get">
+        <button type="submit">Descargar PDF</button>
+    </form>
+</body>
+</html>

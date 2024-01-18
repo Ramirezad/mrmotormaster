@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lista de Usuarios</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Usuarios</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>NIF</th>
+                    <th>Name</th>
+                    <th>Surname</th>
+                    <th>Role</th>
+                    <th>Details</th>
+                    <!-- Añade más columnas según los atributos de tu clase User -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.nif}"></td>
+                    <td th:text="${user.name}"></td>
+                    <td th:text="${user.surname}"></td>
+                    <td th:text="${user.cargo}"></td>
+<!--                    <td th:href="${user.surname}"></td>-->
+                    <!-- Asegúrate de cambiar los nombres de los atributos a los de tu clase User -->
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

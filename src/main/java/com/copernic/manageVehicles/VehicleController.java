@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import com.copernic.manageVehicles.dao.VehicleDAO;
 import com.copernic.manageVehicles.services.VehicleService;
 import org.springframework.web.bind.annotation.PathVariable;
 

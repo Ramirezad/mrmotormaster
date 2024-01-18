@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.copernic.manageVehicles.dao.VehicleDAO;
 import com.copernic.manageVehicles.services.VehicleService;
+import com.copernic.manageVehicles.services.VehicleServiceImpl;
 import org.springframework.web.bind.annotation.PathVariable;
 
 /**
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class VehicleController {
 
     @Autowired
-    private VehicleService vehicleService;
+    private VehicleServiceImpl vehicleService;
     
     //UPDATE VEHICLE
     @GetMapping("/update/{numberPlate}")

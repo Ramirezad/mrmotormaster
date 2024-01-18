@@ -30,20 +30,20 @@ public class WorkerController {
     public String update(User user, Model model) {
         user = userService.find(user);
         model.addAttribute("user", user);
-        return "user-update";  
+        return "user-edit";  
     }
     
     //SHOW FORM User
-    @GetMapping("/user")
+    @GetMapping("/user/{nif}")
     public String showForm(User user) {
-        return "vehicle-form";
+        return "user-details";
     }
 
     //SUMBIT FORM User
     @PostMapping("/user")
     public String submitForm(User user, Model model) {
         userService.save(user);
-        return "redirect:/vehicles";    
+        return "redirect:/users";    
     }
     //LIST Users
     @GetMapping("/users")
@@ -56,7 +56,7 @@ public class WorkerController {
     @GetMapping("/delete/{nif}")
     public String delete(@PathVariable("numberPlate") String nif) {
         userService.deleteById(nif);
-        return "redirect:/vehicles";
+        return "redirect:/users";
     }
     //VIEW User
     @GetMapping("/view/{nif}")
@@ -64,8 +64,8 @@ public class WorkerController {
         User user = new User();
         user.setNif(nif);
         user = userService.find(user);
-            model.addAttribute("vehicle", user);
-            return "vehicle-details";
+            model.addAttribute("user", user);
+            return "user-details";
        
     }
 }

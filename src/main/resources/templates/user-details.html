@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detalles del Usuario y Vehículo</title>
+</head>
+<body>
+    <h1>Detalles del Usuario</h1>
+    <p>Nombre: ${user.name}</p>
+    <p>NIF: ${user.nif}</p>
+    <p>Teléfono: ${user.phone}</p>
+    <p>Correo Electrónico: ${user.email}</p>
+    <a href="/user-edit" th:if="${user.role} == 'admin'">Editar Usuario</a>
+
+    <h2>Detalles del Vehículo</h2>
+    <table>
+        <tr>
+            <th>Number Plate</th>
+            <th>Brand</th>
+            <th>Model</th>
+            <th>Color</th>            
+            <th>KM</th>
+            <th>History</th>
+        </tr>
+        <tr>
+            <td>${vehicle.numberPlate}</td>
+            <td>${vehicle.brand}</td>
+            <td>${vehicle.model}</td>
+            <td>${vehicle.color}</td>            
+            <td>${vehicle.km}</td>
+            <td th:href="/vehicle-details">VIEW</td>
+        </tr>
+    </table>
+     <a href="/vehicle-form" th:if="${user.role} == 'admin'">Add New Vehicle</a>
+     <a href="/delete/${user.nif}" th:if="${user.role} == 'admin'">Delete 🗑️</a>
+</body>
+</html>

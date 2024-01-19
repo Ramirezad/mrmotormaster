@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Repair List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+<div class="container text-center mt-5">
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <a class="btn btn-info" th:href="@{/repair-form}">Create repair</a> 
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Observation</th>
+                    <th scope="col">Km</th>
+                    <th scope="col">Repair Date</th>
+                    <th scope="col">Vehicle</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each = "repair: ${repairs}">
+                    <th scope="row" th:text="${repair.repairId}"></th>
+                    <td th:text="${repair.observation}"></td>
+                    <td th:text="${repair.km}"></td>
+                    <td th:text="${repair.repairDate}"></td>
+                    <td th:text="${repair.vehicle.numberPlate}"></td>
+                    <td>
+                        <a class="btn btn-primary" th:href="@{/repairs/view/{id}(id=${repair.repairId})}">View</a>
+                        <a class="btn btn-success" th:href="@{/repairs/edit/{id}(id=${repair.repairId})}">Edit</a>
+                        <a class="btn btn-danger" th:href="@{/repairs/delete/{id}(id=${repair.repairId})}">Delete</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-2"></div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>
+

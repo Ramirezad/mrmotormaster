@@ -26,7 +26,7 @@ public class VehicleController {
     private VehicleServiceImpl vehicleService;
     
     //UPDATE VEHICLE
-    @GetMapping("/update/{numberPlate}")
+    @GetMapping("/updateVehicle/{numberPlate}")
     public String update(Vehicle vehicle, Model model) {
         vehicle = vehicleService.findVehicle(vehicle);
         model.addAttribute("vehicle", vehicle);
@@ -53,13 +53,13 @@ public class VehicleController {
         return "vehicle-list";
     }
     //DELETE VEHICLE
-    @GetMapping("/delete/{numberPlate}")
+    @GetMapping("/deleteVehicle/{numberPlate}")
     public String delete(@PathVariable("numberPlate") String numberPlate) {
         vehicleService.deleteVehicleById(numberPlate);
         return "redirect:/vehicles";
     }
     //VIEW VEHICLE
-    @GetMapping("/view/{numberPlate}")
+    @GetMapping("/viewVehicle/{numberPlate}")
     public String viewVehicle(@PathVariable("numberPlate") String numberPlate, Model model) {
         Vehicle vehicle = new Vehicle();
         vehicle.setNumberPlate(numberPlate);

@@ -10,8 +10,7 @@
         <h2>Add Vehicle</h2>
         <form th:object="${vehicle}" th:action="@{/vehicle}" method="post">
 
-            
-
+     
             <label class="form-label" for="numberPlate">Number Plate:</label>
             <input class="form-control"type="text" id="numberPlate" th:field="*{numberPlate}" required>
             <br>
@@ -29,10 +28,10 @@
             <br>
             
             <label class="form-label" for="fabricationYear">FabricationYear</label>
-            <input class="form-control" type="text" id="fabricationYear" th:field="*{fabricationYear}" >
+            <input class="form-control" type="number" id="fabricationYear" th:field="*{fabricationYear}" >
            <br>
             <label class="form-label" for="km">Km</label>
-            <input class="form-control"type="text" id="km" th:field="*{km}" >
+            <input class="form-control"type="number" id="km" th:field="*{km}" >
            <br>
 
             <button class="btn btn-primary"  type="submit">Submit</button>

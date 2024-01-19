@@ -5,6 +5,7 @@
 package com.copernic.manageVehicles;
 
 import com.copernic.manageVehicles.domain.User;
+import com.copernic.manageVehicles.domain.Vehicle;
 import com.copernic.manageVehicles.services.UserServiceImpl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,31 +21,39 @@ import org.springframework.web.bind.annotation.PathVariable;
  * @author rfernandez
  */
 @Controller
-public class WorkerController {
+public class UserController {
 
     @Autowired
     private UserServiceImpl userService;
-    
+
     //UPDATE User
     @GetMapping("/update/{nif}")
     public String update(User user, Model model) {
         user = userService.find(user);
         model.addAttribute("user", user);
-        return "user-edit";  
+        return "user-edit";
+    }
+
+    //SHOW FORM User
+    @GetMapping("/user/{nif}")
+    public String viewById(User user) {
+        return "user-details";
     }
     
     //SHOW FORM User
-    @GetMapping("/user/{nif}")
-    public String showForm(User user) {
-        return "user-details";
+    @GetMapping("/signin")
+    public String showRegistrationForm(Model model) {
+        model.addAttribute("user", new User());
+        return "sign-in";
     }
 
     //SUMBIT FORM User
-    @PostMapping("/user")
-    public String submitForm(User user, Model model) {
+    @PostMapping("/signin")
+    public String submitUser(User user, Model model) {
         userService.save(user);
-        return "redirect:/users";    
+        return "redirect:/users";
     }
+
     //LIST Users
     @GetMapping("/users")
     public String listUsers(Model model) {
@@ -52,23 +61,24 @@ public class WorkerController {
         model.addAttribute("users", users);
         return "user-list";
     }
+
     //DELETE User
     @GetMapping("/delete/{nif}")
     public String delete(@PathVariable("numberPlate") String nif) {
         userService.deleteById(nif);
         return "redirect:/users";
     }
+
     //VIEW User
-    @GetMapping("/view/{nif}")
-    public String viewVehicle(@PathVariable("nif") String nif, Model model) {
+    @GetMapping("/users/{nif}")
+    public String viewUser(@PathVariable("nif") String nif, Model model) {
         User user = new User();
         user.setNif(nif);
         user = userService.find(user);
-            model.addAttribute("user", user);
-            return "user-details";
-       
+        List<Vehicle> vehicles = user.getVehicles();        
+        model.addAttribute("user", user);  
+        model.addAttribute("vehicles", vehicles);
+        return "user-details";
+
     }
 }
-  
-
-

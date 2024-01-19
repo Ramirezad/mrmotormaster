@@ -10,9 +10,9 @@
     <h1>Mr. Motor Master</h1>
     <p><a href="/login">Tengo una cuenta</a></p>
     <h2>Nuevo usuario</h2>
-    <form action="#" th:action="@{/signin}" th:object="${user}" method="post">
+    <form th:action="@{/signin}" th:object="${user}" method="post">
         <label for="dni">DNI:</label><br>
-        <input type="text" id="dni" th:field="*{dni}"><br>
+        <input type="text" id="nif" th:field="*{nif}"><br>
         <label for="name">Nombre:</label><br>
         <input type="text" id="name" th:field="*{name}"><br>
         <label for="surname">Apellido:</label><br>

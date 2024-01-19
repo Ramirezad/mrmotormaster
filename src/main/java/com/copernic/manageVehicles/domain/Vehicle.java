@@ -11,6 +11,7 @@ package com.copernic.manageVehicles.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -27,4 +28,6 @@ public class Vehicle {
     private String color;
     private int fabricationYear;
     private int km;
+    @ManyToOne
+    private User owner;
 }

@@ -1,15 +1,15 @@
+
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Detalles del Usuario y Vehículo</title>
 </head>
 <body>
     <h1>Detalles del Usuario</h1>
-    <p>Nombre: ${user.name}</p>
-    <p>NIF: ${user.nif}</p>
-    <p>Teléfono: ${user.phone}</p>
-    <p>Correo Electrónico: ${user.email}</p>
-    <a href="/user-edit" th:if="${user.role} == 'admin'">Editar Usuario</a>
+    <p th:text="${user.name}">Nombre: </p>
+    <p th:text="${user.nif}">NIF: </p>
+    <p th:text="${user.phone}">Teléfono:</p>
+    <p th:text="${user.email}">Correo Electrónico: </p>
 
     <h2>Detalles del Vehículo</h2>
     <table>
@@ -21,16 +21,18 @@
             <th>KM</th>
             <th>History</th>
         </tr>
-        <tr>
-            <td>${vehicle.numberPlate}</td>
-            <td>${vehicle.brand}</td>
-            <td>${vehicle.model}</td>
-            <td>${vehicle.color}</td>            
-            <td>${vehicle.km}</td>
-            <td th:href="/vehicle-details">VIEW</td>
+        <tr th:each="vehicle : ${vehicles}">
+            <td th:text="${vehicle.numberPlate}"></td>
+            <td th:text="${vehicle.brand}"></td>
+            <td th:text="${vehicle.model}"></td>
+            <td th:text="${vehicle.color}"></td>            
+            <td th:text="${vehicle.km}"></td>
+            <td>
+                <a th:href="@{'/view/' + ${vehicle.numberPlate}}">
+                    <button type="button">VIEW</button>
+                </a>
+            </td>
         </tr>
     </table>
-     <a href="/vehicle-form" th:if="${user.role} == 'admin'">Add New Vehicle</a>
-     <a href="/delete/${user.nif}" th:if="${user.role} == 'admin'">Delete 🗑️</a>
 </body>
 </html>

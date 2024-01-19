@@ -24,7 +24,11 @@
                     <td th:text="${user.name}"></td>
                     <td th:text="${user.surname}"></td>
                     <td th:text="${user.cargo}"></td>
-                    <td th:href="/user-details">VIEW</td>
+                    <td>
+                        <a th:href="@{/users/{nif}(nif=${user.nif})}">
+                            <button type="button">VIEW</button>
+                        </a>
+                    </td>
                     <!-- Asegúrate de cambiar los nombres de los atributos a los de tu clase User -->
                 </tr>
             </tbody>

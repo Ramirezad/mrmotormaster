@@ -16,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import lombok.Data;
 
 
@@ -34,4 +35,6 @@ public class User {
     private int phone;
     private String email;
     private String cargo;
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Vehicle> vehicles;
 }

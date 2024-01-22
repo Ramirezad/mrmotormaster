@@ -46,6 +46,7 @@ public class VehicleServiceImpl implements VehicleService {
     }
     @Override
 
+
     public List<Vehicle> findByOwner(User owner){
        return vehicleDAO.findByOwner(owner);
     }
@@ -53,6 +54,9 @@ public class VehicleServiceImpl implements VehicleService {
     public boolean existsById(String numberPlate) {
         return vehicleDAO.existsById(numberPlate);
     }
+
+
+  
 
 
 }

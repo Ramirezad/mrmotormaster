@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Repair</title>
+</head>
+<body>
+    <h2>Edit Form</h2>
+    <form action="#" th:action="@{/repairs}" th:object="${repair}" method="post">
+        <input type="hidden" th:field="*{repairId}" />
+        
+        <label for="observation">Observations:</label>
+        <input type="text" th:field="*{observation}" required />
+
+        <label for="km">Kilometers:</label>
+        <input type="number" th:field="*{km}" required />
+
+        <label for="repairDate">Repair Date:</label>
+        <input type="date" th:field="*{repairDate}" required />
+
+        <button type="submit">Update Repair</button>
+    </form>
+</body>
+</html>
+

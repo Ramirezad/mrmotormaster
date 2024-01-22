@@ -46,13 +46,14 @@ public class VehicleController {
     
     // SUMBIT FORM VEHICLE
     @PostMapping("/vehicle")
+
     public String submitForm(Vehicle vehicle, Model model) {
         User user = userService.findByNif(vehicle.getOwner().getNif());
         vehicle.setOwner(user);
         vehicleService.saveVehicle(vehicle);
         return "redirect:/vehicles";    
-
     }
+
     public String submitForm(@Valid Vehicle vehicle, BindingResult result, Model model) {
         // Antes de guardar, verifica si el vehículo ya existe
          if (vehicleService.existsById(vehicle.getNumberPlate())) {
@@ -64,7 +65,10 @@ public class VehicleController {
             model.addAttribute("alertMessage", "La matrícula ya existe. No se pudo agregar el vehículo.");
         }
         return "redirect:/vehicles?successMessage=Vehículo agregado exitosamente.\"" ;
+
     }
+
+    
     
     //SHOW USER'S VEHICLES
     @GetMapping("/vehicle/{nif}")
@@ -75,6 +79,9 @@ public class VehicleController {
         model.addAttribute("vehicle", vehicle);
         return "vehicle-form";
     }
+    
+
+
     
 
     //LIST VEHICLES

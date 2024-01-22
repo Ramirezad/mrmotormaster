@@ -12,8 +12,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
-import java.util.Set;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -29,6 +29,8 @@ public class Repair {
 
     private String observation;
     private int km;
+    
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate repairDate;
     
     @ManyToOne

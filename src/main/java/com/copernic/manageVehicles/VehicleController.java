@@ -11,13 +11,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import com.copernic.manageVehicles.services.VehicleService;
 import com.copernic.manageVehicles.services.VehicleServiceImpl;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  *
- * @author Albert Grau
+ * @author rfernandez
  */
 @Controller
 public class VehicleController {
@@ -39,12 +40,21 @@ public class VehicleController {
         return "vehicle-form";
     }
     
-    //SUMBIT FORM VEHICLE
+    // SUMBIT FORM VEHICLE
     @PostMapping("/vehicle")
-    public String submitForm(Vehicle vehicle, Model model) {
-        vehicleService.saveVehicle(vehicle);
-        return "redirect:/vehicles";    
+    public String submitForm(@Valid Vehicle vehicle, BindingResult result, Model model) {
+        // Antes de guardar, verifica si el vehículo ya existe
+         if (vehicleService.existsById(vehicle.getNumberPlate())) {
+            model.addAttribute("alertMessage", "La matrícula ya existe. No se pudo agregar el vehículo.");
+        } else {
+            // Manejar la lógica de vehículo existente
+            // Agregar mensaje de alerta flash
+            vehicleService.saveVehicle(vehicle);
+            model.addAttribute("alertMessage", "La matrícula ya existe. No se pudo agregar el vehículo.");
+        }
+        return "redirect:/vehicles?successMessage=Vehículo agregado exitosamente.\"" ;
     }
+    
     //LIST VEHICLES
     @GetMapping("/vehicles")
     public String listVehicle(Model model) {

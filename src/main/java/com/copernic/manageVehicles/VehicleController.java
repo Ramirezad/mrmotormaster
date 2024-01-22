@@ -11,13 +11,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import com.copernic.manageVehicles.services.VehicleService;
 import com.copernic.manageVehicles.services.VehicleServiceImpl;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  *
- * @author Albert Grau
+ * @author rfernandez
  */
 @Controller
 public class VehicleController {
@@ -39,11 +40,16 @@ public class VehicleController {
         return "vehicle-form";
     }
     
-    //SUMBIT FORM VEHICLE
+    // SUMBIT FORM VEHICLE
     @PostMapping("/vehicle")
-    public String submitForm(Vehicle vehicle, Model model) {
+    public String submitForm(@Valid Vehicle vehicle, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            // Si hay errores de validación, regresa a la página del formulario
+            return "vehicle-form";
+        }
+
         vehicleService.saveVehicle(vehicle);
-        return "redirect:/vehicles";    
+        return "redirect:/vehicles";
     }
     //LIST VEHICLES
     @GetMapping("/vehicles")

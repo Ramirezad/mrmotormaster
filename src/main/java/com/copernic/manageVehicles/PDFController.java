@@ -1,4 +1,5 @@
 package com.copernic.manageVehicles;
+import com.copernic.manageVehicles.services.EmailService;
 import com.lowagie.text.DocumentException;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
@@ -9,17 +10,21 @@ import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.pdfbox.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 @Controller
 public class PDFController {
+    
+     // Autowired para inyectar el servicio de correo electrónico
+    @Autowired
+    private EmailService emailService;
+
     // Datos dinámicos
     String nombre = "Usuario + ID Reparacion"; // O puedes obtenerlo dinámicamente
     
@@ -60,9 +65,20 @@ public class PDFController {
         // Configurar la respuesta HTTP
         response.setContentType(MediaType.APPLICATION_PDF_VALUE);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Repair " + nombre + ".pdf");
-
+        
+        //Enviar por email
+        sendPdfByEmail(byteArrayOutputStream.toByteArray());
         // Devolver el arreglo de bytes
         return byteArrayOutputStream.toByteArray();
+        }
+    }
+    
+   // Método para enviar el PDF por correo electrónico
+    private void sendPdfByEmail(byte[] pdfBytes) {
+        try {
+            emailService.sendPdfByEmail("raulfer2017@gmail.com", pdfBytes);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

@@ -43,14 +43,18 @@ public class VehicleController {
     // SUMBIT FORM VEHICLE
     @PostMapping("/vehicle")
     public String submitForm(@Valid Vehicle vehicle, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            // Si hay errores de validación, regresa a la página del formulario
-            return "vehicle-form";
+        // Antes de guardar, verifica si el vehículo ya existe
+         if (vehicleService.existsById(vehicle.getNumberPlate())) {
+            model.addAttribute("alertMessage", "La matrícula ya existe. No se pudo agregar el vehículo.");
+        } else {
+            // Manejar la lógica de vehículo existente
+            // Agregar mensaje de alerta flash
+            vehicleService.saveVehicle(vehicle);
+            model.addAttribute("alertMessage", "La matrícula ya existe. No se pudo agregar el vehículo.");
         }
-
-        vehicleService.saveVehicle(vehicle);
-        return "redirect:/vehicles";
+        return "redirect:/vehicles?successMessage=Vehículo agregado exitosamente.\"" ;
     }
+    
     //LIST VEHICLES
     @GetMapping("/vehicles")
     public String listVehicle(Model model) {

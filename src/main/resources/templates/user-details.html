@@ -1,38 +1,53 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Detalles del Usuario y Vehículo</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
-<body>
-    <h1>Detalles del Usuario</h1>
-    <p th:text="${user.name}">Nombre: </p>
-    <p th:text="${user.nif}">NIF: </p>
-    <p th:text="${user.phone}">Teléfono:</p>
-    <p th:text="${user.email}">Correo Electrónico: </p>
+<body class="container">
+    <h1 class="my-4">Detalles del Usuario</h1>
 
+    <!-- User Details -->
+    <div class="mb-4">
+        <p th:text="${user.name}">Nombre: </p>
+        <p th:text="${user.nif}">NIF: </p>
+        <p th:text="${user.phone}">Teléfono:</p>
+        <p th:text="${user.email}">Correo Electrónico: </p>
+
+        <!-- Buttons -->
+        <a th:href="@{/deleteUser/{nif}(nif=${user.nif})}" class="btn btn-danger mr-2">DELETE</a>
+        <a th:href="@{/updateUser/{nif}(nif=${user.nif})}" class="btn btn-warning">EDIT</a>
+    </div>
+
+    <!-- Vehicle Details -->
     <h2>Detalles del Vehículo</h2>
-    <table>
+
+    <!-- Table -->
+    <table class="table"    >
         <tr>
             <th>Number Plate</th>
             <th>Brand</th>
             <th>Model</th>
-            <th>Color</th>            
-            <th>KM</th>
-            <th>History</th>
+            <th>Color</th>
+            <th>FabricationYear</th>
+            <th>Km</th>
         </tr>
         <tr th:each="vehicle : ${vehicles}">
+            
             <td th:text="${vehicle.numberPlate}"></td>
             <td th:text="${vehicle.brand}"></td>
             <td th:text="${vehicle.model}"></td>
-            <td th:text="${vehicle.color}"></td>            
+            <td th:text="${vehicle.color}"></td>
+            <td th:text="${vehicle.fabricationYear}"></td>
             <td th:text="${vehicle.km}"></td>
             <td>
-                <a th:href="@{'/view/' + ${vehicle.numberPlate}}">
-                    <button type="button">VIEW</button>
-                </a>
+                <a class="btn btn-primary" th:href="@{'/view/' + ${vehicle.numberPlate}}">View</a>
             </td>
         </tr>
+      
     </table>
+
+    <!-- Add New Vehicle Button -->
+    <a th:href="@{/vehicle/{nif}(nif=${user.nif})}" class="btn btn-success">ADD NEW VEHICLE</a>
 </body>
 </html>

@@ -2,16 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Mr. Motor Master - Inicio de Sesión</title>
-    <style>
-        /* Aquí puedes agregar tu CSS */
-    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
     <h1>Mr. Motor Master</h1>
     <p><a href="/login">Tengo una cuenta</a></p>
     <h2>Nuevo usuario</h2>
-    <form th:action="@{/signin}" th:object="${user}" method="post">
-        <label for="dni">DNI:</label><br>
+    <form th:action="@{/user}" th:object="${user}" method="post">
+        <label for="nif">NIF:</label><br>
         <input type="text" id="nif" th:field="*{nif}"><br>
         <label for="name">Nombre:</label><br>
         <input type="text" id="name" th:field="*{name}"><br>

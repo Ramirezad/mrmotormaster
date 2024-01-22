@@ -4,7 +4,9 @@
  */
 package com.copernic.manageVehicles;
 
+import com.copernic.manageVehicles.domain.User;
 import com.copernic.manageVehicles.domain.Vehicle;
+import com.copernic.manageVehicles.services.UserServiceImpl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +26,8 @@ public class VehicleController {
 
     @Autowired
     private VehicleServiceImpl vehicleService;
+    @Autowired
+    private UserServiceImpl userService;
     
     //UPDATE VEHICLE
     @GetMapping("/update/{numberPlate}")
@@ -42,9 +46,22 @@ public class VehicleController {
     //SUMBIT FORM VEHICLE
     @PostMapping("/vehicle")
     public String submitForm(Vehicle vehicle, Model model) {
+        User user = userService.findByNif(vehicle.getOwner().getNif());
+        vehicle.setOwner(user);
         vehicleService.saveVehicle(vehicle);
         return "redirect:/vehicles";    
     }
+    
+    //SHOW USER'S VEHICLES
+    @GetMapping("/vehicle/{nif}")
+    public String showForm(@PathVariable("nif") String nif, Model model) {
+        Vehicle vehicle = new Vehicle();
+        User user = userService.findByNif(nif);
+        vehicle.setOwner(user);
+        model.addAttribute("vehicle", vehicle);
+        return "vehicle-form";
+    }
+    
     //LIST VEHICLES
     @GetMapping("/vehicles")
     public String listVehicle(Model model) {

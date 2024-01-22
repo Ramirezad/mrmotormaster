@@ -7,6 +7,7 @@ package com.copernic.manageVehicles;
 import com.copernic.manageVehicles.domain.User;
 import com.copernic.manageVehicles.domain.Vehicle;
 import com.copernic.manageVehicles.services.UserServiceImpl;
+import com.copernic.manageVehicles.services.VehicleServiceImpl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,32 +26,40 @@ public class UserController {
 
     @Autowired
     private UserServiceImpl userService;
+    @Autowired
+    private VehicleServiceImpl vehicleService;
 
     //UPDATE User
-    @GetMapping("/update/{nif}")
-    public String update(User user, Model model) {
-        user = userService.find(user);
+    @GetMapping("/updateUser/{nif}")
+    public String update(@PathVariable("nif") String nif, Model model) {
+        User user = userService.findByNif(nif);
         model.addAttribute("user", user);
         return "user-edit";
-    }
+    }    
 
     //SHOW FORM User
-    @GetMapping("/user/{nif}")
-    public String viewById(User user) {
-        return "user-details";
-    }
-    
-    //SHOW FORM User
-    @GetMapping("/signin")
+    @GetMapping("/user")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new User());
         return "sign-in";
     }
 
-    //SUMBIT FORM User
-    @PostMapping("/signin")
+    @PostMapping("/user")
     public String submitUser(User user, Model model) {
-        userService.save(user);
+        User existingUser = userService.findByNif(user.getNif());
+        if (existingUser != null) {
+            // Actualización sin modificar el nif
+            existingUser.setName(user.getName());
+            existingUser.setSurname(user.getSurname());
+            existingUser.setPhone(user.getPhone());
+            existingUser.setEmail(user.getEmail());
+            existingUser.setCargo(user.getCargo());
+            existingUser.setVehicles(user.getVehicles());
+            userService.save(existingUser);
+        } else {
+            // Guardar nuevo usuario
+            userService.save(user);
+        }
         return "redirect:/users";
     }
 
@@ -63,22 +72,19 @@ public class UserController {
     }
 
     //DELETE User
-    @GetMapping("/delete/{nif}")
-    public String delete(@PathVariable("numberPlate") String nif) {
+    @GetMapping("/deleteUser/{nif}")
+    public String delete(@PathVariable("nif") String nif) {
         userService.deleteById(nif);
         return "redirect:/users";
     }
 
-    //VIEW User
+    //SHOW  User
     @GetMapping("/users/{nif}")
-    public String viewUser(@PathVariable("nif") String nif, Model model) {
-        User user = new User();
-        user.setNif(nif);
-        user = userService.find(user);
-        List<Vehicle> vehicles = user.getVehicles();        
-        model.addAttribute("user", user);  
+    public String viewById(@PathVariable("nif") String nif, Model model) {
+        User user = userService.findByNif(nif);
+        List<Vehicle> vehicles = vehicleService.findByOwner(user);
+        model.addAttribute("user", user);
         model.addAttribute("vehicles", vehicles);
         return "user-details";
-
     }
 }

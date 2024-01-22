@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserDAO extends JpaRepository<User, Long> {
     User findByNif(String nif);
-    User deleteByNif(String nif);
+    void deleteByNif(String nif);
 }
 

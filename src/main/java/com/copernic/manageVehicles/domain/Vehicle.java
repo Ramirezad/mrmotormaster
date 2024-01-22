@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+import org.antlr.v4.runtime.misc.NotNull;
 
 
 @Entity
@@ -21,12 +22,17 @@ import lombok.Data;
 @Data
 public class Vehicle {
     @Id
-    
+    @NotNull
     private String numberPlate;
+    @NotNull
     private String brand;
+    @NotNull
     private String model;
+    @NotNull
     private String color;
+    @NotNull
     private int fabricationYear;
+    @NotNull
     private int km;
     @ManyToOne
     private User owner;

@@ -24,14 +24,14 @@
             <br>
 
             <label class="form-label" for="color">Color:</label>
-            <input class="form-control" type="text" id="color" th:field="*{color}" >
+            <input class="form-control" type="text" id="color" th:field="*{color}" required>
             <br>
             
             <label class="form-label" for="fabricationYear">FabricationYear</label>
-            <input class="form-control" type="number" id="fabricationYear" th:field="*{fabricationYear}" >
+            <input class="form-control" type="number" id="fabricationYear" th:field="*{fabricationYear}" required min="">
            <br>
             <label class="form-label" for="km">Km</label>
-            <input class="form-control"type="number" id="km" th:field="*{km}" >
+            <input class="form-control"type="number" id="km" th:field="*{km}" required min="0">
            <br>
 
             <button class="btn btn-primary"  type="submit">Submit</button>

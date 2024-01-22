@@ -7,6 +7,7 @@ package com.copernic.manageVehicles.services;
 import com.copernic.manageVehicles.dao.RepairDAO;
 import com.copernic.manageVehicles.domain.Repair;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,15 +36,15 @@ public class RepairServiceImpl implements RepairService {
     }
 
     @Override
-    public Repair findRepair(Repair repair) {
-        return repairDAO.findById(repair.getRepairId()).orElse(null);
+    @Transactional(readOnly = true)
+    public Optional<Repair> findRepairById(Long id) {
+        return repairDAO.findById(id);
     }
 
     @Override
+    @Transactional
     public void deleteRepairById(Long id) {
         repairDAO.deleteById(id);
     }
-
-    
 }
 

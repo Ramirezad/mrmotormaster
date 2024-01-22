@@ -6,6 +6,8 @@ package com.copernic.manageVehicles.services;
 
 import com.copernic.manageVehicles.domain.Repair;
 import java.util.List;
+import java.util.Optional;
+
 
 /**
  *
@@ -14,6 +16,6 @@ import java.util.List;
 public interface RepairService {
     Repair saveRepair(Repair repair);
     List<Repair> getAllRepairs();
-    Repair findRepair(Repair repair);
+    Optional<Repair> findRepairById(Long id);
     void deleteRepairById(Long id);
 }

@@ -42,4 +42,19 @@ public class RepairController {
         repairService.save(repair);  
         return "redirect:/repairs";  
     }
+    
+    //ESTE
+    @GetMapping("/repairs/view/{id}")
+    public String findById(Model model, @PathVariable Long id){
+        Optional<Repair> repairOptional = repairService.findById(id);
+
+            if (repairOptional.isPresent()) {
+                 Repair repair = repairOptional.get();
+                 model.addAttribute("repair", repair);
+                 return "repair-view";
+        } else {
+
+            return "redirect:/repairs";
+        }
+    }
 }

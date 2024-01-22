@@ -31,8 +31,8 @@
 
     <!-- Enlaces de Update y Delete -->
     <p>
-        <a class="btn btn-success" th:href="@{'/update/' + ${vehicle.numberPlate}}">Update</a>
-        <a class="btn btn-danger" th:href="@{'/delete/' + ${vehicle.numberPlate}}" onclick="return confirm('Are you sure to delete this vehicle?');">Delete</a>
+        <a class="btn btn-success" th:href="@{'/updateVehicle/' + ${vehicle.numberPlate}}">Update</a>
+        <a class="btn btn-danger" th:href="@{'/deleteVehicle/' + ${vehicle.numberPlate}}" onclick="return confirm('Are you sure to delete this vehicle?');">Delete</a>
     </p>
 </body>
 </html>

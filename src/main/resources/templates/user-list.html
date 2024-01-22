@@ -37,7 +37,7 @@
                     </td>
                     <td>
                         <a th:href="@{/deleteUser/{nif}(nif=${user.nif})}">
-                            <button type="button">DELETE</button>
+                            <button type="button" onclick="return confirm('Are you sure to delete this vehicle?');">DELETE</button>
                         </a>
                     </td>
                 </tr>

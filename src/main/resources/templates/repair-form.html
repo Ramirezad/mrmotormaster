@@ -1,15 +1,27 @@
 <!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Repair</title>
+</head>
+<body>
+    <h2>Create Form</h2>
+    <form action="#" th:action="@{/repairs}" th:object="${repair}" method="post">
+        <input type="hidden" th:field="*{repairId}" />
+        
+        <label for="observation">Observations:</label>
+        <input type="text" th:field="*{observation}" required />
+
+        <label for="km">Kilometers:</label>
+        <input type="number" th:field="*{km}" required />
+
+        <label for="repairDate">Repair Date:</label>
+        <input type="date" th:field="*{repairDate}" required />
+
+        <button type="submit">Save Repair</button>
+    </form>
+</body>
 </html>
+
+
+

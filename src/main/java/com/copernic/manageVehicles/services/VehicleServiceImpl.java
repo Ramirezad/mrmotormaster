@@ -45,7 +45,14 @@ public class VehicleServiceImpl implements VehicleService {
         vehicleDAO.deleteById(numberPlate);
     }
     @Override
+
     public List<Vehicle> findByOwner(User owner){
        return vehicleDAO.findByOwner(owner);
     }
+
+    public boolean existsById(String numberPlate) {
+        return vehicleDAO.existsById(numberPlate);
+    }
+
+
 }

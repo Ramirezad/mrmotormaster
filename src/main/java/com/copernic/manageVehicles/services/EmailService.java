@@ -26,13 +26,13 @@ public class EmailService {
     public void sendPdfByEmail(String to, byte[] pdfBytes) throws MessagingException, IOException {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
-        helper.setFrom("raulfer2017@gmail.com");
+        helper.setFrom("mrmotormatersl@gmail.com");
         helper.setTo(to);
-        helper.setSubject("Asunto del correo");
-        helper.setText("Cuerpo del correo");
+        helper.setSubject("Reparation Order");
+        helper.setText("Texto del mensaje");
 
         // Adjuntar el PDF al correo
-        helper.addAttachment("documento.pdf", new ByteArrayResource(pdfBytes));
+        helper.addAttachment("repair.pdf", new ByteArrayResource(pdfBytes));
 
         javaMailSender.send(mimeMessage);
     }

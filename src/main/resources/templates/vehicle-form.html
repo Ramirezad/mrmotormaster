@@ -11,7 +11,7 @@
         <h2>Add Vehicle</h2>
         <form th:object="${vehicle}" th:action="@{/vehicle}" method="post">
 
-     
+
             <label class="form-label" for="numberPlate">Number Plate:</label>
             <input class="form-control"type="text" id="numberPlate" th:field="*{numberPlate}" required>
             <br>
@@ -29,15 +29,15 @@
             <br>
 
             <label class="form-label" for="owner">Owner NIF:</label>
-            <input class="form-control" type="text" id="owner" th:field="*{owner.nif}" required>
+            <input class="form-control" type="text" id="owner" th:field="*{owner.nif}" required readonly>
             <br>
 
             <label class="form-label" for="fabricationYear">FabricationYear</label>
             <input class="form-control" type="number" id="fabricationYear" th:field="*{fabricationYear}" required min="">
-           <br>
+            <br>
             <label class="form-label" for="km">Km</label>
             <input class="form-control"type="number" id="km" th:field="*{km}" required min="0">
-           <br>
+            <br>
 
             <button class="btn btn-primary"  type="submit">Submit</button>
         </form>

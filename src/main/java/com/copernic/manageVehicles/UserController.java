@@ -35,7 +35,7 @@ public class UserController {
         User user = userService.findByNif(nif);
         model.addAttribute("user", user);
         return "user-edit";
-    }    
+    }
 
     //SHOW FORM User
     @GetMapping("/user")
@@ -87,4 +87,5 @@ public class UserController {
         model.addAttribute("vehicles", vehicles);
         return "user-details";
     }
+
 }

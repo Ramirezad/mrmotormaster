@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -65,8 +66,13 @@ public class UserController {
 
     //LIST Users
     @GetMapping("/users")
-    public String listUsers(Model model) {
-        List<User> users = userService.getAll();
+    public String listUsers(@RequestParam(required = false) String query, Model model) {
+        List<User> users;
+        if (query != null && !query.isEmpty()) {
+            users = userService.search(query);
+        } else {
+            users = userService.getAll();
+        }
         model.addAttribute("users", users);
         return "user-list";
     }

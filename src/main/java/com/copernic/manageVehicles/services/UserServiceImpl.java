@@ -41,6 +41,9 @@ public class UserServiceImpl implements ServiceInterface<User>{
         return userDAO.findByNif(user.getNif());
    }
 
+    public List<User> search(String query) {
+        return userDAO.findByNifContainingOrNameContainingOrSurnameContaining(query, query, query);
+    }
     
     @Override
     @Transactional

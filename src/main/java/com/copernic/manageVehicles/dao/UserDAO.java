@@ -5,10 +5,12 @@
 package com.copernic.manageVehicles.dao;
 
 import com.copernic.manageVehicles.domain.User;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserDAO extends JpaRepository<User, Long> {
     User findByNif(String nif);
     void deleteByNif(String nif);
+    List<User> findByNifContainingOrNameContainingOrSurnameContaining(String nif, String name, String surname);
 }
 

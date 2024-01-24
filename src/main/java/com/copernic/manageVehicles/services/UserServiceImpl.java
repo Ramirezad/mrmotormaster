@@ -11,6 +11,7 @@ package com.copernic.manageVehicles.services;
 import com.copernic.manageVehicles.dao.UserDAO;
 import com.copernic.manageVehicles.domain.User;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,12 +33,12 @@ public class UserServiceImpl implements ServiceInterface<User>{
         return userDAO.findAll();
     }
     
-    public User findByNif(String nif){
+    public Optional<User> findByNif(String nif){
         return userDAO.findByNif(nif);
     }
 
     @Override
-    public User find(User user) {
+    public Optional<User> find(User user) {
         return userDAO.findByNif(user.getNif());
    }
 

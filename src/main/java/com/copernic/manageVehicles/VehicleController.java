@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.copernic.manageVehicles.services.VehicleServiceImpl;
 import jakarta.validation.Valid;
+import java.util.Optional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -44,33 +45,45 @@ public class VehicleController {
         return "vehicle-form";
     }
 
-    // SUMBIT FORM VEHICLE
     @PostMapping("/vehicle")
-    public String submitForm(@Valid Vehicle vehicle, BindingResult result, Model model) {
-        User user = userService.findByNif(vehicle.getOwner().getNif());
-        if (user != null) {
-            vehicle.setOwner(user);
-            if (vehicleService.existsById(vehicle.getNumberPlate())) {
-                model.addAttribute("alertMessage", "La matrícula ya existe. No se pudo agregar el vehículo.");
-            } else {
-                vehicleService.saveVehicle(vehicle);
-                model.addAttribute("successMessage", "Vehículo agregado exitosamente.");
-            }
+public String submitForm(@Valid Vehicle vehicle, BindingResult result, Model model) {
+    Optional<User> userOptional = userService.findByNif(vehicle.getOwner().getNif());
+
+    if (userOptional.isPresent()) {
+        User user = userOptional.get();
+        vehicle.setOwner(user);
+
+        if (vehicleService.existsById(vehicle.getNumberPlate())) {
+            model.addAttribute("alertMessage", "La matrícula ya existe. No se pudo agregar el vehículo.");
         } else {
-            model.addAttribute("alertMessage", "El usuario no existe. No se pudo agregar el vehículo.");
+            vehicleService.saveVehicle(vehicle);
+            model.addAttribute("successMessage", "Vehículo agregado exitosamente.");
         }
-        return "redirect:/vehicles";
+    } else {
+        model.addAttribute("alertMessage", "El usuario no existe. No se pudo agregar el vehículo.");
     }
 
-    //SHOW USER'S VEHICLES
+    return "redirect:/vehicles";
+}
+
+
     @GetMapping("/vehicle/{nif}")
-    public String showForm(@PathVariable("nif") String nif, Model model) {
+public String showForm(@PathVariable("nif") String nif, Model model) {
+    Optional<User> userOptional = userService.findByNif(nif);
+
+    if (userOptional.isPresent()) {
+        User user = userOptional.get();
         Vehicle vehicle = new Vehicle();
-        User user = userService.findByNif(nif);
         vehicle.setOwner(user);
         model.addAttribute("vehicle", vehicle);
         return "vehicle-form";
+    } else {
+        // Manejar el caso en que el usuario no existe
+        // Puedes redirigir a una página de error o hacer algo apropiado
+        return "redirect:/error"; // Cambia a la página de error que desees
     }
+}
+
 
     //LIST VEHICLES
     @GetMapping("/vehicles")

@@ -18,12 +18,15 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 
 @Entity
 @Table(name = "user")
 @Data
 public class User {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

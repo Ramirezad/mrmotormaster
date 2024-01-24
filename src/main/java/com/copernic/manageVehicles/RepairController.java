@@ -56,16 +56,6 @@ public class RepairController {
         if (repairOptional.isPresent()) {
             Repair repair = repairOptional.get();
             model.addAttribute("repair", repair);
-            
-            if(repair.getTasks()==null)
-            {
-                System.out.println("TASKS ARE NULL");
-            }
-            else{
-                System.out.println("TASKS ARE NOT NULL");
-                System.out.println(repair.tasks.size());
-            }
-            
             return "repair-view";
         } else {
 

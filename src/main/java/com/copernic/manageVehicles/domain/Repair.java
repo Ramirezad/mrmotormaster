@@ -9,11 +9,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -37,7 +41,11 @@ public class Repair {
     @JoinColumn(name = "numberPlate", referencedColumnName = "numberPlate")
     private Vehicle vehicle;
     
-//    @OneToMany (mappedBy = "Repair")
-//    private Set<Order> orders = new HashSet<>();
-
+    @ManyToMany
+    @JoinTable(
+        name = "repair_task",
+        joinColumns = @JoinColumn(name = "repair_id"),
+        inverseJoinColumns = @JoinColumn(name = "task_id")
+    )
+    private Set<Task> tasks = new HashSet<>();
 }

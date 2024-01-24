@@ -44,9 +44,7 @@ public class RepairController {
     @GetMapping("/repair-form")
     public String getEmptyForm(Model model){
         model.addAttribute("repair", new Repair());
-        List<Task> tasks = taskService.getAllTasks();
-        System.out.println(tasks.size());
-        model.addAttribute("tasks", tasks);
+        model.addAttribute("tasks", taskService.getAllTasks());
         return "repair-form";
     }
     
@@ -81,6 +79,7 @@ public class RepairController {
         if (repairOptional.isPresent()) {
             Repair repair = repairOptional.get();
             model.addAttribute("repair", repair);
+            model.addAttribute("tasks", taskService.getAllTasks());
             return "repair-edit";
         } else {
             return "redirect:/repairs";

@@ -6,6 +6,7 @@ package com.copernic.manageVehicles.services;
 
 import com.copernic.manageVehicles.dao.RepairDAO;
 import com.copernic.manageVehicles.domain.Repair;
+import com.copernic.manageVehicles.domain.Task;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;

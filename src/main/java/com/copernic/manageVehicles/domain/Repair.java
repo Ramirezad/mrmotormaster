@@ -42,6 +42,9 @@ public class Repair {
     @JoinColumn(name = "numberPlate", referencedColumnName = "numberPlate")
     private Vehicle vehicle;
     
+    //With lazy it does not work
+    //Thats an inconvenient because if we try to get a repair with many tasks
+    //we will be charging all that information to memory.
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "repair_task",

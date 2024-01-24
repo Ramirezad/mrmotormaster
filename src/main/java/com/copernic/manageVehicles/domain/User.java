@@ -34,7 +34,8 @@ public class User {
     private String surname;
     private int phone;
     private String email;
-    private String cargo;
+    @Enumerated(EnumType.STRING)
+    private Rol cargo;
     @OneToMany(fetch = FetchType.EAGER)
     private List<Vehicle> vehicles;
 }

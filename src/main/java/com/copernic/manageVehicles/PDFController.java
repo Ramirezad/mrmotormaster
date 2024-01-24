@@ -15,6 +15,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
@@ -26,17 +27,19 @@ public class PDFController {
     private EmailService emailService;
 
     // Datos dinámicos
-    String nombre = "Usuario + ID Reparacion"; // O puedes obtenerlo dinámicamente
+    String nombre = "Usuario " + "Repair ID"; // Cambiar a .get()    
+    //PDF
+     byte[] bytesPDF = null;
     
     @GetMapping("/generar-pdf")
     public String generarPdf(Model model) {
-
         // Agregar datos al modelo
         model.addAttribute("nombre", nombre);
 
         // Devolver el nombre de la plantilla (Thymeleaf)
         return "pdf-generate";
     }
+    
     @GetMapping("/generate-pdf")
     @ResponseBody
     public byte[] generatePdf(HttpServletResponse response) throws IOException {
@@ -61,18 +64,26 @@ public class PDFController {
                 Logger.getLogger(PDFController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
         // Configurar la respuesta HTTP
         response.setContentType(MediaType.APPLICATION_PDF_VALUE);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Repair " + nombre + ".pdf");
-        
         //Enviar por email
-        sendPdfByEmail(byteArrayOutputStream.toByteArray());
+        bytesPDF = byteArrayOutputStream.toByteArray();
         // Devolver el arreglo de bytes
         return byteArrayOutputStream.toByteArray();
         }
     }
-    
+    @PostMapping("/send-email")
+    public String enviarCorreo() {
+        // Lógica para enviar el correo electrónico
+        try {
+            // Llamada al método para enviar el PDF por correo electrónico
+            sendPdfByEmail(bytesPDF);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "pdf-generate"; 
+    }
    // Método para enviar el PDF por correo electrónico
     private void sendPdfByEmail(byte[] pdfBytes) {
         try {

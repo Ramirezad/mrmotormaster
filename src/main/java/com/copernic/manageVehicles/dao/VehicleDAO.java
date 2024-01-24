@@ -4,10 +4,12 @@
  */
 package com.copernic.manageVehicles.dao;
 
+import com.copernic.manageVehicles.domain.User;
 import com.copernic.manageVehicles.domain.Vehicle;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface VehicleDAO extends JpaRepository<Vehicle, String> {
-    
+    List<Vehicle> findByOwner(User Owner);
 }
 

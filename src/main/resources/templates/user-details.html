@@ -1,38 +1,80 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Detalles del Usuario y Vehículo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
-<body>
-    <h1>Detalles del Usuario</h1>
-    <p th:text="${user.name}">Nombre: </p>
-    <p th:text="${user.nif}">NIF: </p>
-    <p th:text="${user.phone}">Teléfono:</p>
-    <p th:text="${user.email}">Correo Electrónico: </p>
+<body class="container">
+    <nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
+        <div class="container text-center">
+            <div class="row">
+            <ul class="nav justify-content-center">
+                <div class="col">
+                    <li class="nav-item"><a class="btn btn-dark" th:href="@{/users}">Users</a></li>
+                </div>
+                <div class="col">
+                    <li class="nav-item"><a class="btn btn-light" th:href="@{/vehicles}">Vehicles</a></li>
+                </div>
+                <div class="col">
+                    <li class="nav-item"><a class="btn btn-dark" th:href="@{/repairs}">Repairs</a></li>
+                </div>
+                <div class="col">
+                    <li class="nav-item"><a class="btn btn-light" th:href="@{/tasks}">Tasks</a></li>
+                </div>
+            </ul>
+            </div>
+        </div>
+    </nav>
+    <h1 class="my-4">Detalles del Usuario</h1>
 
-    <h2>Detalles del Vehículo</h2>
-    <table>
-        <tr>
-            <th>Number Plate</th>
-            <th>Brand</th>
-            <th>Model</th>
-            <th>Color</th>            
-            <th>KM</th>
-            <th>History</th>
-        </tr>
-        <tr th:each="vehicle : ${vehicles}">
-            <td th:text="${vehicle.numberPlate}"></td>
-            <td th:text="${vehicle.brand}"></td>
-            <td th:text="${vehicle.model}"></td>
-            <td th:text="${vehicle.color}"></td>            
-            <td th:text="${vehicle.km}"></td>
-            <td>
-                <a th:href="@{'/view/' + ${vehicle.numberPlate}}">
-                    <button type="button">VIEW</button>
-                </a>
-            </td>
-        </tr>
+    <!-- User Details -->
+    <div class="mb-4">
+        <p><strong>Nombre:</strong> <span th:text="${user.name}"></span></p>
+        <p><strong>NIF:</strong> <span th:text="${user.nif}"></span></p>
+        <p><strong>Teléfono:</strong> <span th:text="${user.phone}"></span></p>
+        <p><strong>Correo Electrónico:</strong> <span th:text="${user.email}"></span></p>
+
+        <!-- Buttons -->
+        <a th:href="@{/deleteUser/{nif}(nif=${user.nif})}" class="btn btn-danger mr-2">DELETE</a>
+        <a th:href="@{/updateUser/{nif}(nif=${user.nif})}" class="btn btn-warning">EDIT</a>
+    </div>
+
+    <!-- Vehicle Details -->
+    <h2 class="my-4">Detalles del Vehículo</h2>
+
+    <!-- Table -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Number Plate</th>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Color</th>
+                <th>FabricationYear</th>
+                <th>Km</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="vehicle : ${vehicles}">
+                <td th:text="${vehicle.numberPlate}"></td>
+                <td th:text="${vehicle.brand}"></td>
+                <td th:text="${vehicle.model}"></td>
+                <td th:text="${vehicle.color}"></td>
+                <td th:text="${vehicle.fabricationYear}"></td>
+                <td th:text="${vehicle.km}"></td>
+                <td>
+                    <a class="btn btn-primary" th:href="@{'/viewVehicle/' + ${vehicle.numberPlate}}">View</a>
+                </td>
+                <td>
+                    <a class="btn btn-danger" th:href="@{'/deleteVehicle/' + ${vehicle.numberPlate}}" onclick="return confirm('Are you sure to delete this vehicle?');">Delete</a>
+                </td>
+            </tr>
+        </tbody>
     </table>
+
+    <!-- Add New Vehicle Button -->
+    <a th:href="@{/vehicle/{nif}(nif=${user.nif})}" class="btn btn-success">ADD NEW VEHICLE</a>
 </body>
 </html>

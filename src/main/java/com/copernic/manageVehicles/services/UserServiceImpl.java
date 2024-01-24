@@ -31,13 +31,22 @@ public class UserServiceImpl implements ServiceInterface<User>{
     public List getAll() {
         return userDAO.findAll();
     }
+    
+    public User findByNif(String nif){
+        return userDAO.findByNif(nif);
+    }
 
     @Override
     public User find(User user) {
         return userDAO.findByNif(user.getNif());
    }
 
+    public List<User> search(String query) {
+        return userDAO.findByNifContainingOrNameContainingOrSurnameContaining(query, query, query);
+    }
+    
     @Override
+    @Transactional
     public void deleteById(String nif) {
         userDAO.deleteByNif(nif);
     }

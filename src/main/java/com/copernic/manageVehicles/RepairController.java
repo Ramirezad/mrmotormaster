@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -39,45 +41,43 @@ public class RepairController {
         return "repair-list";
     }
 
-    //Repair form
-
     @GetMapping("/repair-form")
-    public String getEmptyForm(Model model){
-        model.addAttribute("repair", new Repair());
-        return "repair-form";
+public String getEmptyForm(@ModelAttribute("numberPlate") String numberPlate, Model model){
+    Repair repair = new Repair();
+
+    if (numberPlate != null) {
+        Vehicle vehicle = vehicleService.findByNumberPlate(numberPlate);
+        repair.setVehicle(vehicle);
     }
 
+    model.addAttribute("repair", repair);
+
+    return "repair-form";
+}
+    
+    //Save a repair
     @PostMapping("/repairs")
     public String saveRepair(@ModelAttribute("repair") Repair repair) {
+        String numberPlate = repair.getVehicle().getNumberPlate();
+        Vehicle vehicle = vehicleService.findByNumberPlate(numberPlate);
+        repair.setVehicle(vehicle);
         repairService.save(repair);  
         return "redirect:/repairs";  
     }
     
-    //ESTE
+    //Visualize individual repair
     @GetMapping("/repairs/view/{id}")
     public String findById(Model model, @PathVariable Long id){
         Optional<Repair> repairOptional = repairService.findById(id);
-
-            if (repairOptional.isPresent()) {
-                 Repair repair = repairOptional.get();
-                 model.addAttribute("repair", repair);
-                 return "repair-view";
+        if (repairOptional.isPresent()) {
+            Repair repair = repairOptional.get();
+            model.addAttribute("repair", repair);
+            return "repair-view";
         } else {
 
             return "redirect:/repairs";
         }
     }
-    //SHOW USER'S VEHICLES
-    @GetMapping("/repairs/view/{numberPlate}")
-    public String showForm(@PathVariable("numberPlate") String nif, Model model) {
-        Repair repair = new Repair();
-        Vehicle vehicle= new Vehicle();
-        vehicle = vehicleService.findVehicle(vehicle);
-        repair.setVehicle(vehicle);
-        model.addAttribute("repair", repair);
-        return "repair-form";
-    }
-
    
     //Update a repair
     @GetMapping("/repairs/edit/{id}")

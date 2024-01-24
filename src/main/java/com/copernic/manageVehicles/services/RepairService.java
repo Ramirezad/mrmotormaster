@@ -5,6 +5,7 @@
 package com.copernic.manageVehicles.services;
 
 import com.copernic.manageVehicles.domain.Repair;
+import com.copernic.manageVehicles.domain.Task;
 import com.copernic.manageVehicles.domain.Vehicle;
 import java.util.List;
 import java.util.Optional;

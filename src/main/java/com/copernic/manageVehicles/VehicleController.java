@@ -8,7 +8,6 @@ import com.copernic.manageVehicles.dao.RepairDAO;
 import com.copernic.manageVehicles.domain.Repair;
 import com.copernic.manageVehicles.domain.User;
 import com.copernic.manageVehicles.domain.Vehicle;
-import com.copernic.manageVehicles.services.RepairServiceImpl;
 import com.copernic.manageVehicles.services.UserServiceImpl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.copernic.manageVehicles.services.VehicleServiceImpl;
 import jakarta.validation.Valid;
+import java.util.Optional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -49,12 +49,15 @@ public class VehicleController {
         return "vehicle-form";
     }
 
-    // SUMBIT FORM VEHICLE
     @PostMapping("/vehicle")
     public String submitForm(@Valid Vehicle vehicle, BindingResult result, Model model) {
-        User user = userService.findByNif(vehicle.getOwner().getNif());
-        if (user != null) {
+        Optional<User> userOptional = userService.findByNif(vehicle.getOwner().getNif());
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
             vehicle.setOwner(user);
+            vehicle.getRepairs();
+
             if (vehicleService.existsById(vehicle.getNumberPlate())) {
                 model.addAttribute("alertMessage", "La matrícula ya existe. No se pudo agregar el vehículo.");
             } else {
@@ -64,18 +67,28 @@ public class VehicleController {
         } else {
             model.addAttribute("alertMessage", "El usuario no existe. No se pudo agregar el vehículo.");
         }
+
         return "redirect:/vehicles";
     }
 
-    //SHOW USER'S VEHICLES
-    @GetMapping("/vehicle/{nif}")
-    public String showForm(@PathVariable("nif") String nif, Model model) {
+   @GetMapping("/vehicle/{nif}")
+public String showForm(@PathVariable("nif") String nif, Model model) {
+    Optional<User> userOptional = userService.findByNif(nif);
+
+    if (userOptional.isPresent()) {
+        User user = userOptional.get();
         Vehicle vehicle = new Vehicle();
-        User user = userService.findByNif(nif);
         vehicle.setOwner(user);
         model.addAttribute("vehicle", vehicle);
         return "vehicle-form";
+    } else {
+        // Manejar el caso en que el usuario no existe
+        // Puedes redirigir a una página de error o hacer algo apropiado
+        return "redirect:/error"; // Cambia a la página de error que desees
     }
+}
+
+
 
     //LIST VEHICLES
     @GetMapping("/vehicles")
@@ -98,8 +111,8 @@ public class VehicleController {
         Vehicle vehicle = new Vehicle();
         vehicle.setNumberPlate(numberPlate);
         vehicle = vehicleService.findVehicle(vehicle);
-        User user = userService.findByNif(vehicle.getOwner().getNif());
-        List <Repair> repair = repairService.findByVehicle(vehicle);
+        List<Repair> repair = repairService.findByVehicle(vehicle);
+        User user = userService.findByNif(vehicle.getOwner().getNif()).orElse(new User());
         model.addAttribute("vehicle", vehicle);
         model.addAttribute("user", user);
         model.addAttribute("repair", repair);

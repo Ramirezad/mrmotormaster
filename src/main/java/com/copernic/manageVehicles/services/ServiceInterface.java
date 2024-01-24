@@ -5,6 +5,7 @@
 package com.copernic.manageVehicles.services;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -14,7 +15,7 @@ import java.util.List;
 public interface ServiceInterface<T> {
     T save(T entidad);
     List<T> getAll();
-    T find(T entidad);
+    Optional<T> find(T entity);
     void deleteById(String entidad);
     
     

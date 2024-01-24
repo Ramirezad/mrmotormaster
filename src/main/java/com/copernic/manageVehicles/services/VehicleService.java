@@ -20,6 +20,7 @@ public interface VehicleService {
     void deleteVehicleById(String numberPlate);
     List<Vehicle> findByOwner(User owner);
     boolean existsById(String numberPlate);
+    Vehicle findByNumberPlate(String numberPlate);
    
 }
     

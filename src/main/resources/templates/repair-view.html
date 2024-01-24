@@ -38,7 +38,6 @@
                     <th scope="col">Observation</th>
                     <th scope="col">Km</th>
                     <th scope="col">Repair Date</th>
-                    <!-- Add an additional header for the Edit button -->
                     <th scope="col">Actions</th>
                 </tr>
                 </thead>
@@ -48,13 +47,29 @@
                         <td th:text="${repair.observation}"></td>
                         <td th:text="${repair.km}"></td>
                         <td th:text="${repair.repairDate}"></td>
-                        <!-- Add an Edit button with a link to the edit page -->
                         <td>
                             <a class="btn btn-primary" th:href="@{/repairs/edit/{id}(id=${repair.repairId})}">Edit</a>
                             <a class="btn btn-danger" th:href="@{/repairs/delete/{id}(id=${repair.repairId})}">Delete</a>
                         </td>
                     </tr>
                 </tbody>
+            </table>
+            <h2>Tasks for Repair</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Task ID</th>
+                        <th scope="col">Task Name</th>
+                        <th scope="col">Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="task : ${repair.tasks}">
+                       <td th:text="${task.id}"></td>
+                       <td th:text="${task.name}"></td>
+                       <td th:text="${task.price}"></td>
+                    </tr>
+                 </tbody>
             </table>
             <a class="btn btn-secondary" th:href="@{/repairs}">Back to List</a>
         </div>

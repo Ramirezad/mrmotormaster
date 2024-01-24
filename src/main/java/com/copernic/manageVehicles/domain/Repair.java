@@ -5,6 +5,7 @@
 package com.copernic.manageVehicles.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 /**
  *
@@ -41,11 +42,11 @@ public class Repair {
     @JoinColumn(name = "numberPlate", referencedColumnName = "numberPlate")
     private Vehicle vehicle;
     
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "repair_task",
         joinColumns = @JoinColumn(name = "repair_id"),
         inverseJoinColumns = @JoinColumn(name = "task_id")
     )
-    private Set<Task> tasks = new HashSet<>();
+    public List<Task> tasks;
 }

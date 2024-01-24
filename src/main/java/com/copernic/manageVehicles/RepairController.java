@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import java.util.List;
 
 /**
  *
@@ -35,28 +36,37 @@ public class RepairController {
     }
 
     //Repair form
-
     @GetMapping("/repair-form")
     public String getEmptyForm(Model model){
         model.addAttribute("repair", new Repair());
         return "repair-form";
     }
-
+    
+    //Save a repair
     @PostMapping("/repairs")
     public String saveRepair(@ModelAttribute("repair") Repair repair) {
         repairService.save(repair);  
         return "redirect:/repairs";  
     }
     
-    //ESTE
+    //Visualize individual repair
     @GetMapping("/repairs/view/{id}")
     public String findById(Model model, @PathVariable Long id){
         Optional<Repair> repairOptional = repairService.findById(id);
-
-            if (repairOptional.isPresent()) {
-                 Repair repair = repairOptional.get();
-                 model.addAttribute("repair", repair);
-                 return "repair-view";
+        if (repairOptional.isPresent()) {
+            Repair repair = repairOptional.get();
+            model.addAttribute("repair", repair);
+            
+            if(repair.getTasks()==null)
+            {
+                System.out.println("TASKS ARE NULL");
+            }
+            else{
+                System.out.println("TASKS ARE NOT NULL");
+                System.out.println(repair.tasks.size());
+            }
+            
+            return "repair-view";
         } else {
 
             return "redirect:/repairs";

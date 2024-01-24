@@ -49,13 +49,10 @@ public class VehicleServiceImpl implements VehicleService {
     public List<Vehicle> findByOwner(User owner){
        return vehicleDAO.findByOwner(owner);
     }
-
+   
     public boolean existsById(String numberPlate) {
         return vehicleDAO.existsById(numberPlate);
     }
-
-
-  
-
-
+   
+    
 }

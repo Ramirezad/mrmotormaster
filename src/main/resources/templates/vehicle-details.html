@@ -6,7 +6,7 @@
     <title>Vehicle Details</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
-<body>
+<body class="container">
     <!-- Contenido del menú -->
     <nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
         <div class="container text-center">
@@ -29,31 +29,41 @@
         </div>
     </nav>
     <h2>Vehicle Details</h2>
-
-    <dl>
-        <dt>Number Plate:</dt>
-        <dd th:text="${vehicle.numberPlate}"></dd>
-
-        <dt>Brand:</dt>
-        <dd th:text="${vehicle.brand}"></dd>
-
-        <dt>Model:</dt>
-        <dd th:text="${vehicle.model}"></dd>
-
-        <dt>Color:</dt>
-        <dd th:text="${vehicle.color}"></dd>
-
-        <dt>Fabrication Year:</dt>
-        <dd th:text="${vehicle.fabricationYear}"></dd>
-
-        <dt>Km:</dt>
-        <dd th:text="${vehicle.km}"></dd>
-    </dl>
-
-    <!-- Enlaces de Update y Delete -->
+  <!-- Vehicle Details -->
+   <div class="row">
+    <div class="col-md-6">
+        <p><strong>NumberPlate:</strong> <span th:text="${vehicle.numberPlate}"></span></p>
+        <p><strong>Brand:</strong> <span th:text="${vehicle.brand}"></span></p>
+        <p><strong>Model:</strong> <span th:text="${vehicle.model}"></span></p>
+        <p><strong>Color:</strong> <span th:text="${vehicle.color}"></span></p>
+        <p><strong>Fabrication Year:</strong> <span th:text="${vehicle.fabricationYear}"></span></p>
+        <p><strong>Km: </strong> <span th:text="${vehicle.km}"></span></p>
     <p>
         <a class="btn btn-success" th:href="@{'/updateVehicle/' + ${vehicle.numberPlate}}">Update</a>
         <a class="btn btn-danger" th:href="@{'/deleteVehicle/' + ${vehicle.numberPlate}}" onclick="return confirm('Are you sure to delete this vehicle?');">Delete</a>
     </p>
+    </div>
+   <!-- Vehicle Details -->
+    <div class="col-md-6">
+        <p><strong>Nombre:</strong> <span th:text="${user.name}"></span></p>
+        <p><strong>NIF:</strong> <span th:text="${user.nif}"></span></p>
+        <p><strong>Teléfono:</strong> <span th:text="${user.phone}"></span></p>
+        <p><strong>Correo Electrónico:</strong> <span th:text="${user.email}"></span></p>
+    </div>
+   </div>
+  <div class="container-text-center">
+        <tr th:each = "repair: ${repairs}">
+                    <th scope="row" th:text="${repair.repairId}"></th>
+                    <td th:text="${repair.observation}"></td>
+                    <td th:text="${repair.km}"></td>
+                    <td th:text="${repair.repairDate}"></td>
+                    <td>
+                        <a class="btn btn-primary" th:href="@{/repairs/view/{id}(id=${repair.repairId})}">View</a>
+                    </td>
+                </tr>
+  </div>
+    <a class="btn btn-info" th:href="@{/repair-form}">Create repair</a> 
+    
+    
 </body>
 </html>

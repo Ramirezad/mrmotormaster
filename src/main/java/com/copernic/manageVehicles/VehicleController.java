@@ -4,8 +4,11 @@
  */
 package com.copernic.manageVehicles;
 
+import com.copernic.manageVehicles.dao.RepairDAO;
+import com.copernic.manageVehicles.domain.Repair;
 import com.copernic.manageVehicles.domain.User;
 import com.copernic.manageVehicles.domain.Vehicle;
+import com.copernic.manageVehicles.services.RepairServiceImpl;
 import com.copernic.manageVehicles.services.UserServiceImpl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,8 @@ public class VehicleController {
     private VehicleServiceImpl vehicleService;
     @Autowired
     private UserServiceImpl userService;
+    @Autowired
+    private RepairDAO repairService;
 
     //UPDATE VEHICLE
     @GetMapping("/updateVehicle/{numberPlate}")
@@ -93,7 +98,11 @@ public class VehicleController {
         Vehicle vehicle = new Vehicle();
         vehicle.setNumberPlate(numberPlate);
         vehicle = vehicleService.findVehicle(vehicle);
+        User user = userService.findByNif(vehicle.getOwner().getNif());
+        List <Repair> repair = repairService.findByVehicle(vehicle);
         model.addAttribute("vehicle", vehicle);
+        model.addAttribute("user", user);
+        model.addAttribute("repair", repair);
         return "vehicle-details";
 
     }

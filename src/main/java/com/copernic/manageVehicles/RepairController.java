@@ -8,6 +8,8 @@ import com.copernic.manageVehicles.dao.RepairDAO;
 import com.copernic.manageVehicles.dao.TasksDAO;
 import com.copernic.manageVehicles.domain.Repair;
 import com.copernic.manageVehicles.domain.Task;
+import com.copernic.manageVehicles.domain.Vehicle;
+import com.copernic.manageVehicles.services.VehicleServiceImpl;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,9 @@ public class RepairController {
     
     @Autowired
     private RepairDAO repairService;
+    @Autowired
+    private VehicleServiceImpl vehicleService;
+    
     
     //List of repairs
     @GetMapping("/repairs")
@@ -61,6 +66,16 @@ public class RepairController {
 
             return "redirect:/repairs";
         }
+    }
+    //SHOW USER'S VEHICLES
+    @GetMapping("/repairs/view/{numberPlate}")
+    public String showForm(@PathVariable("numberPlate") String nif, Model model) {
+        Repair repair = new Repair();
+        Vehicle vehicle= new Vehicle();
+        vehicle = vehicleService.findVehicle(vehicle);
+        repair.setVehicle(vehicle);
+        model.addAttribute("repair", repair);
+        return "repair-form";
     }
 
    

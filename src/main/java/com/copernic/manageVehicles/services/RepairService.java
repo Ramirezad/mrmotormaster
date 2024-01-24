@@ -20,5 +20,6 @@ public interface RepairService {
     List<Repair> getAllRepairs();
     Optional<Repair> findRepairById(Long id);
     void deleteRepairById(Long id);
+    double getTotalPrice(Long id);
     List <Repair> findByVehicle(Vehicle vehicle);
 }

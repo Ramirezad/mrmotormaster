@@ -48,9 +48,27 @@ public class RepairServiceImpl implements RepairService {
     public void deleteRepairById(Long id) {
         repairDAO.deleteById(id);
     }
+
     @Override
+    public double getTotalPrice(Long id) {
+        Optional<Repair> repairOptional = findRepairById(id);
+
+        if (repairOptional.isPresent()) {
+            Repair repair = repairOptional.get();
+            List<Task> tasks = repair.getTasks();
+
+            double totalPrice = tasks.stream()
+                    .mapToDouble(Task::getPrice)
+                    .sum();
+
+            return totalPrice;
+        } else {
+            throw new RuntimeException("Repair with ID " + id + " not found.");
+        }
+    
+}
+@Override
     public List<Repair> findByVehicle(Vehicle vehicle){
         return repairDAO.findByVehicle(vehicle);
     }
 }
-

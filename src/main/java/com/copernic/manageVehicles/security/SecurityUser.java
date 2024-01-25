@@ -6,8 +6,10 @@ package com.copernic.manageVehicles.security;
 
 import com.copernic.manageVehicles.domain.User;
 import java.util.Collection;
+import java.util.Collections;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
@@ -15,13 +17,18 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @author vigob
  */
 @AllArgsConstructor
-public class SecurityUser implements UserDetails{
-    
+public class SecurityUser implements UserDetails {
+
     private final User user;
+    
+    public User getUser() {
+        return this.user;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        // Aquí seconvierte el rol (cargo) del usuario en un GrantedAuthority
+        return Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getCargo().name()));
     }
 
     @Override
@@ -53,5 +60,6 @@ public class SecurityUser implements UserDetails{
     public boolean isEnabled() {
         return true;
     }
-    
+
 }
+

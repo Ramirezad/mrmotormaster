@@ -37,11 +37,11 @@
         <label class="form-label" for="observation">Observations:</label>
         <input class="form-control" type="text" th:field="*{observation}" required />
 
-        <label for="km">Kilometers:</label>
-        <input type="number" th:field="*{km}" required />
+        <label class="form-label" for="km">Kilometers:</label>
+        <input class="form-control" type="number" th:field="*{km}" required />
 
-        <label for="repairDate">Repair Date:</label>
-        <input type="date" th:field="*{repairDate}" required />
+        <label class="form-label"for="repairDate">Repair Date:</label>
+        <input class="form-control"type="date" th:field="*{repairDate}" required />
         <h2>Tasks:</h2>
         <div id="tasksContainer">
             <div th:each="task : ${tasks}">

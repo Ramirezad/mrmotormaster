@@ -1,69 +1,98 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-   
-<head>
-    <meta charset="UTF-8">
-    <title>Vehicle Details</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-</head>
-<body class="container">
-    <!-- Contenido del menú -->
-    <nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
-        <div class="container text-center">
-            <div class="row">
-            <ul class="nav justify-content-center">
-                <div class="col">
-                    <li class="nav-item"><a class="btn btn-dark" th:href="@{/users}">Users</a></li>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Vehicle Details</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    </head>
+    <body class="container">
+        <!-- Contenido del menú -->
+        <nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
+            <div class="container text-center">
+                <div class="row">
+                    <ul class="nav justify-content-center">
+                        <div class="col">
+                            <li class="nav-item"><a class="btn btn-dark" th:href="@{/users}">Users</a></li>
+                        </div>
+                        <div class="col">
+                            <li class="nav-item"><a class="btn btn-light" th:href="@{/vehicles}">Vehicles</a></li>
+                        </div>
+                        <div class="col">
+                            <li class="nav-item"><a class="btn btn-dark" th:href="@{/repairs}">Repairs</a></li>
+                        </div>
+                        <div class="col">
+                            <li class="nav-item"><a class="btn btn-light" th:href="@{/tasks}">Tasks</a></li>
+                        </div>
+                    </ul>
                 </div>
-                <div class="col">
-                    <li class="nav-item"><a class="btn btn-light" th:href="@{/vehicles}">Vehicles</a></li>
-                </div>
-                <div class="col">
-                    <li class="nav-item"><a class="btn btn-dark" th:href="@{/repairs}">Repairs</a></li>
-                </div>
-                <div class="col">
-                    <li class="nav-item"><a class="btn btn-light" th:href="@{/tasks}">Tasks</a></li>
-                </div>
-            </ul>
+            </div>
+        </nav>
+        <h2>Vehicle Details</h2>
+        <!-- Vehicle Details -->
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>NumberPlate:</strong> <span th:text="${vehicle.numberPlate}"></span></p>
+                <p><strong>Brand:</strong> <span th:text="${vehicle.brand}"></span></p>
+                <p><strong>Model:</strong> <span th:text="${vehicle.model}"></span></p>
+                <p><strong>Color:</strong> <span th:text="${vehicle.color}"></span></p>
+                <p><strong>Fabrication Year:</strong> <span th:text="${vehicle.fabricationYear}"></span></p>
+                <p><strong>Km: </strong> <span th:text="${vehicle.km}"></span></p>
+                <p>
+                    <a class="btn btn-success" th:href="@{'/updateVehicle/' + ${vehicle.numberPlate}}">Update</a>
+                    <a class="btn btn-danger" th:href="@{'/deleteVehicle/' + ${vehicle.numberPlate}}" onclick="return confirm('Are you sure to delete this vehicle?');">Delete</a>
+                </p>
+            </div>
+            <!-- Vehicle Details -->
+            <div class="col-md-6">
+                <p><strong>Nombre:</strong> <span th:text="${user.name}"></span></p>
+                <p><strong>NIF:</strong> <span th:text="${user.nif}"></span></p>
+                <p><strong>Teléfono:</strong> <span th:text="${user.phone}"></span></p>
+                <p><strong>Correo Electrónico:</strong> <span th:text="${user.email}"></span></p>
             </div>
         </div>
-    </nav>
-    <h2>Vehicle Details</h2>
-  <!-- Vehicle Details -->
-   <div class="row">
-    <div class="col-md-6">
-        <p><strong>NumberPlate:</strong> <span th:text="${vehicle.numberPlate}"></span></p>
-        <p><strong>Brand:</strong> <span th:text="${vehicle.brand}"></span></p>
-        <p><strong>Model:</strong> <span th:text="${vehicle.model}"></span></p>
-        <p><strong>Color:</strong> <span th:text="${vehicle.color}"></span></p>
-        <p><strong>Fabrication Year:</strong> <span th:text="${vehicle.fabricationYear}"></span></p>
-        <p><strong>Km: </strong> <span th:text="${vehicle.km}"></span></p>
-    <p>
-        <a class="btn btn-success" th:href="@{'/updateVehicle/' + ${vehicle.numberPlate}}">Update</a>
-        <a class="btn btn-danger" th:href="@{'/deleteVehicle/' + ${vehicle.numberPlate}}" onclick="return confirm('Are you sure to delete this vehicle?');">Delete</a>
-    </p>
-    </div>
-   <!-- Vehicle Details -->
-    <div class="col-md-6">
-        <p><strong>Nombre:</strong> <span th:text="${user.name}"></span></p>
-        <p><strong>NIF:</strong> <span th:text="${user.nif}"></span></p>
-        <p><strong>Teléfono:</strong> <span th:text="${user.phone}"></span></p>
-        <p><strong>Correo Electrónico:</strong> <span th:text="${user.email}"></span></p>
-    </div>
-   </div>
-  <div class="container-text-center">
-        <tr th:each = "repair: ${vehicle.repairs}">
-                    <th scope="row" th:text="${repair.repairId}"></th>
-                    <td th:text="${repair.observation}"></td>
-                    <td th:text="${repair.km}"></td>
-                    <td th:text="${#dates.format(repair.repairDate, 'yyyy-MM-dd HH:mm')}"></td>
-                    <td>
-                        <a class="btn btn-primary" th:href="@{/repairs/view/{id}(id=${repair.repairId})}">View</a>
-                    </td>
-                </tr>
-  </div>
-    <a class="btn btn-info"  th:href="@{/repair-form(numberPlate=${vehicle.numberPlate})}">Create repair</a> 
-    
-    
-</body>
+
+        <div class="container text-center mt-5">
+            <div class="row">
+                <div class="col-2"></div>
+                <div class="col-8">
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Observation</th>
+                                <th scope="col">Km</th>
+                                <th scope="col">Repair Date</th>
+                                <th scope="col">Number Plate</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr th:each="repair: ${repairs}">
+                                <th scope="row" th:text="${repair.repairId}"></th>
+                                <td th:text="${repair.observation}"></td>
+                                <td th:text="${repair.km}"></td>
+                                <td th:text="${#temporals.format(repair.repairDate, 'yyyy-MM-dd')}"></td>
+                                <td th:text="${repair.vehicle != null ? repair.vehicle.numberPlate : ''}"></td>
+                                <td>
+                                    <a class="btn btn-primary" th:href="@{/repairs/view/{id}(id=${repair.repairId})}">View</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-2"></div>
+            </div>
+        </div>
+        <div
+            <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <a class="btn btn-inf"  th:href="@{/repair-form(numberPlate=${vehicle.numberPlate})}">Create repair</a> 
+                </div>
+            </div>
+        </div>
+
+    </body>
 </html>

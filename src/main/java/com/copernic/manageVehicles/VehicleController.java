@@ -1,4 +1,4 @@
-    /*
+/*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -50,6 +50,7 @@ public class VehicleController {
         vehicleService.updateVehicle(vehicle);
         return "redirect:/vehicles"; // Redirige a la lista de vehículos después de la actualización
     }
+
     //SHOW FORM VEHICLE
     @GetMapping("/vehicle")
     public String showForm(Vehicle vehicle) {
@@ -79,24 +80,22 @@ public class VehicleController {
         return "redirect:/vehicles";
     }
 
-   @GetMapping("/vehicle/{nif}")
-public String showForm(@PathVariable("nif") String nif, Model model) {
-    Optional<User> userOptional = userService.findByNif(nif);
+    @GetMapping("/vehicle/{nif}")
+    public String showForm(@PathVariable("nif") String nif, Model model) {
+        Optional<User> userOptional = userService.findByNif(nif);
 
-    if (userOptional.isPresent()) {
-        User user = userOptional.get();
-        Vehicle vehicle = new Vehicle();
-        vehicle.setOwner(user);
-        model.addAttribute("vehicle", vehicle);
-        return "vehicle-form";
-    } else {
-        // Manejar el caso en que el usuario no existe
-        // Puedes redirigir a una página de error o hacer algo apropiado
-        return "redirect:/error"; // Cambia a la página de error que desees
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            Vehicle vehicle = new Vehicle();
+            vehicle.setOwner(user);
+            model.addAttribute("vehicle", vehicle);
+            return "vehicle-form";
+        } else {
+            // Manejar el caso en que el usuario no existe
+            // Puedes redirigir a una página de error o hacer algo apropiado
+            return "redirect:/error"; // Cambia a la página de error que desees
+        }
     }
-}
-
-
 
     //LIST VEHICLES
     @GetMapping("/vehicles")
@@ -113,18 +112,19 @@ public String showForm(@PathVariable("nif") String nif, Model model) {
         return "redirect:/vehicles";
     }
 
-    //VIEW VEHICLE
     @GetMapping("/viewVehicle/{numberPlate}")
     public String viewVehicle(@PathVariable("numberPlate") String numberPlate, Model model) {
         Vehicle vehicle = new Vehicle();
         vehicle.setNumberPlate(numberPlate);
         vehicle = vehicleService.findVehicle(vehicle);
-        List<Repair> repair = repairService.findByVehicle(vehicle);
+        List<Repair> repairs = repairService.findByVehicle(vehicle);
+        vehicle.setRepairs(repairs);
         User user = userService.findByNif(vehicle.getOwner().getNif()).orElse(new User());
+
         model.addAttribute("vehicle", vehicle);
         model.addAttribute("user", user);
-        model.addAttribute("repair", repair);
-        return "vehicle-details";
+        model.addAttribute("repairs", repairs); // Add repairs to the model
 
+        return "vehicle-details";
     }
 }

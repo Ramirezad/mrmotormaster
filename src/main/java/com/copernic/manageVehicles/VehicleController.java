@@ -1,4 +1,4 @@
-/*
+    /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -19,6 +19,7 @@ import com.copernic.manageVehicles.services.VehicleServiceImpl;
 import jakarta.validation.Valid;
 import java.util.Optional;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
 /**
@@ -35,20 +36,27 @@ public class VehicleController {
     @Autowired
     private RepairDAO repairService;
 
-    //UPDATE VEHICLE
+    // Método para mostrar el formulario de actualización
     @GetMapping("/updateVehicle/{numberPlate}")
-    public String update(Vehicle vehicle, Model model) {
-        vehicle = vehicleService.findVehicle(vehicle);
+    public String updateForm(@PathVariable("numberPlate") String numberPlate, Model model) {
+        Vehicle vehicle = vehicleService.findByNumberPlate(numberPlate);
         model.addAttribute("vehicle", vehicle);
-        return "vehicle-form";
+        return "vehicle-update";
     }
 
+    // Método para procesar el formulario de actualización
+    @PostMapping("/updateVehicle")
+    public String updateVehicle(@ModelAttribute("vehicle") Vehicle vehicle, Model model) {
+        vehicleService.updateVehicle(vehicle);
+        return "redirect:/vehicles"; // Redirige a la lista de vehículos después de la actualización
+    }
     //SHOW FORM VEHICLE
     @GetMapping("/vehicle")
     public String showForm(Vehicle vehicle) {
         return "vehicle-form";
     }
 
+    //ADD VEHICLE
     @PostMapping("/vehicle")
     public String submitForm(@Valid Vehicle vehicle, BindingResult result, Model model) {
         Optional<User> userOptional = userService.findByNif(vehicle.getOwner().getNif());

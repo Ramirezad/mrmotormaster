@@ -25,7 +25,7 @@
             </div>
         </div>
     </nav>
-<body>
+<body class="container">
 <div class="container text-center mt-5">
     <div class="row">
         <div class="col-2"></div>
@@ -47,7 +47,7 @@
                     <td th:text="${repair.observation}"></td>
                     <td th:text="${repair.km}"></td>
                     <td th:text="${repair.repairDate}"></td>
-                    <td th:text="${repair.vehicle.numberPlate}"></td>
+                    <td th:text="${repair.vehicle != null ? repair.vehicle.numberPlate : ''}"></td>
                     <td>
                         <a class="btn btn-primary" th:href="@{/repairs/view/{id}(id=${repair.repairId})}">View</a>
                     </td>

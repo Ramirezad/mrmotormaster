@@ -59,5 +59,33 @@ public class VehicleServiceImpl implements VehicleService {
          return vehicleDAO.findByNumberPlate(numberPlate);
 
     }
+       @Override
+    public void updateVehicle(Vehicle vehicle) {
+        if (vehicle != null && vehicle.getNumberPlate() != null) {
+            // Verificar si el vehículo existe antes de intentar actualizar
+            Optional<Vehicle> existingVehicleOptional = vehicleDAO.findById(vehicle.getNumberPlate());
+
+            if (existingVehicleOptional.isPresent()) {
+                Vehicle existingVehicle = existingVehicleOptional.get();
+
+                // Actualizar solo los campos necesarios
+                existingVehicle.setBrand(vehicle.getBrand());
+                existingVehicle.setColor(vehicle.getColor());
+                existingVehicle.setFabricationYear(vehicle.getFabricationYear());
+                existingVehicle.setKm(vehicle.getKm());
+                existingVehicle.setModel(vehicle.getModel());
+
+                // Puedes agregar más campos según sea necesario
+
+                vehicleDAO.save(existingVehicle); // Esto actualizará el vehículo en la base de datos
+            } else {
+                // Manejar el caso en que el vehículo no existe
+                // Puedes lanzar una excepción, loggear un mensaje, etc.
+            }
+        } else {
+            // Manejar el caso de un vehículo nulo o sin placa
+            // Puedes lanzar una excepción, loggear un mensaje, etc.
+        }
+    }
 }
     

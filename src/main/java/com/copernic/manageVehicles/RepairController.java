@@ -45,11 +45,12 @@ public class RepairController {
         model.addAttribute("repairs", repairService.getAllRepairs());
         return "repair-list";
     }
-
+    //Create Repair
     @GetMapping("/repair-form")
-public String getEmptyForm(@ModelAttribute("numberPlate") String numberPlate, Model model){
+    public String getEmptyForm(@ModelAttribute("numberPlate") String numberPlate, Model model){
     Repair repair = new Repair();
-
+    List<Task> tasks = taskService.getAllTasks();
+    model.addAttribute("tasks", tasks);
     if (numberPlate != null) {
         Vehicle vehicle = vehicleService.findByNumberPlate(numberPlate);
         repair.setVehicle(vehicle);

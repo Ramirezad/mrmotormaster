@@ -18,16 +18,7 @@ public interface VehicleService {
     List<Vehicle> getAllVehicles();
     Vehicle findVehicle(Vehicle vehicle);
     void deleteVehicleById(String numberPlate);
-
-
+    Vehicle findVehicleByNumberPlate(String numberPlate);
     List<Vehicle> findByOwner(User owner);
-
-
-    boolean existsById(String numberPlate);
-
-
-   
-
-    
-    
+    boolean existsById(String numberPlate);    
 }

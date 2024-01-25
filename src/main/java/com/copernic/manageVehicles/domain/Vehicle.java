@@ -10,6 +10,7 @@ package com.copernic.manageVehicles.domain;
  */
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -53,6 +54,6 @@ public class Vehicle {
     @ManyToOne
     private User owner;
     
-    @OneToMany(mappedBy = "vehicle")
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Repair> reparaciones;
 }

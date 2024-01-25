@@ -53,9 +53,9 @@ public class VehicleServiceImpl implements VehicleService {
     public boolean existsById(String numberPlate) {
         return vehicleDAO.existsById(numberPlate);
     }
-
-
-  
-
+    
+    public Vehicle findVehicleByNumberPlate(String numberPlate) {
+    return vehicleDAO.findVehicleByNumberPlate(numberPlate);
+}
 
 }

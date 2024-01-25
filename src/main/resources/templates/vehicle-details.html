@@ -55,5 +55,51 @@
         <a class="btn btn-success" th:href="@{'/updateVehicle/' + ${vehicle.numberPlate}}">Update</a>
         <a class="btn btn-danger" th:href="@{'/deleteVehicle/' + ${vehicle.numberPlate}}" onclick="return confirm('Are you sure to delete this vehicle?');">Delete</a>
     </p>
+    
+    <div class="mb-4">
+        <p><strong>Nombre:</strong> <span th:text="${user.name}"></span></p>
+        <p><strong>NIF:</strong> <span th:text="${user.nif}"></span></p>
+        <p><strong>Teléfono:</strong> <span th:text="${user.phone}"></span></p>
+        <p><strong>Correo Electrónico:</strong> <span th:text="${user.email}"></span></p>
+
+        <!-- Buttons -->
+        
+    </div>
+    
+    <div class="container text-center mt-5">
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <a class="btn btn-info" th:href="@{/repair-form}">Create repair</a> 
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Observation</th>
+                    <th scope="col">Km</th>
+                    <th scope="col">Repair Date</th>
+
+                    <th scope="col">Actions</th>
+
+                    <th scope="col">Visualize</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each = "repair: ${repairs}">
+                    <th scope="row" th:text="${repair.repairId}"></th>
+                    <td th:text="${repair.observation}"></td>
+                    <td th:text="${repair.km}"></td>
+                    <td th:text="${repair.repairDate}"></td>
+                    <td>
+                        <a class="btn btn-primary" th:href="@{/repairs/view/{id}(id=${repair.repairId})}">View</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-2"></div>
+    </div>
+</div>
 </body>
 </html>

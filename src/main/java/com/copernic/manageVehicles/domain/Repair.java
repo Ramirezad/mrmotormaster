@@ -34,10 +34,9 @@ public class Repair {
     private LocalDate repairDate;
     
     @ManyToOne
-    @JoinColumn(name = "numberPlate", referencedColumnName = "numberPlate")
-    private Vehicle vehicle;
+    @JoinColumn(name = "numberPlate")
+    private Vehicle vehicle;  
     
-//    @OneToMany (mappedBy = "Repair")
-//    private Set<Order> orders = new HashSet<>();
+
 
 }

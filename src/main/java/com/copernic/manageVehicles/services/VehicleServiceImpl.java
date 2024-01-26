@@ -15,7 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.copernic.manageVehicles.dao.VehicleDAO;
 import com.copernic.manageVehicles.domain.User;
-import java.util.Optional;
+import jakarta.persistence.EntityNotFoundException;
+
 
 @Service
 public class VehicleServiceImpl implements VehicleService {
@@ -41,51 +42,48 @@ public class VehicleServiceImpl implements VehicleService {
         return vehicleDAO.findById(vehicle.getNumberPlate()).orElse(null);
 
     }
+
     @Override
     public void deleteVehicleById(String numberPlate) {
         vehicleDAO.deleteById(numberPlate);
     }
-    
+
     @Override
-    public List<Vehicle> findByOwner(User owner){
-       return vehicleDAO.findByOwner(owner);
+    public List<Vehicle> findByOwner(User owner) {
+        return vehicleDAO.findByOwner(owner);
     }
-   
+
     public boolean existsById(String numberPlate) {
         return vehicleDAO.existsById(numberPlate);
     }
+
     @Override
     public Vehicle findByNumberPlate(String numberPlate) {
-         return vehicleDAO.findByNumberPlate(numberPlate);
+        return vehicleDAO.findByNumberPlate(numberPlate);
 
     }
-       @Override
-    public void updateVehicle(Vehicle vehicle) {
-        if (vehicle != null && vehicle.getNumberPlate() != null) {
-            // Verificar si el vehículo existe antes de intentar actualizar
-            Optional<Vehicle> existingVehicleOptional = vehicleDAO.findById(vehicle.getNumberPlate());
 
-            if (existingVehicleOptional.isPresent()) {
-                Vehicle existingVehicle = existingVehicleOptional.get();
-
-                // Actualizar solo los campos necesarios
-                existingVehicle.setBrand(vehicle.getBrand());
-                existingVehicle.setColor(vehicle.getColor());
-                existingVehicle.setFabricationYear(vehicle.getFabricationYear());
-                existingVehicle.setKm(vehicle.getKm());
-                existingVehicle.setModel(vehicle.getModel());
-
-                // Puedes agregar más campos según sea necesario
-
-                vehicleDAO.save(existingVehicle); // Esto actualizará el vehículo en la base de datos
-            } else {
-                // Manejar el caso en que el vehículo no existe
-                // Puedes lanzar una excepción, loggear un mensaje, etc.
-            }
-        } else {
-            // Manejar el caso de un vehículo nulo o sin placa
-            // Puedes lanzar una excepción, loggear un mensaje, etc.
+    @Override
+    public void updateVehicle(Vehicle updatedVehicle) {
+        if (updatedVehicle == null || updatedVehicle.getNumberPlate() == null) {
+            throw new IllegalArgumentException("El vehículo es nulo o no tiene placa");
         }
+
+        // Recuperar el vehículo existente
+        Vehicle existingVehicle = vehicleDAO.findByNumberPlate(updatedVehicle.getNumberPlate());
+
+        if (existingVehicle == null) {
+            throw new EntityNotFoundException("No se encontró el vehículo con placa: " + updatedVehicle.getNumberPlate());
+        }
+
+        // Actualizar los campos necesarios
+        existingVehicle.setBrand(updatedVehicle.getBrand());
+        existingVehicle.setColor(updatedVehicle.getColor());
+        existingVehicle.setFabricationYear(updatedVehicle.getFabricationYear());
+        existingVehicle.setKm(updatedVehicle.getKm());
+        existingVehicle.setModel(updatedVehicle.getModel());
+
+        // Guardar los cambios en la base de datos
+        vehicleDAO.save(existingVehicle);
     }
 }
-    

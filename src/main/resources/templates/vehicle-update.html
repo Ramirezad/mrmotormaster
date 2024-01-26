@@ -35,7 +35,8 @@
 
     <!-- Campo oculto para el número de placa -->
     <h2 th:text="${vehicle.numberPlate}"></h2>
-
+    <!-- Campo oculto para el número de placa -->
+    <input type="hidden" th:field="*{numberPlate}" />
     <label class="form-label" for="brand">Brand:</label>
     <input class="form-control" type="text" id="brand" th:field="*{brand}" required>
     <br>

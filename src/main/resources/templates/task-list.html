@@ -35,7 +35,10 @@
 
         </div>
         <div class="col-8">
-
+            <a  th:if="${isAdmin}">Eres Admin</a>
+            <a  th:if="${isUser}">Eres User</a> 
+            
+            
             <a class="btn btn-info" th:href="@{/task-form}">Crear task</a> 
             <table class="table">
                 <thead>

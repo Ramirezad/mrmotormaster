@@ -26,14 +26,17 @@ public class TaskController {
     private TasksDAO taskService;
    
     
-    @GetMapping("/tasks")
+@GetMapping("/tasks")
 public String findAll(Model model, Principal principal){
     Collection<? extends GrantedAuthority> authorities = ((UserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getAuthorities();
     boolean isAdmin = authorities.contains(new SimpleGrantedAuthority("ROLE_ADMINISTRADOR"));
+    boolean isUser = authorities.contains(new SimpleGrantedAuthority("ROLE_USUARIO"));
     model.addAttribute("tasks", taskService.findAll());
     model.addAttribute("isAdmin", isAdmin);
+    model.addAttribute("isUser", isUser);
     return "task-list";
 }
+
 
 
     @GetMapping("/tasks/view/{id}")

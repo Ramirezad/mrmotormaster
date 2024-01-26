@@ -17,24 +17,25 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
-public class SecurityUserDetailsService implements UserDetailsService{
-    
+public class SecurityUserDetailsService implements UserDetailsService {
+
     private final UserDAO userDAO;
-    
+
     public SecurityUserDetailsService(UserDAO userDAO){
         this.userDAO = userDAO;
     }
-    
+
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var optUser = this.userDAO.findByNif(username);
+    public UserDetails loadUserByUsername(String nif) throws UsernameNotFoundException {
+        var optUser = this.userDAO.findByNif(nif);
         if(optUser.isPresent()){
             return new SecurityUser(optUser.get());
         }
-        
-        throw new UsernameNotFoundException("User not found: " + username);
+
+        throw new UsernameNotFoundException("Usuario no encontrado: " + nif);
     }
-    
 }
+
+
 
 

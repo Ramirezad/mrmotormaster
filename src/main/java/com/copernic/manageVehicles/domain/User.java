@@ -27,6 +27,13 @@ import lombok.Setter;
 @Data
 public class User {
     
+    
+    public enum Rol{
+        USUARIO,
+        MECANICO,
+        ADMINISTRADOR
+    }
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

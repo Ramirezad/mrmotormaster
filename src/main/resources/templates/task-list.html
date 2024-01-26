@@ -35,7 +35,10 @@
 
         </div>
         <div class="col-8">
-
+            <a  th:if="${isAdmin}">Eres Admin</a>
+            <a  th:if="${isUser}">Eres User</a> 
+            
+            
             <a class="btn btn-info" th:href="@{/task-form}">Crear task</a> 
             <table class="table">
                 <thead>
@@ -46,15 +49,19 @@
                     <th scope="col">Actions</th>
                 </tr>
                 </thead>
+                    
                 <tbody>
                 <tr th:each = "task: ${tasks}">
                     <th scope="row" th:text="${task.id}"></th>
                     <td th:text="${task.name}"></td>
                     <td th:text="${task.price}"></td>
                     <td>
-                        <a class="btn btn-primary" th:href="@{/tasks/view/{id}(id=${task.id})}">Ver</a>
-                        <a class="btn btn-success" th:href="@{/tasks/edit/{id}(id=${task.id})}">Editar</a>
-                        <a class="btn btn-danger" th:href="@{/tasks/delete/{id}(id=${task.id})}">Borrar</a>
+                        <td>
+    <a class="btn btn-success" th:href="@{/tasks/view/{id}(id=${task.id})}">Ver</a>                        
+    <a class="btn btn-primary" th:href="@{/tasks/edit/{id}(id=${task.id})}" th:if="${isAdmin}">Editar</a>                    
+    <a class="btn btn-danger" th:href="@{/tasks/delete/{id}(id=${task.id})}">Borrar</a>
+</td>
+
                     </td>
                 </tr>
                 </tbody>

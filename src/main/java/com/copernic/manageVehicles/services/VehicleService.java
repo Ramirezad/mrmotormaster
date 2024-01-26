@@ -21,6 +21,7 @@ public interface VehicleService {
     List<Vehicle> findByOwner(User owner);
     boolean existsById(String numberPlate);
     Vehicle findByNumberPlate(String numberPlate);
+    void updateVehicle(Vehicle vehicle);
    
 }
     

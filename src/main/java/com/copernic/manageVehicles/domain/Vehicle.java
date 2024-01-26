@@ -9,6 +9,7 @@ package com.copernic.manageVehicles.domain;
  * @author rfernandez
  */
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -60,7 +61,7 @@ public class Vehicle {
     @JoinColumn(name = "nif", referencedColumnName = "nif")
     private User owner;
  
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER ,mappedBy = "vehicle",cascade = CascadeType.REMOVE)
     private List<Repair> repairs;
    
 }

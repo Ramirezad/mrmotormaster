@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.copernic.manageVehicles.dao.VehicleDAO;
+import com.copernic.manageVehicles.domain.Repair;
 import com.copernic.manageVehicles.domain.User;
 import jakarta.persistence.EntityNotFoundException;
 
@@ -85,5 +86,10 @@ public class VehicleServiceImpl implements VehicleService {
 
         // Guardar los cambios en la base de datos
         vehicleDAO.save(existingVehicle);
+    }
+
+    @Override
+    public List<Repair> findRepairsByNumberPlate(String numberPlate) {
+        return vehicleDAO.findByNumberPlate(numberPlate).getRepairs();
     }
 }

@@ -4,6 +4,7 @@
  */
 package com.copernic.manageVehicles.services;
 
+import com.copernic.manageVehicles.domain.Repair;
 import com.copernic.manageVehicles.domain.User;
 import com.copernic.manageVehicles.domain.Vehicle;
 import java.util.List;
@@ -22,6 +23,6 @@ public interface VehicleService {
     boolean existsById(String numberPlate);
     Vehicle findByNumberPlate(String numberPlate);
     void updateVehicle(Vehicle vehicle);
-   
+    List<Repair> findRepairsByNumberPlate(String numberPlate);
 }
     

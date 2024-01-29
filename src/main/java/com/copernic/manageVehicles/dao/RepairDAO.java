@@ -5,12 +5,10 @@
 package com.copernic.manageVehicles.dao;
 
 import com.copernic.manageVehicles.domain.Repair;
-import com.copernic.manageVehicles.domain.Vehicle;
-import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RepairDAO extends JpaRepository<Repair, Long> {
-    List<Repair> findByVehicle(Vehicle vehicle);
+    
 }

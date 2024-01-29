@@ -5,10 +5,7 @@
 package com.copernic.manageVehicles.services;
 
 import com.copernic.manageVehicles.domain.Repair;
-import com.copernic.manageVehicles.domain.Task;
-import com.copernic.manageVehicles.domain.Vehicle;
 import java.util.List;
-import java.util.Optional;
 
 
 /**
@@ -18,8 +15,7 @@ import java.util.Optional;
 public interface RepairService {
     Repair saveRepair(Repair repair);
     List<Repair> getAllRepairs();
-    Optional<Repair> findRepairById(Long id);
-    void deleteRepairById(Long id);
+    Repair findById(Long id);
+    void deleteById(Long id);
     double getTotalPrice(Long id);
-    List <Repair> findByVehicle(Vehicle vehicle);
 }

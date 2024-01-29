@@ -4,15 +4,12 @@
  */
 package com.copernic.manageVehicles;
 
-import com.copernic.manageVehicles.dao.RepairDAO;
-import com.copernic.manageVehicles.dao.TasksDAO;
 import com.copernic.manageVehicles.domain.Repair;
 import com.copernic.manageVehicles.domain.Task;
 import com.copernic.manageVehicles.domain.Vehicle;
 import com.copernic.manageVehicles.services.RepairService;
 import com.copernic.manageVehicles.services.TaskService;
 import com.copernic.manageVehicles.services.VehicleService;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +18,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import java.util.List;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -71,9 +67,8 @@ public class RepairController {
     //Visualize individual repair
     @GetMapping("/repairs/view/{id}")
     public String findById(Model model, @PathVariable Long id){
-        Optional<Repair> repairOptional = repairService.findRepairById(id);
-        if (repairOptional.isPresent()) {
-            Repair repair = repairOptional.get();
+        Repair repair = repairService.findById(id);
+        if (repair!=null) {
             model.addAttribute("repair", repair);
             model.addAttribute("total", repairService.getTotalPrice(id));
             
@@ -87,9 +82,8 @@ public class RepairController {
     //Update a repair
     @GetMapping("/repairs/edit/{id}")
     public String editRepair(Model model, @PathVariable Long id){
-        Optional<Repair> repairOptional = repairService.findRepairById(id);
-        if (repairOptional.isPresent()) {
-            Repair repair = repairOptional.get();
+        Repair repair = repairService.findById(id);
+        if (repair!=null) {
             model.addAttribute("repair", repair);
             model.addAttribute("tasks", taskService.getAllTasks());
             return "repair-edit";
@@ -100,8 +94,7 @@ public class RepairController {
     // Delete a repair
     @GetMapping("/repairs/delete/{id}")
     public String deleteRepair(@PathVariable Long id) {
-        repairService.deleteRepairById(id);
+        repairService.deleteById(id);
         return "redirect:/repairs";
-
     }
 }

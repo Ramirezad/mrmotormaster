@@ -77,7 +77,19 @@
             <h2>Total cost: <span th:text="${total}"></span>€</h2>
             <a class="btn btn-secondary" th:href="@{/repairs}">Back to List</a>
         </div>
-        <div class="col-2"></div>
+        <div class="col-2">
+            <!-- Nuevo formulario para generar el PDF de esta reparación específica -->
+        <form th:action="@{/generate-pdf-for-repair}" method="post">
+            <input type="hidden" name="repairId" th:value="${repair.repairId}" />
+            <button class="btn btn-danger" type="submit">Download PDF</button>
+        </form>
+
+        <!-- botón para enviar el correo electrónico -->
+        <form th:action="@{/send-email}" method="post">
+            <button class="btn btn-primary" type="submit">Send E-mail</button>
+        </form>
+    </div>
+        </div>
     </div>
 </div>
 </body>

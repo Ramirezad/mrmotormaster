@@ -4,8 +4,6 @@
  */
 package com.copernic.manageVehicles;
 
-import com.copernic.manageVehicles.dao.RepairDAO;
-import com.copernic.manageVehicles.dao.TasksDAO;
 import com.copernic.manageVehicles.domain.Repair;
 import com.copernic.manageVehicles.domain.Task;
 import com.copernic.manageVehicles.domain.Vehicle;
@@ -23,7 +21,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import java.util.List;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -47,12 +44,12 @@ public class RepairController {
         model.addAttribute("repairs", repairService.getAllRepairs());
         return "repair-list";
     }
-
-    //Repair form
+    //Create Repair
     @GetMapping("/repair-form")
-public String getEmptyForm(@ModelAttribute("numberPlate") String numberPlate, Model model){
+    public String getEmptyForm(@ModelAttribute("numberPlate") String numberPlate, Model model){
     Repair repair = new Repair();
-
+    List<Task> tasks = taskService.getAllTasks();
+    model.addAttribute("tasks", tasks);
     if (numberPlate != null) {
         Vehicle vehicle = vehicleService.findVehicleByNumberPlate(numberPlate);
         repair.setVehicle(vehicle);
@@ -84,9 +81,8 @@ public String getEmptyForm(@ModelAttribute("numberPlate") String numberPlate, Mo
     //Visualize individual repair
     @GetMapping("/repairs/view/{id}")
     public String findById(Model model, @PathVariable Long id){
-        Optional<Repair> repairOptional = repairService.findRepairById(id);
-        if (repairOptional.isPresent()) {
-            Repair repair = repairOptional.get();
+        Repair repair = repairService.findById(id);
+        if (repair!=null) {
             model.addAttribute("repair", repair);
             model.addAttribute("total", repairService.getTotalPrice(id));
             
@@ -110,9 +106,8 @@ public String getEmptyForm(@ModelAttribute("numberPlate") String numberPlate, Mo
     //Update a repair
     @GetMapping("/repairs/edit/{id}")
     public String editRepair(Model model, @PathVariable Long id){
-        Optional<Repair> repairOptional = repairService.findRepairById(id);
-        if (repairOptional.isPresent()) {
-            Repair repair = repairOptional.get();
+        Repair repair = repairService.findById(id);
+        if (repair!=null) {
             model.addAttribute("repair", repair);
             model.addAttribute("tasks", taskService.getAllTasks());
             return "repair-edit";
@@ -124,8 +119,7 @@ public String getEmptyForm(@ModelAttribute("numberPlate") String numberPlate, Mo
     // Delete a repair
     @GetMapping("/repairs/delete/{id}")
     public String deleteRepair(@PathVariable Long id) {
-        repairService.deleteRepairById(id);
+        repairService.deleteById(id);
         return "redirect:/repairs";
-
     }
 }

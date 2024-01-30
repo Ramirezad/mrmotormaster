@@ -37,15 +37,15 @@ public class RepairServiceImpl implements RepairService {
         return repairDAO.findAll();
     }
 
-    @Override
+    
     @Transactional(readOnly = true)
-    public Optional<Repair> findRepairById(Long id) {
-        return repairDAO.findById(id);
+    public Repair findById(Long id) {
+        return repairDAO.findById(id).orElse(null);
     }
 
-    @Override
+    
     @Transactional
-    public void deleteRepairById(Long id) {
+    public void deleteById(Long id) {
         repairDAO.deleteById(id);
     }
 
@@ -59,21 +59,28 @@ public class RepairServiceImpl implements RepairService {
     }
 
     @Override
+    @Transactional
     public double getTotalPrice(Long id) {
-        Optional<Repair> repairOptional = findRepairById(id);
-
-        if (repairOptional.isPresent()) {
-            Repair repair = repairOptional.get();
+        Repair repair = findById(id);
+        if (repair!=null) {
             List<Task> tasks = repair.getTasks();
-
             double totalPrice = tasks.stream()
                     .mapToDouble(Task::getPrice)
                     .sum();
-
             return totalPrice;
         } else {
             throw new RuntimeException("Repair with ID " + id + " not found.");
         }
+    }
+
+    @Override
+    public Optional<Repair> findRepairById(Long id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void deleteRepairById(Long id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
 

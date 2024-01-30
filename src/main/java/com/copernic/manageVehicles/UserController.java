@@ -55,7 +55,9 @@ public class UserController {
         model.addAttribute("user", new User());
         return "sign-in";
     }
-
+    
+    
+    
     @PostMapping("/user")
     public String submitUser(User user, Model model) {
         Optional<User> existingUserOptional = userService.findByNif(user.getNif());

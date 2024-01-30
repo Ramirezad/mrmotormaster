@@ -22,3 +22,4 @@ public interface VehicleService {
     List<Vehicle> findByOwner(User owner);
     boolean existsById(String numberPlate);    
 }
+    

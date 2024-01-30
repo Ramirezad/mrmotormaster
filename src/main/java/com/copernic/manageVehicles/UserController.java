@@ -8,8 +8,14 @@ import com.copernic.manageVehicles.domain.User;
 import com.copernic.manageVehicles.domain.Vehicle;
 import com.copernic.manageVehicles.services.UserServiceImpl;
 import com.copernic.manageVehicles.services.VehicleServiceImpl;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,9 +39,14 @@ public class UserController {
     //UPDATE User
     @GetMapping("/updateUser/{nif}")
     public String update(@PathVariable("nif") String nif, Model model) {
-        User user = userService.findByNif(nif);
-        model.addAttribute("user", user);
-        return "user-edit";
+        Optional<User> userOptional = userService.findByNif(nif);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            model.addAttribute("user", user);
+            return "user-edit";
+        } else {
+            return "redirect:/error";
+        }
     }
 
     //SHOW FORM User
@@ -47,9 +58,11 @@ public class UserController {
 
     @PostMapping("/user")
     public String submitUser(User user, Model model) {
-        User existingUser = userService.findByNif(user.getNif());
-        if (existingUser != null) {
-            // Actualización sin modificar el nif
+        Optional<User> existingUserOptional = userService.findByNif(user.getNif());
+
+        if (existingUserOptional.isPresent()) {
+            // Usuario existente, actualiza los detalles
+            User existingUser = existingUserOptional.get();
             existingUser.setName(user.getName());
             existingUser.setSurname(user.getSurname());
             existingUser.setPhone(user.getPhone());
@@ -58,9 +71,10 @@ public class UserController {
             existingUser.setVehicles(user.getVehicles());
             userService.save(existingUser);
         } else {
-            // Guardar nuevo usuario
+            // Nuevo usuario, guárdalo
             userService.save(user);
         }
+
         return "redirect:/users";
     }
 
@@ -87,11 +101,44 @@ public class UserController {
     //SHOW  User
     @GetMapping("/users/{nif}")
     public String viewById(@PathVariable("nif") String nif, Model model) {
-        User user = userService.findByNif(nif);
-        List<Vehicle> vehicles = vehicleService.findByOwner(user);
-        model.addAttribute("user", user);
-        model.addAttribute("vehicles", vehicles);
-        return "user-details";
+        Optional<User> userOptional = userService.findByNif(nif);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            List<Vehicle> vehicles = vehicleService.findByOwner(user);
+            model.addAttribute("user", user);
+            model.addAttribute("vehicles", vehicles);
+            return "user-details";
+        } else {
+            // Manejar el caso en que el usuario no existe
+            // Puedes redirigir a una página de error o hacer algo apropiado
+            return "redirect:/error"; // Cambia a la página de error que desees
+        }
+    }
+
+    @GetMapping("/session")
+    public ResponseEntity<?> getDetailsSession(Authentication authentication) {
+        String sessionId = "";
+        Object sessionUser = null;
+
+        if (authentication != null) {
+            if (authentication.getDetails() instanceof WebAuthenticationDetails) {
+                WebAuthenticationDetails details = (WebAuthenticationDetails) authentication.getDetails();
+                sessionId = details.getSessionId();
+            }
+            if (authentication.getPrincipal() instanceof com.copernic.manageVehicles.security.SecurityUser) {
+                com.copernic.manageVehicles.security.SecurityUser securityUser = (com.copernic.manageVehicles.security.SecurityUser) authentication.getPrincipal();
+                sessionUser = securityUser;
+            }
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("response", "Hello World");
+        response.put("sessionId", sessionId);
+        response.put("sessionUser", sessionUser);
+
+        System.out.println(authentication);
+        return ResponseEntity.ok(response);
     }
 
 }

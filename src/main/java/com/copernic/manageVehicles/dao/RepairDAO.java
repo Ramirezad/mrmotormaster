@@ -13,4 +13,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RepairDAO extends JpaRepository<Repair, Long> {
         List<Repair> findByVehicle(Vehicle vehicle);
+        
 }

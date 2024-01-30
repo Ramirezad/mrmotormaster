@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.copernic.manageVehicles.dao.VehicleDAO;
 import com.copernic.manageVehicles.domain.User;
+import java.util.Optional;
 
 @Service
 public class VehicleServiceImpl implements VehicleService {
@@ -49,13 +50,14 @@ public class VehicleServiceImpl implements VehicleService {
     public List<Vehicle> findByOwner(User owner){
        return vehicleDAO.findByOwner(owner);
     }
-
+   
     public boolean existsById(String numberPlate) {
         return vehicleDAO.existsById(numberPlate);
     }
-    
+    @Override
     public Vehicle findVehicleByNumberPlate(String numberPlate) {
-    return vehicleDAO.findVehicleByNumberPlate(numberPlate);
-}
+         return vehicleDAO.findVehicleByNumberPlate(numberPlate);
 
+    }
 }
+    

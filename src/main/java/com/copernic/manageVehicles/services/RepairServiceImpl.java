@@ -6,6 +6,7 @@ package com.copernic.manageVehicles.services;
 
 import com.copernic.manageVehicles.dao.RepairDAO;
 import com.copernic.manageVehicles.domain.Repair;
+import com.copernic.manageVehicles.domain.Task;
 import com.copernic.manageVehicles.domain.User;
 import com.copernic.manageVehicles.domain.Vehicle;
 import java.util.List;
@@ -18,10 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author enricledo
  */
-
 @Service
 public class RepairServiceImpl implements RepairService {
-    
+
     @Autowired
     private RepairDAO repairDAO;
 
@@ -48,14 +48,34 @@ public class RepairServiceImpl implements RepairService {
     public void deleteRepairById(Long id) {
         repairDAO.deleteById(id);
     }
-    
+
     public boolean existsById(Long id) {
         return repairDAO.existsById(id);
     }
-    
+
     @Override
-    public List<Repair> findByVehicle(Vehicle vehicle){
-       return repairDAO.findByVehicle(vehicle);
+    public List<Repair> findByVehicle(Vehicle vehicle) {
+        return repairDAO.findByVehicle(vehicle);
+    }
+
+    @Override
+    public double getTotalPrice(Long id) {
+        Optional<Repair> repairOptional = findRepairById(id);
+
+        if (repairOptional.isPresent()) {
+            Repair repair = repairOptional.get();
+            List<Task> tasks = repair.getTasks();
+
+            double totalPrice = tasks.stream()
+                    .mapToDouble(Task::getPrice)
+                    .sum();
+
+            return totalPrice;
+        } else {
+            throw new RuntimeException("Repair with ID " + id + " not found.");
+        }
     }
 }
+
+    
 

@@ -9,8 +9,9 @@ import com.copernic.manageVehicles.dao.TasksDAO;
 import com.copernic.manageVehicles.domain.Repair;
 import com.copernic.manageVehicles.domain.Task;
 import com.copernic.manageVehicles.domain.Vehicle;
-import com.copernic.manageVehicles.services.RepairServiceImpl;
-import com.copernic.manageVehicles.services.VehicleServiceImpl;
+import com.copernic.manageVehicles.services.RepairService;
+import com.copernic.manageVehicles.services.TaskService;
+import com.copernic.manageVehicles.services.VehicleService;
 import jakarta.validation.Valid;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import java.util.List;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -31,24 +33,37 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class RepairController {
 
     @Autowired
-    private RepairServiceImpl repairService;
+    private RepairService repairService;
+    
     @Autowired
-    private VehicleServiceImpl vehicleService;
-
+    private TaskService taskService;
+   
+    @Autowired
+    private VehicleService vehicleService;
+    
     //List of repairs
     @GetMapping("/repairs")
-    public String findAll(Model model) {
+    public String findAll(Model model){
         model.addAttribute("repairs", repairService.getAllRepairs());
         return "repair-list";
     }
 
     //Repair form
     @GetMapping("/repair-form")
-    public String getEmptyForm(Model model) {
-        model.addAttribute("repair", new Repair());
-        return "repair-form";
+public String getEmptyForm(@ModelAttribute("numberPlate") String numberPlate, Model model){
+    Repair repair = new Repair();
+
+    if (numberPlate != null) {
+        Vehicle vehicle = vehicleService.findVehicleByNumberPlate(numberPlate);
+        repair.setVehicle(vehicle);
     }
 
+    model.addAttribute("repair", repair);
+
+    return "repair-form";
+}
+    
+    //Save a repair
     @PostMapping("/repairs")
     public String saveRepair(@Valid Repair repair, BindingResult result, Model model) {
         Vehicle vehicle = vehicleService.findVehicleByNumberPlate(repair.getVehicle().getNumberPlate());
@@ -65,15 +80,16 @@ public class RepairController {
         }
         return "redirect:/repairs";
     }
-
-    //ESTE
+    
+    //Visualize individual repair
     @GetMapping("/repairs/view/{id}")
-    public String findById(Model model, @PathVariable Long id) {
+    public String findById(Model model, @PathVariable Long id){
         Optional<Repair> repairOptional = repairService.findRepairById(id);
-
         if (repairOptional.isPresent()) {
             Repair repair = repairOptional.get();
             model.addAttribute("repair", repair);
+            model.addAttribute("total", repairService.getTotalPrice(id));
+            
             return "repair-view";
         } else {
 
@@ -93,11 +109,12 @@ public class RepairController {
 
     //Update a repair
     @GetMapping("/repairs/edit/{id}")
-    public String editRepair(Model model, @PathVariable Long id) {
+    public String editRepair(Model model, @PathVariable Long id){
         Optional<Repair> repairOptional = repairService.findRepairById(id);
         if (repairOptional.isPresent()) {
             Repair repair = repairOptional.get();
             model.addAttribute("repair", repair);
+            model.addAttribute("tasks", taskService.getAllTasks());
             return "repair-edit";
         } else {
             return "redirect:/repairs";

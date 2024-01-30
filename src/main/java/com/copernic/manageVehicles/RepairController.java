@@ -51,7 +51,7 @@ public class RepairController {
     List<Task> tasks = taskService.getAllTasks();
     model.addAttribute("tasks", tasks);
     if (numberPlate != null) {
-        Vehicle vehicle = vehicleService.findVehicleByNumberPlate(numberPlate);
+        Vehicle vehicle = vehicleService.findByNumberPlate(numberPlate);
         repair.setVehicle(vehicle);
     }
 
@@ -63,7 +63,7 @@ public class RepairController {
     //Save a repair
     @PostMapping("/repairs")
     public String saveRepair(@Valid Repair repair, BindingResult result, Model model) {
-        Vehicle vehicle = vehicleService.findVehicleByNumberPlate(repair.getVehicle().getNumberPlate());
+        Vehicle vehicle = vehicleService.findByNumberPlate(repair.getVehicle().getNumberPlate());
         if (vehicle != null) {
             repair.setVehicle(vehicle);
             if (repairService.existsById(repair.getRepairId())) {
@@ -97,7 +97,7 @@ public class RepairController {
     @GetMapping("/repairs/view/{numberPlate}")
     public String showForm(@PathVariable("numberPlate") Vehicle vehicle, Model model) {
         Repair repair = new Repair();
-        Vehicle vehicles = vehicleService.findVehicleByNumberPlate(vehicle.getNumberPlate());
+        Vehicle vehicles = vehicleService.findByNumberPlate(vehicle.getNumberPlate());
         repair.setVehicle(vehicles);
         model.addAttribute("repair", repair);
         return "repair-form";

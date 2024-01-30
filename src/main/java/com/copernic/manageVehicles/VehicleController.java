@@ -133,6 +133,7 @@ public class VehicleController {
     } else {
         return "redirect:/error"; // Cambia a la página de error que desees
     }
+    }
 
     // LIST VEHICLES
     @GetMapping("/vehicles")

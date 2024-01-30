@@ -17,8 +17,8 @@ import java.util.Optional;
 public interface RepairService {
     Repair saveRepair(Repair repair);
     List<Repair> getAllRepairs();
-    Optional<Repair> findRepairById(Long id);
-    void deleteRepairById(Long id);
+    Repair findById(Long id);
+    void deleteById(Long id);
     List<Repair> findByVehicle(Vehicle vehicle);
     boolean existsById(Long id);
     double getTotalPrice(Long id) ;

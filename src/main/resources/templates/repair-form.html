@@ -47,7 +47,7 @@
             <div th:each="task : ${tasks}">
                 <input type="checkbox" th:field="*{tasks}" th:value="${task.id}" />
                 <label th:for="${'task-' + task.id}" th:text="${task.name}"></label>
-                <br />
+                <br/>
             </div>
         </div>
         <br/>

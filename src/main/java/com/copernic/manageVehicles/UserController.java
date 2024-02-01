@@ -74,6 +74,7 @@ public class UserController {
             userService.save(existingUser);
         } else {
             // Nuevo usuario, guárdalo
+            user.setCargo(User.Rol.USUARIO);
             userService.save(user);
         }
 

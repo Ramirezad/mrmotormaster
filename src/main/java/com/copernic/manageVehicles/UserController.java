@@ -145,22 +145,6 @@ public class UserController {
     
 
 
-   @GetMapping("/session")
-public ResponseEntity<?> getDetailsSession(Authentication authentication) {
-    String sessionId = "";
-    Object sessionUser = null;
-
-    if (authentication != null) {
-        if (authentication.getDetails() instanceof WebAuthenticationDetails) {
-            WebAuthenticationDetails details = (WebAuthenticationDetails) authentication.getDetails();
-            sessionId = details.getSessionId();
-        }
-        if (authentication.getPrincipal() instanceof com.copernic.manageVehicles.security.SecurityUser) {
-            com.copernic.manageVehicles.security.SecurityUser securityUser = (com.copernic.manageVehicles.security.SecurityUser) authentication.getPrincipal();
-            sessionUser = securityUser;
-        }
-    }
-
     @GetMapping("/session")
     public ResponseEntity<?> getDetailsSession(Authentication authentication) {
         String sessionId = "";

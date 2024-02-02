@@ -23,6 +23,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.util.List;
 import lombok.Data;
 
@@ -36,15 +37,16 @@ import org.antlr.v4.runtime.misc.NotNull;
 public class Vehicle {
    
     @Id 
+    @Size(max = 20, message = "This field can't have more than 20 characters")
     @NotBlank(message = "Number plate can't be empty!")
     private String numberPlate;
-    
+    @Size(max = 30, message = "This field can't have more than 30 characters")
     @NotBlank(message = "Brand can't be empty!")
     private String brand;
-    
+    @Size(max = 30, message = "This field can't have more than 30 characters")
     @NotBlank(message = "Model can't be empty!")
     private String model;
-   
+    @Size(max = 30, message = "This field can't have more than 30 characters")
     @NotBlank(message = "Color can't be empty!")
     private String color;
     
@@ -54,7 +56,8 @@ public class Vehicle {
     private int fabricationYear;
     
     @NotNull
-    @Min(value = 0, message = "Kilometers can't be negative!")   
+    @Min(value = 0, message = "Kilometers can't be negative!")  
+    @Max(value=10000000, message="That's impossible, too many kilometers, max 10 million")
     private int km;
     
     //Relaciones amorosas

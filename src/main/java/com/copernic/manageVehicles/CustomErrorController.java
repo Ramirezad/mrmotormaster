@@ -4,9 +4,17 @@
  */
 package com.copernic.manageVehicles;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.nio.file.AccessDeniedException;
+import java.security.Principal;
+import java.util.Collection;
 import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -16,12 +24,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 
+
 @Controller
 @ControllerAdvice
 public class CustomErrorController implements ErrorController {
+    
+    private void addRolesToModel(Model model, Principal principal) {
+        Collection<? extends GrantedAuthority> authorities = ((UserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getAuthorities();
+        boolean isAdmin = authorities.contains(new SimpleGrantedAuthority("ROLE_ADMINISTRADOR"));
+        boolean isUser = authorities.contains(new SimpleGrantedAuthority("ROLE_USUARIO"));
+        boolean isMecanico = authorities.contains(new SimpleGrantedAuthority("ROLE_MECANICO"));
+
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("isUser", isUser);
+        model.addAttribute("isMecanico", isMecanico);
+    }
 
     @ExceptionHandler({AccessDeniedException.class, NoHandlerFoundException.class})
-    public String handleError(Model model, Exception ex, HttpServletResponse response) {
+    public String handleError(Model model, Exception ex, HttpServletResponse response, Principal principal) {
+        // Obtener el nif del usuario actualmente autenticado
+        String nif = principal.getName();
+        model.addAttribute("nif", nif);
+
+        // Añadir roles al modelo
+        addRolesToModel(model, principal);
+
         if (ex instanceof NoHandlerFoundException) {
             // Si es un error 404, redirige a la página personalizada para el error 404
             return "error404";
@@ -37,8 +64,30 @@ public class CustomErrorController implements ErrorController {
     }
     
      @RequestMapping("/error")
-    public String handle404Error() {
-        return "error"; // Redirige a error404.html en caso de error 404
-    }
+    public String handleError(Model model, Principal principal) {
     
+    // Obtener el nif del usuario actualmente autenticado
+    String nif = principal.getName();
+    model.addAttribute("nif", nif);
+
+    // Añadir roles al modelo
+    addRolesToModel(model, principal);
+    
+    return "error"; // Redirige a error404.html en caso de error 404
+    }
 }
+
+
+    
+    
+    
+   
+    
+    
+
+
+
+    
+
+    
+

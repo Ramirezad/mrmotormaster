@@ -4,6 +4,8 @@
  */
 package com.copernic.manageVehicles.config;
 
+import com.copernic.manageVehicles.domain.User;
+import com.copernic.manageVehicles.security.SecurityUser;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,6 +24,17 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
-        response.sendRedirect("/session");
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof SecurityUser) {
+            SecurityUser securityUser = (SecurityUser) principal;
+            User user = securityUser.getUser();
+            String role = user.getCargo().name();
+            if ("ADMINISTRADOR".equals(role) || "MECANICO".equals(role)) {
+                response.sendRedirect("/users");
+            } else if ("USUARIO".equals(role)) {
+                response.sendRedirect("/users/" + user.getNif());
+            }
+        }
     }
 }
+

@@ -10,16 +10,19 @@
             <div class="row">
             <ul class="nav justify-content-center">
                 <div class="col">
-                    <li class="nav-item"><a class="btn btn-dark" th:href="@{/users}">Users</a></li>
+                    <li class="nav-item" th:if="${isAdmin || isMecanico}"><a class="btn btn-dark" th:href="@{/users}" >Users</a></li>
                 </div>
                 <div class="col">
-                    <li class="nav-item"><a class="btn btn-light" th:href="@{/vehicles}">Vehicles</a></li>
+                    <li class="nav-item" th:if="${isUser}"><a class="btn btn-dark" th:href="@{/users/{nif}(nif=${user.nif})}" >Users</a></li>
                 </div>
                 <div class="col">
-                    <li class="nav-item"><a class="btn btn-dark" th:href="@{/repairs}">Repairs</a></li>
+                    <li class="nav-item" th:if="${isAdmin || isMecanico}"><a class="btn btn-light" th:href="@{/vehicles}">Vehicles</a></li>
                 </div>
                 <div class="col">
-                    <li class="nav-item"><a class="btn btn-light" th:href="@{/tasks}">Tasks</a></li>
+                    <li class="nav-item" th:if="${isAdmin || isMecanico}"><a class="btn btn-dark" th:href="@{/repairs}">Repairs</a></li>
+                </div>
+                <div class="col">
+                    <li class="nav-item" th:if="${isAdmin || isMecanico}"><a class="btn btn-light" th:href="@{/tasks}">Tasks</a></li>
                 </div>
             </ul>
             </div>
@@ -35,7 +38,7 @@
         <p><strong>Correo Electrónico:</strong> <span th:text="${user.email}"></span></p>
 
         <!-- Buttons -->
-        <a th:href="@{/deleteUser/{nif}(nif=${user.nif})}" class="btn btn-danger mr-2">DELETE</a>
+        <a th:href="@{/deleteUser/{nif}(nif=${user.nif})}" class="btn btn-danger mr-2" th:if="${isAdmin}">DELETE</a>
         <a th:href="@{/updateUser/{nif}(nif=${user.nif})}" class="btn btn-warning">EDIT</a>
     </div>
 
@@ -67,14 +70,15 @@
                 <td>
                     <a class="btn btn-primary" th:href="@{'/viewVehicle/' + ${vehicle.numberPlate}}">View</a>
                 </td>
-                <td>
-                    <a class="btn btn-danger" th:href="@{'/deleteVehicle/' + ${vehicle.numberPlate}}" onclick="return confirm('Are you sure to delete this vehicle?');">Delete</a>
-                </td>
+               <td>
+                    <a class="btn btn-danger" th:href="@{'/deleteVehicle/' + ${vehicle.numberPlate}}" th:if="${isAdmin || isMecanico}" onclick="return confirm('Are you sure to delete this vehicle?');">Delete</a>
+               </td>
+
             </tr>
         </tbody>
     </table>
 
     <!-- Add New Vehicle Button -->
-    <a th:href="@{/vehicle/{nif}(nif=${user.nif})}" class="btn btn-success">ADD NEW VEHICLE</a>
+    <a th:href="@{/vehicle/{nif}(nif=${user.nif})}" class="btn btn-success" th:if="${isAdmin || isMecanico}">ADD NEW VEHICLE</a>
 </body>
 </html>

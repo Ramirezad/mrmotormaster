@@ -35,6 +35,9 @@ public class WebSecurityConfig {
     private UserDetailsService userDetailsService;
 
     @Autowired
+    private CustomAuthenticationSuccessHandler successHandler;
+
+    @Autowired
     public void autenticacio(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(NoOpPasswordEncoder.getInstance());
     }
@@ -43,11 +46,17 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         return http.authorizeHttpRequests(authorize -> authorize
+         
+        
         .requestMatchers("/tasks/edit/{id}").hasRole("ADMINISTRADOR")
-        .requestMatchers("/tasks/**").authenticated()
-        .anyRequest().permitAll())
+        .requestMatchers("/deleteUser/{nif}").hasRole("ADMINISTRADOR")
+        .requestMatchers("tasks").hasAnyRole("ADMINISTRADOR", "MECANICO")
+        .requestMatchers("/users").hasAnyRole("ADMINISTRADOR", "MECANICO")        
+        .requestMatchers("/vehicle").hasAnyRole("ADMINISTRADOR", "MECANICO")
+        .requestMatchers("/user").permitAll()
+        .anyRequest().authenticated())
         .formLogin(formLogin -> formLogin
-            .defaultSuccessUrl("/session", true))
+            .successHandler(successHandler)) // Aquí se configura el AuthenticationSuccessHandler personalizado
             .sessionManagement(session -> session
             .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                     .invalidSessionUrl("/login").maximumSessions(1)
@@ -56,11 +65,10 @@ public class WebSecurityConfig {
                     .and().sessionFixation().migrateSession())
         .build();
     }
-
+ 
+        
     @Bean
     public SessionRegistry sessionRegistry(){
         return new SessionRegistryImpl();
     }
 }
-
-

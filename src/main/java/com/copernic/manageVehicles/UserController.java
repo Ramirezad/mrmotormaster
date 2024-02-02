@@ -20,16 +20,31 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-
+import java.security.Principal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import java.util.Collection;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 /**
  *
  * @author rfernandez
  */
 @Controller
 public class UserController {
+    
+    private void addRolesToModel(Model model, Principal principal) {
+        Collection<? extends GrantedAuthority> authorities = ((UserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getAuthorities();
+        boolean isAdmin = authorities.contains(new SimpleGrantedAuthority("ROLE_ADMINISTRADOR"));
+        boolean isUser = authorities.contains(new SimpleGrantedAuthority("ROLE_USUARIO"));
+        boolean isMecanico = authorities.contains(new SimpleGrantedAuthority("ROLE_MECANICO"));
+
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("isUser", isUser);
+        model.addAttribute("isMecanico", isMecanico);
+    }
 
     @Autowired
     private UserServiceImpl userService;
@@ -78,27 +93,32 @@ public String submitUser(User user, Model model) {
 
     //LIST Users
     @GetMapping("/users")
-    public String listUsers(@RequestParam(required = false) String query, Model model) {
+    public String listUsers(@RequestParam(required = false) String query, Model model, Principal principal) {
         List<User> users;
         if (query != null && !query.isEmpty()) {
             users = userService.search(query);
         } else {
             users = userService.getAll();
         }
-        model.addAttribute("users", users);
-        return "user-list";
-    }
 
-    //DELETE User
+    addRolesToModel(model, principal);
+
+    model.addAttribute("users", users);
+    return "user-list";
+}
+
+
+
+    //DELETE User solo para administradores
     @GetMapping("/deleteUser/{nif}")
     public String delete(@PathVariable("nif") String nif) {
         userService.deleteById(nif);
         return "redirect:/users";
     }
 
-    //SHOW  User
-   @GetMapping("/users/{nif}")
-public String viewById(@PathVariable("nif") String nif, Model model) {
+    //SHOW User
+    @GetMapping("/users/{nif}")
+    public String viewById(@PathVariable("nif") String nif, Model model, Principal principal) {
     Optional<User> userOptional = userService.findByNif(nif);
 
     if (userOptional.isPresent()) {
@@ -106,6 +126,9 @@ public String viewById(@PathVariable("nif") String nif, Model model) {
         List<Vehicle> vehicles = vehicleService.findByOwner(user);
         model.addAttribute("user", user);
         model.addAttribute("vehicles", vehicles);
+
+        addRolesToModel(model, principal);
+
         return "user-details";
     } else {
         // Manejar el caso en que el usuario no existe
@@ -113,6 +136,8 @@ public String viewById(@PathVariable("nif") String nif, Model model) {
         return "redirect:/error"; // Cambia a la página de error que desees
     }
 }
+
+    
 
 
    @GetMapping("/session")

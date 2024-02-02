@@ -57,7 +57,7 @@
     <div class="row">
         <div class="col-2"></div>
         <div class="col-8">
-            <a class="btn btn-info" th:href="@{/repair-form}">Create repair</a> 
+            <a class="btn btn-info" th:href="@{/repair-form/{numberPlate}(numberPlate=${vehicle.numberPlate})}">CREATE REPAIR</a>
             <table class="table">
                 <thead>
                 <tr>

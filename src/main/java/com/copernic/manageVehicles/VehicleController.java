@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.copernic.manageVehicles;
-
 import com.copernic.manageVehicles.dao.RepairDAO;
 import com.copernic.manageVehicles.domain.Repair;
 import com.copernic.manageVehicles.domain.User;
@@ -22,11 +21,6 @@ import java.util.Optional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-
-/**
- *
- * @author rfernandez
- */
 import com.copernic.manageVehicles.dao.RepairDAO;
 import com.copernic.manageVehicles.domain.Repair;
 import com.copernic.manageVehicles.domain.User;
@@ -40,6 +34,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.web.bind.annotation.RequestParam;
+
+/**
+ *
+ * @author rfernandez
+ */
 
 @Controller
 public class VehicleController {
@@ -162,4 +162,5 @@ public class VehicleController {
 
         return "vehicle-details" ;
     }
+    
 }

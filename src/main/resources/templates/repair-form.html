@@ -30,7 +30,7 @@
     <h2>Create Repair</h2>
     <form action="#" th:action="@{/repairs}" th:object="${repair}" method="post">
         <input type="hidden" th:field="*{repairId}" />
-        <label class="form-label" for="owner">Vehicle NumberPlate</label>
+        <label class="form-label" for="id">Vehicle NumberPlate</label>
             <input class="form-control" type="text" id="numberPlate" th:field="*{vehicle.numberPlate}" required readonly>
             <br>
 

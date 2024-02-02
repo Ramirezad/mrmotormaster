@@ -92,6 +92,5 @@ public class VehicleServiceImpl implements VehicleService {
     public List<Repair> findRepairsByNumberPlate(String numberPlate) {
         return vehicleDAO.findByNumberPlate(numberPlate).getRepairs();
     }
-
-    
+   
 }

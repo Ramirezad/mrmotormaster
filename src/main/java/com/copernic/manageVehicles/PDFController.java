@@ -67,7 +67,7 @@ public class PDFController {
                 renderer.createPDF(byteArrayOutputStream);
                 bytesPDF = byteArrayOutputStream.toByteArray();
                 return byteArrayOutputStream.toByteArray();
-            } catch (DocumentException ex) {
+            } catch (DocumentException ex) { 
                 Logger.getLogger(PDFController.class.getName()).log(Level.SEVERE, null, ex);
                 // Manejo de errores, por ejemplo, redirigir a una página de error
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

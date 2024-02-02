@@ -1,16 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Lista de Usuarios</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-</head>
-<body class="container">
-    <nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
-        <div class="container text-center">
-            <div class="row">
-            <ul class="nav justify-content-center">
-                <div class="col">
-                    <li class="nav-item"><a class="btn btn-dark" th:href="@{/users}">Users</a></li>
+    <head>
+        <title>Lista de Usuarios</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        <style>
+            body {
+                background-color: #2B7DA9; /* Este es un color azul eléctrico */
+            }
+        </style>
+    </head>
+    <body class="container">
+        <nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
+            <div class="container text-center">
+                <div class="row">
+                    <a class="navbar-brand" href="#">
+                        <img src="https://64.media.tumblr.com/01a3a9d7ccac918e04e71240b6899d6a/5b51322c74a0d231-32/s540x810/04475ec73c560e805398de6c7121b99e0a490e71.pnj" alt="Logo" width="50" height="50" class="d-inline-block align-text-top">
+                        MR. MOTOR MASTER
+                    </a>
+                    <ul class="nav justify-content-around flex-grow-1">
+                        <li class="nav-item flex-grow-1 text-center"><a class="btn btn-dark" th:href="@{/users}">Users</a></li>
+                        <li class="nav-item flex-grow-1 text-center"><a class="btn btn-light" th:href="@{/vehicles}">Vehicles</a></li>
+                        <li class="nav-item flex-grow-1 text-center"><a class="btn btn-dark" th:href="@{/repairs}">Repairs</a></li>
+                        <li class="nav-item flex-grow-1 text-center"><a class="btn btn-light" th:href="@{/tasks}">Tasks</a></li>
+                    </ul>
                 </div>
                 <div class="col">
                     <li class="nav-item" ><a class="btn btn-light" th:href="@{/vehicles}">Vehicles</a></li>
@@ -23,44 +35,44 @@
                 </div>
             </ul>
             </div>
-        </div>
-    </nav>
-    <h1 class="my-4">Usuarios</h1>
-    <!-- Search Bar -->
-    <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Buscar">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
-    </form>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>NIF</th>
-                <th>Name</th>
-                <th>Surname</th>
-                <th>Role</th>
-                <th>Details</th>
-                <th>Edit</th>
-                <th>Delete</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="user : ${users}">
-                <td th:text="${user.nif}"></td>
-                <td th:text="${user.name}"></td>
-                <td th:text="${user.surname}"></td>
-                <td th:text="${user.cargo}"></td>
-                <td>
-                    <a th:href="@{/users/{nif}(nif=${user.nif})}" class="btn btn-primary">VIEW</a>
-                </td>
-                <td>
-                    <a th:href="@{/updateUser/{nif}(nif=${user.nif})}" class="btn btn-warning">EDIT</a>
-                </td>
-                <td>
-                    <a th:href="@{/deleteUser/{nif}(nif=${user.nif})}" class="btn btn-danger" onclick="return confirm('Are you sure to delete this User?');">DELETE</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+        </nav>
+        <h1 class="my-4">Usuarios</h1>
+        <!-- Search Bar -->
+        <form class="form-inline my-2 my-lg-0" th:action="@{/users}" method="get">
+            <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Buscar" name="query">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+        </form>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>NIF</th>
+                    <th>Name</th>
+                    <th>Surname</th>
+                    <th>Role</th>
+                    <th>Details</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.nif}"></td>
+                    <td th:text="${user.name}"></td>
+                    <td th:text="${user.surname}"></td>
+                    <td th:text="${user.cargo}"></td>
+                    <td>
+                        <a th:href="@{/users/{nif}(nif=${user.nif})}" class="btn btn-primary">VIEW</a>
+                    </td>
+                    <td>
+                        <a th:href="@{/updateUser/{nif}(nif=${user.nif})}" class="btn btn-warning">EDIT</a>
+                    </td>
+                    <td>
+                        <a th:href="@{/deleteUser/{nif}(nif=${user.nif})}" class="btn btn-danger" onclick="return confirm('Are you sure to delete this User?');">DELETE</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

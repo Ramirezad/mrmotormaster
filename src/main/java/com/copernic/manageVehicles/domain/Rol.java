@@ -10,7 +10,7 @@ package com.copernic.manageVehicles.domain;
  */
 
 public enum Rol {    
-    CLIENT,
-    MECHANIC,
-    ADMIN
+    USUARIO,
+    MECANICO,
+    ADMINISTRADOR
 }

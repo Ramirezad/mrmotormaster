@@ -5,10 +5,16 @@
 package com.copernic.manageVehicles.dao;
 
 import com.copernic.manageVehicles.domain.Repair;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import com.copernic.manageVehicles.domain.Vehicle;
+import java.util.Optional;
 
 @Repository
 public interface RepairDAO extends JpaRepository<Repair, Long> {
-    
+        List<Repair> findByVehicle(Vehicle vehicle);        
+        Optional<Repair> findById(Long id);
+        void deleteById(Long id);
+        
 }

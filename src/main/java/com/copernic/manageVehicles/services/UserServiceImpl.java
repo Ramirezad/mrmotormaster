@@ -51,7 +51,7 @@ public class UserServiceImpl implements ServiceInterface<User>{
     public void deleteById(String nif) {
         userDAO.deleteByNif(nif);
     }
-
+  
    
 }
 

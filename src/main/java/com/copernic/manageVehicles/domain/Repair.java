@@ -38,8 +38,8 @@ public class Repair {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate repairDate;
     
-    @ManyToOne
-    @JoinColumn(name = "numberPlate", referencedColumnName = "numberPlate")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "numberPlate" )
     private Vehicle vehicle;
     
     //With lazy it does not work

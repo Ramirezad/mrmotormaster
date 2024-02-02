@@ -4,6 +4,7 @@
  */
 package com.copernic.manageVehicles.services;
 
+import com.copernic.manageVehicles.domain.Repair;
 import com.copernic.manageVehicles.domain.User;
 import com.copernic.manageVehicles.domain.Vehicle;
 import java.util.List;
@@ -17,17 +18,12 @@ public interface VehicleService {
     Vehicle saveVehicle(Vehicle vehicle);
     List<Vehicle> getAllVehicles();
     Vehicle findVehicle(Vehicle vehicle);
-    void deleteVehicleById(String numberPlate);
-
-
+    void deleteVehicleById(String numberPlate);    
     List<Vehicle> findByOwner(User owner);
-
-
     boolean existsById(String numberPlate);
+    Vehicle findByNumberPlate(String numberPlate);
+    void updateVehicle(Vehicle vehicle);
+    List<Repair> findRepairsByNumberPlate(String numberPlate);
 
-
-   
-
-    
-    
 }
+    

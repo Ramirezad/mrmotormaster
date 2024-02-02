@@ -24,33 +24,35 @@
                 </div>
             </ul>
             </div>
-        </div>
-    </nav>
-    <h2>List of Vehicles</h2>
-    
-    <table class="table"    >
-        <tr>
-            <th>Number Plate</th>
-            <th>Brand</th>
-            <th>Model</th>
-            <th>Color</th>
-            <th>FabricationYear</th>
-            <th>Km</th>
-        </tr>
-        <tr th:each="vehicle : ${vehicles}">
-            
-            <td th:text="${vehicle.numberPlate}"></td>
-            <td th:text="${vehicle.brand}"></td>
-            <td th:text="${vehicle.model}"></td>
-            <td th:text="${vehicle.color}"></td>
-            <td th:text="${vehicle.fabricationYear}"></td>
-            <td th:text="${vehicle.km}"></td>
-            <td>
-                <a class="btn btn-primary" th:href="@{'/viewVehicle/' + ${vehicle.numberPlate}}">View</a>
-            </td>
-        </tr>
-      
-    </table>
-    <a class="btn btn-info" th:href="@{/vehicle}"> Add Vehicle</a><br />
-</body>
+        </nav>
+        <!-- Search Bar -->
+        <form class="form-inline my-2 my-lg-0" th:action="@{/vehicles}" method="get">
+            <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Buscar" name="query">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+        </form>
+        <h2>List of Vehicles</h2>
+
+        <table class="table"    >
+            <tr>
+                <th>Number Plate</th>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Color</th>
+                <th>FabricationYear</th>
+                <th>Km</th>
+            </tr>
+            <tr th:each="vehicle : ${vehicles}">
+
+                <td th:text="${vehicle.numberPlate}"></td>
+                <td th:text="${vehicle.brand}"></td>
+                <td th:text="${vehicle.model}"></td>
+                <td th:text="${vehicle.color}"></td>
+                <td th:text="${vehicle.fabricationYear}"></td>
+                <td th:text="${vehicle.km}"></td>
+                <td>
+                    <a class="btn btn-primary" th:href="@{'/viewVehicle/' + ${vehicle.numberPlate}}">View</a>
+                </td>
+            </tr>
+        </table>
+    </body>
 </html>

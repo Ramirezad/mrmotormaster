@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -54,9 +54,14 @@ public class UserController {
     //UPDATE User
     @GetMapping("/updateUser/{nif}")
     public String update(@PathVariable("nif") String nif, Model model) {
-        Optional<User> user = userService.findByNif(nif);
-        model.addAttribute("user", user);
-        return "user-edit";
+        Optional<User> userOptional = userService.findByNif(nif);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            model.addAttribute("user", user);
+            return "user-edit";
+        } else {
+            return "redirect:/error";
+        }
     }
 
     //SHOW FORM User
@@ -69,27 +74,27 @@ public class UserController {
     
     
     @PostMapping("/user")
-public String submitUser(User user, Model model) {
-    Optional<User> existingUserOptional = userService.findByNif(user.getNif());
+    public String submitUser(User user, Model model) {
+        Optional<User> existingUserOptional = userService.findByNif(user.getNif());
 
-    if (existingUserOptional.isPresent()) {
-        // Usuario existente, actualiza los detalles
-        User existingUser = existingUserOptional.get();
-        existingUser.setName(user.getName());
-        existingUser.setSurname(user.getSurname());
-        existingUser.setPhone(user.getPhone());
-        existingUser.setEmail(user.getEmail());
-        existingUser.setCargo(user.getCargo());
-        existingUser.setVehicles(user.getVehicles());
-        userService.save(existingUser);
-    } else {
-        // Nuevo usuario, guárdalo
-        userService.save(user);
+        if (existingUserOptional.isPresent()) {
+            // Usuario existente, actualiza los detalles
+            User existingUser = existingUserOptional.get();
+            existingUser.setName(user.getName());
+            existingUser.setSurname(user.getSurname());
+            existingUser.setPhone(user.getPhone());
+            existingUser.setEmail(user.getEmail());
+            existingUser.setCargo(user.getCargo());
+            existingUser.setVehicles(user.getVehicles());
+            userService.save(existingUser);
+        } else {
+            // Nuevo usuario, guárdalo
+            user.setCargo(User.Rol.USUARIO);
+            userService.save(user);
+        }
+
+        return "redirect:/users";
     }
-
-    return "redirect:/users";
-}
-
 
     //LIST Users
     @GetMapping("/users")
@@ -156,19 +161,29 @@ public ResponseEntity<?> getDetailsSession(Authentication authentication) {
         }
     }
 
-    Map<String, Object> response = new HashMap<>();
-    response.put("response", "Hello World");
-    response.put("sessionId", sessionId);
-    response.put("sessionUser", sessionUser);
+    @GetMapping("/session")
+    public ResponseEntity<?> getDetailsSession(Authentication authentication) {
+        String sessionId = "";
+        Object sessionUser = null;
 
-    System.out.println(authentication);
-    return ResponseEntity.ok(response);
+        if (authentication != null) {
+            if (authentication.getDetails() instanceof WebAuthenticationDetails) {
+                WebAuthenticationDetails details = (WebAuthenticationDetails) authentication.getDetails();
+                sessionId = details.getSessionId();
+            }
+            if (authentication.getPrincipal() instanceof com.copernic.manageVehicles.security.SecurityUser) {
+                com.copernic.manageVehicles.security.SecurityUser securityUser = (com.copernic.manageVehicles.security.SecurityUser) authentication.getPrincipal();
+                sessionUser = securityUser;
+            }
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("response", "Hello World");
+        response.put("sessionId", sessionId);
+        response.put("sessionUser", sessionUser);
+
+        System.out.println(authentication);
+        return ResponseEntity.ok(response);
+    }
+
 }
-
-
-
-
-
-}
-
-

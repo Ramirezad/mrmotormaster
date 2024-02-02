@@ -31,35 +31,36 @@ public class RepairController {
 
     @Autowired
     private RepairService repairService;
-    
+
     @Autowired
     private TaskService taskService;
-   
+
     @Autowired
     private VehicleService vehicleService;
-    
+
     //List of repairs
     @GetMapping("/repairs")
-    public String findAll(Model model){
+    public String findAll(Model model) {
         model.addAttribute("repairs", repairService.getAllRepairs());
         return "repair-list";
     }
+
     //Create Repair
     @GetMapping("/repair-form")
-    public String getEmptyForm(@ModelAttribute("numberPlate") String numberPlate, Model model){
-    Repair repair = new Repair();
-    List<Task> tasks = taskService.getAllTasks();
-    model.addAttribute("tasks", tasks);
-    if (numberPlate != null) {
-        Vehicle vehicle = vehicleService.findByNumberPlate(numberPlate);
-        repair.setVehicle(vehicle);
+    public String getEmptyForm(@ModelAttribute("numberPlate") String numberPlate, Model model) {
+        Repair repair = new Repair();
+        List<Task> tasks = taskService.getAllTasks();
+        model.addAttribute("tasks", tasks);
+        if (numberPlate != null) {
+            Vehicle vehicle = vehicleService.findByNumberPlate(numberPlate);
+            repair.setVehicle(vehicle);
+        }
+
+        model.addAttribute("repair", repair);
+
+        return "repair-form";
     }
 
-    model.addAttribute("repair", repair);
-
-    return "repair-form";
-}
-    
     //Save a repair
     @PostMapping("/repairs")
     public String saveRepair(@Valid Repair repair, BindingResult result, Model model) {
@@ -77,24 +78,22 @@ public class RepairController {
         }
         return "redirect:/repairs";
     }
-    
-    //Visualize individual repair
+
+    // Visualize individual repair
     @GetMapping("/repairs/view/{id}")
-    public String findById(Model model, @PathVariable Long id){
+    public String findById(Model model, @PathVariable Long id) {
         Repair repair = repairService.findById(id);
-        if (repair!=null) {
+        if (repair != null) {
             model.addAttribute("repair", repair);
             model.addAttribute("total", repairService.getTotalPrice(id));
-            
             return "repair-view";
         } else {
-
             return "redirect:/repairs";
         }
     }
 
-    //SHOW USER'S VEHICLES
-    @GetMapping("/repairs/view/{numberPlate}")
+// Show user's vehicles
+    @GetMapping("/repairs/viewByNumberPlate/{numberPlate}")
     public String showForm(@PathVariable("numberPlate") Vehicle vehicle, Model model) {
         Repair repair = new Repair();
         Vehicle vehicles = vehicleService.findByNumberPlate(vehicle.getNumberPlate());
@@ -105,9 +104,9 @@ public class RepairController {
 
     //Update a repair
     @GetMapping("/repairs/edit/{id}")
-    public String editRepair(Model model, @PathVariable Long id){
+    public String editRepair(Model model, @PathVariable Long id) {
         Repair repair = repairService.findById(id);
-        if (repair!=null) {
+        if (repair != null) {
             model.addAttribute("repair", repair);
             model.addAttribute("tasks", taskService.getAllTasks());
             return "repair-edit";

@@ -17,7 +17,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.copernic.manageVehicles.services.VehicleServiceImpl;
 import jakarta.validation.Valid;
+import java.security.Principal;
+import java.util.Collection;
 import java.util.Optional;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +49,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class VehicleController {
+    
+    private void addRolesToModel(Model model, Principal principal) {
+        Collection<? extends GrantedAuthority> authorities = ((UserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getAuthorities();
+        boolean isAdmin = authorities.contains(new SimpleGrantedAuthority("ROLE_ADMINISTRADOR"));
+        boolean isUser = authorities.contains(new SimpleGrantedAuthority("ROLE_USUARIO"));
+        boolean isMecanico = authorities.contains(new SimpleGrantedAuthority("ROLE_MECANICO"));
+
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("isUser", isUser);
+        model.addAttribute("isMecanico", isMecanico);
+    }
 
     @Autowired
     private VehicleServiceImpl vehicleService;
@@ -135,13 +152,24 @@ public class VehicleController {
     }
     }
 
-    // LIST VEHICLES
-    @GetMapping("/vehicles")
-    public String listVehicle(Model model) {
-        List<Vehicle> vehicles = vehicleService.getAllVehicles();
-        model.addAttribute("vehicles", vehicles);
-        return "vehicle-list";
-    }
+
+    //LIST VEHICLES
+   @GetMapping("/vehicles")
+    public String listVehicle(Model model, Principal principal) {
+    List<Vehicle> vehicles = vehicleService.getAllVehicles();
+    model.addAttribute("vehicles", vehicles);
+
+    // Obtener el nif del usuario actualmente autenticado
+    String nif = principal.getName();
+    model.addAttribute("nif", nif);
+
+    // Añadir roles al modelo
+    addRolesToModel(model, principal);
+
+    return "vehicle-list";
+}
+
+
 
     // DELETE VEHICLE
     @GetMapping("/deleteVehicle/{numberPlate}")

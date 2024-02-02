@@ -31,9 +31,11 @@ public String findAll(Model model, Principal principal){
     Collection<? extends GrantedAuthority> authorities = ((UserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getAuthorities();
     boolean isAdmin = authorities.contains(new SimpleGrantedAuthority("ROLE_ADMINISTRADOR"));
     boolean isUser = authorities.contains(new SimpleGrantedAuthority("ROLE_USUARIO"));
+    boolean isMecanico = authorities.contains(new SimpleGrantedAuthority("ROLE_MECANICO"));
     model.addAttribute("tasks", taskService.findAll());
     model.addAttribute("isAdmin", isAdmin);
     model.addAttribute("isUser", isUser);
+    model.addAttribute("isMecanico", isMecanico);
     return "task-list";
 }
 

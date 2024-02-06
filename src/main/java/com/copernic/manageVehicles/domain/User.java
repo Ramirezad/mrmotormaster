@@ -46,6 +46,6 @@ public class User {
     private String email;
     @Enumerated(EnumType.STRING)
     private Rol cargo;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "owner")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "owner")
     private List<Vehicle> vehicles;
 }

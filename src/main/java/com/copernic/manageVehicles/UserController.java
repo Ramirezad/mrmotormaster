@@ -53,19 +53,25 @@ public class UserController {
 
     //UPDATE User
     @GetMapping("/updateUser/{nif}")
-    public String update(@PathVariable("nif") String nif, Model model) {
+    public String update(@PathVariable("nif") String nif, Model model, Principal principal) {
         Optional<User> userOptional = userService.findByNif(nif);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             model.addAttribute("user", user);
+
+            // Agregar roles al modelo
+            addRolesToModel(model, principal);
+
             return "user-edit";
         } else {
             return "redirect:/error";
         }
-    }
+}
+    
+    
 
     //SHOW FORM User
-    @GetMapping("/user")
+    @GetMapping("/signin")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new User());
         return "sign-in";
@@ -73,7 +79,7 @@ public class UserController {
     
     
     
-    @PostMapping("/user")
+    @PostMapping("/signin")
     public String submitUser(User user, Model model) {
         Optional<User> existingUserOptional = userService.findByNif(user.getNif());
 
@@ -111,6 +117,20 @@ public class UserController {
     model.addAttribute("users", users);
     return "user-list";
 }
+    @PostMapping("/users")
+    public String listarUsers(@RequestParam(required = false) String query, Model model, Principal principal) {
+        List<User> users;
+        if (query != null && !query.isEmpty()) {
+            users = userService.search(query);
+        } else {
+            users = userService.getAll();
+        }
+
+    addRolesToModel(model, principal);
+
+    model.addAttribute("users", users);
+    return "user-list";
+}
 
 
 
@@ -120,7 +140,29 @@ public class UserController {
         userService.deleteById(nif);
         return "redirect:/users";
     }
+    
+    
+    //SHOW User
+    @PostMapping("/users/{nif}")
+    public String viewUser(@PathVariable("nif") String nif, Model model, Principal principal) {
+    Optional<User> userOptional = userService.findByNif(nif);
 
+    if (userOptional.isPresent()) {
+        User user = userOptional.get();
+        List<Vehicle> vehicles = vehicleService.findByOwner(user);
+        model.addAttribute("user", user);
+        model.addAttribute("vehicles", vehicles);
+
+        addRolesToModel(model, principal);
+        userService.save(user);
+        return "user-details";
+    } else {
+        // Manejar el caso en que el usuario no existe
+        // Puedes redirigir a una página de error o hacer algo apropiado
+        return "redirect:/error"; // Cambia a la página de error que desees
+    }
+}
+    
     //SHOW User
     @GetMapping("/users/{nif}")
     public String viewById(@PathVariable("nif") String nif, Model model, Principal principal) {
@@ -144,7 +186,7 @@ public class UserController {
 
     
 
-
+    /* NO SE USA
     @GetMapping("/session")
     public ResponseEntity<?> getDetailsSession(Authentication authentication) {
         String sessionId = "";
@@ -169,5 +211,5 @@ public class UserController {
         System.out.println(authentication);
         return ResponseEntity.ok(response);
     }
-
+    */
 }

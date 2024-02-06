@@ -10,24 +10,31 @@
         </style>
     </head>
     <body class="container">
-        <nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
-            <div class="container text-center">
-                <div class="row">
-                    <a class="navbar-brand" href="#">
-                        <img src="/images/logo.png" alt="Logo" width="50" height="50" class="d-inline-block align-text-top">
-                        MR. MOTOR MASTER
-                    </a>
-                    <ul class="nav justify-content-around flex-grow-1">
-                        <li class="nav-item flex-grow-1 text-center"><a class="btn btn-dark" th:href="@{/users}">Users</a></li>
-                        <li class="nav-item flex-grow-1 text-center"><a class="btn btn-light" th:href="@{/vehicles}">Vehicles</a></li>
-                        <li class="nav-item flex-grow-1 text-center"><a class="btn btn-dark" th:href="@{/repairs}">Repairs</a></li>
-                        <li class="nav-item flex-grow-1 text-center"><a class="btn btn-light" th:href="@{/tasks}">Tasks</a></li>
-                    </ul>
+       <nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
+        <div class="container text-center">
+            <div class="row">
+            <ul class="nav justify-content-center">
+                <div class="col">
+                    <li class="nav-item" th:if="${isAdmin || isMecanico}"><a class="btn btn-dark" th:href="@{/users}" >Users</a></li>
                 </div>
+                <div class="col">
+                    <li class="nav-item" th:if="${isUser}"><a class="btn btn-dark" th:href="@{/users/{nif}(nif=${user.nif})}" >Users</a></li>
+                </div>
+                <div class="col">
+                    <li class="nav-item" th:if="${isAdmin || isMecanico}"><a class="btn btn-light" th:href="@{/vehicles}">Vehicles</a></li>
+                </div>
+                <div class="col">
+                    <li class="nav-item" th:if="${isAdmin || isMecanico}"><a class="btn btn-dark" th:href="@{/repairs}">Repairs</a></li>
+                </div>
+                <div class="col">
+                    <li class="nav-item" th:if="${isAdmin || isMecanico}"><a class="btn btn-light" th:href="@{/tasks}">Tasks</a></li>
+                </div>
+            </ul>
             </div>
         </nav>
     <h1 class="my-4">Editar Usuario</h1>
-    <form action="#" th:action="@{/user}" th:object="${user}" method="post" class="mb-3">
+    <form action="#" th:action="${isAdmin || isMecanico} ? @{/users} : @{/users/{nif}(nif=${user.nif})}" th:object="${user}" method="post" class="mb-3">
+
         <div class="form-group">
             <label for="nif">NIF:</label>
             <input type="text" id="nif" name="nif" th:value="${user.nif}" pattern="[0-9]{8}[A-Za-z]{1}" readonly class="form-control">
@@ -53,8 +60,8 @@
             <input type="email" id="email" name="email" th:value="${user.email}" required class="form-control">
         </div>
         <div class="form-group">
-            <label for="cargo">Cargo:</label>
-            <select id="cargo" name="cargo" th:field="*{cargo}" class="form-control">
+            <label for="cargo" th:if="${isAdmin}" >Cargo:</label>
+            <select id="cargo" name="cargo" th:field="*{cargo}" class="form-control" th:if="${isAdmin}">
                 <option th:each="rol : ${T(com.copernic.manageVehicles.domain.Rol).values()}" th:value="${rol}" th:text="${rol}">Cargo</option>
             </select>
         </div>             

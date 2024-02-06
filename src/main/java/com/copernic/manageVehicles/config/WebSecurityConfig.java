@@ -48,13 +48,20 @@ public class WebSecurityConfig {
         return http.authorizeHttpRequests(authorize -> authorize
          
         
-        .requestMatchers("/tasks/edit/{id}").hasRole("ADMINISTRADOR")
-        .requestMatchers("/deleteUser/{nif}").hasRole("ADMINISTRADOR")
-        .requestMatchers("tasks").hasAnyRole("ADMINISTRADOR", "MECANICO")
-        .requestMatchers("/users").hasAnyRole("ADMINISTRADOR", "MECANICO")        
-        .requestMatchers("/vehicle").hasAnyRole("ADMINISTRADOR", "MECANICO")
-        .requestMatchers("/user").permitAll()
+        .requestMatchers("/deleteUser/*", "/tasks/edit/*","/task-form", "/tasks/delete/*").hasRole("ADMINISTRADOR")
+                
+        .requestMatchers("/repairs/edit/*", "/repairs/delete/*","/repair-form/*","/repairs/view/*","/repairs/viewByNumberPlate/*",
+                "/updateVehicle/*","/vehicle/*", "/vehicles", "/deleteVehicle/*",               
+                "/users","/vehicle", "/tasks","/repairs")            
+                .hasAnyRole("ADMINISTRADOR", "MECANICO")         
+                
+        
+        .requestMatchers("/updateUser/*").hasAnyRole("ADMINISTRADOR", "USUARIO")
+                
+        .requestMatchers("/signin", "/login", "/error", "/error404", "/repairs/view/*", "/users/{nif}", "/logout", "/viewVehicle/*").permitAll()
         .anyRequest().authenticated())
+                
+                
         .formLogin(formLogin -> formLogin
             .successHandler(successHandler)) // Aquí se configura el AuthenticationSuccessHandler personalizado
             .sessionManagement(session -> session

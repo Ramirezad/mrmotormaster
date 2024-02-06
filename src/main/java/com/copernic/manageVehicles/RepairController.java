@@ -118,7 +118,7 @@ public class RepairController {
             model.addAttribute("tasks", taskService.getAllTasks());
             return "repair-edit";
         } else {
-            return "redirect:/repairs";
+            return "redirect:/repairs"; 
         }
     }
 

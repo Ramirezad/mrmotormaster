@@ -39,8 +39,8 @@ public String findAll(Model model, Principal principal){
     return "task-list";
 }
 
-
-
+ 
+    /* NO LA USAMOS
     @GetMapping("/tasks/view/{id}")
     public String findById(Model model, @PathVariable Long id){
     Optional<Task> taskOptional = taskService.findById(id);
@@ -54,6 +54,7 @@ public String findAll(Model model, Principal principal){
         return "redirect:/tasks";
     }
 }
+*/ 
 
 
     @GetMapping("/task-form")

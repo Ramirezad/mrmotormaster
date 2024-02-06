@@ -177,18 +177,29 @@ public class VehicleController {
         vehicleService.deleteVehicleById(numberPlate);
         return "redirect:/vehicles";
     }
-
+    
+    
+    
+    
     @GetMapping("/viewVehicle/{numberPlate}")
-    public String viewVehicle(@PathVariable("numberPlate") String numberPlate, Model model) {
-        Vehicle vehicle = vehicleService.findByNumberPlate(numberPlate);
-        List<Repair> repairs = vehicleService.findRepairsByNumberPlate(numberPlate);
-        User user = userService.findByNif(vehicle.getOwner().getNif()).orElse(new User());
+public String viewVehicle(@PathVariable("numberPlate") String numberPlate, Model model, Principal principal) {
+    Vehicle vehicle = vehicleService.findByNumberPlate(numberPlate);
+    List<Repair> repairs = vehicleService.findRepairsByNumberPlate(numberPlate);
+    User user = userService.findByNif(vehicle.getOwner().getNif()).orElse(new User());
 
-        model.addAttribute("vehicle", vehicle);// Add Vehicle info to the model
-        model.addAttribute("user", user);// Add User info to the model
-        model.addAttribute("repairs", repairs); // Add Repairs info to the model
+    model.addAttribute("vehicle", vehicle); // Add Vehicle info to the model
+    model.addAttribute("user", user); // Add User info to the model
+    model.addAttribute("repairs", repairs); // Add Repairs info to the model
 
-        return "vehicle-details" ;
-    }
+    // Obtener el nif del usuario actualmente autenticado
+    String nif = principal.getName();
+    model.addAttribute("nif", nif);
+
+    // Añadir roles al modelo
+    addRolesToModel(model, principal);
+
+    return "vehicle-details";
+}
+
     
 }

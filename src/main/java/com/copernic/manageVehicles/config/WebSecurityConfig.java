@@ -50,7 +50,7 @@ public class WebSecurityConfig {
         
         .requestMatchers("/deleteUser/*", "/tasks/edit/*","/task-form", "/tasks/delete/*").hasRole("ADMINISTRADOR")
                 
-        .requestMatchers("/repairs/edit/*", "/repairs/delete/*","/repair-form/*","/repairs/view/*","/repairs/viewByNumberPlate/*",
+        .requestMatchers("/repairs/edit/*", "/repairs/delete/*","/repair-form/*","/repairs/viewByNumberPlate/*",
                 "/updateVehicle/*","/vehicle/*", "/vehicles", "/deleteVehicle/*",               
                 "/users","/vehicle", "/tasks","/repairs")            
                 .hasAnyRole("ADMINISTRADOR", "MECANICO")         
@@ -58,7 +58,7 @@ public class WebSecurityConfig {
         
         .requestMatchers("/updateUser/*").hasAnyRole("ADMINISTRADOR", "USUARIO")
                 
-        .requestMatchers("/signin", "/login", "/error", "/error404", "/repairs/view/*", "/users/{nif}", "/logout", "/viewVehicle/*").permitAll()
+        .requestMatchers("/signin", "/login", "/error", "/error404", "/repairs/view/*", "/users/{nif}", "/logout", "/viewVehicle/*","/repairs/view/*").permitAll()
         .anyRequest().authenticated())
                 
                 

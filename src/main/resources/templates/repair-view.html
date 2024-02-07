@@ -19,10 +19,21 @@
                         MR. MOTOR MASTER
                     </a>
                     <ul class="nav justify-content-around flex-grow-1">
-                        <li class="nav-item flex-grow-1 text-center"><a class="btn btn-dark" th:href="@{/users}">Users</a></li>
-                        <li class="nav-item flex-grow-1 text-center"><a class="btn btn-light" th:href="@{/vehicles}">Vehicles</a></li>
-                        <li class="nav-item flex-grow-1 text-center"><a class="btn btn-dark" th:href="@{/repairs}">Repairs</a></li>
-                        <li class="nav-item flex-grow-1 text-center"><a class="btn btn-light" th:href="@{/tasks}">Tasks</a></li>
+                        <div class="col">
+                        <li class="nav-item" th:if="${isAdmin || isMecanico}"><a class="btn btn-dark" th:href="@{/users}" >Users</a></li>
+                </div>
+                <div class="col">
+                    <li class="nav-item" th:if="${isUser}"><a class="btn btn-dark" th:href="@{/users/{nif}(nif=${user.nif})}" >Users</a></li>
+                </div>
+                <div class="col">
+                    <li class="nav-item" th:if="${isAdmin || isMecanico}"><a class="btn btn-light" th:href="@{/vehicles}">Vehicles</a></li>
+                </div>
+                <div class="col">
+                    <li class="nav-item" th:if="${isAdmin || isMecanico}"><a class="btn btn-dark" th:href="@{/repairs}">Repairs</a></li>
+                </div>
+                <div class="col">
+                    <li class="nav-item" th:if="${isAdmin || isMecanico}"><a class="btn btn-light" th:href="@{/tasks}">Tasks</a></li>
+                </div>
                     </ul>
                 </div>
             </div>
@@ -41,7 +52,7 @@
                     <th scope="col">Observation</th>
                     <th scope="col">Km</th>
                     <th scope="col">Repair Date</th>
-                    <th scope="col">Actions</th>
+                    <th scope="col" th:if="${isAdmin || isMecanico}">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -50,9 +61,9 @@
                         <td th:text="${repair.observation}"></td>
                         <td th:text="${repair.km}"></td>
                         <td th:text="${repair.repairDate}"></td>
-                        <td>
-                            <a class="btn btn-primary" th:href="@{/repairs/edit/{id}(id=${repair.repairId})}">Edit</a>
-                            <a class="btn btn-danger" th:href="@{/repairs/delete/{id}(id=${repair.repairId})}">Delete</a>
+                        <td th:if="${isAdmin || isMecanico}">
+                            <a class="btn btn-primary" th:href="@{/repairs/edit/{id}(id=${repair.repairId})}" th:if="${isAdmin || isMecanico}">Edit</a>
+                            <a class="btn btn-danger" th:href="@{/repairs/delete/{id}(id=${repair.repairId})}" th:if="${isAdmin || isMecanico}">Delete</a>
                         </td>
                     </tr>
                 </tbody>
@@ -74,8 +85,13 @@
                     </tr>
                  </tbody>
             </table>
-            <h2>Total cost: <span th:text="${total}"></span>€</h2>
-            <a class="btn btn-secondary" th:href="@{/repairs}">Back to List</a>
+            <h2>Total cost: <span th:text="${total}"></span>€</h2>            
+            <a class="btn btn-secondary" th:href="@{/viewVehicle/{numberPlate}(numberPlate=${numberPlate})}">Go to Vehicle</a>
+
+            
+
+
+            
         </div>
         <div class="col-2">
             <!-- Nuevo formulario para generar el PDF de esta reparación específica -->

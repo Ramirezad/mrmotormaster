@@ -51,10 +51,21 @@ public class UserController {
     @Autowired
     private VehicleServiceImpl vehicleService;
 
-    //UPDATE User
     @GetMapping("/updateUser/{nif}")
-    public String update(@PathVariable("nif") String nif, Model model, Principal principal) {
+public String update(@PathVariable("nif") String nif, Model model, Principal principal) {
+    // Obtén el nombre del usuario logueado
+    String loggedInNif = principal.getName();
+
+    // Comprueba si el usuario logueado tiene el rol 'isUser', 'isAdmin' o 'isMecanico'
+    Collection<? extends GrantedAuthority> authorities = ((UserDetails) ((Authentication) principal).getPrincipal()).getAuthorities();
+    boolean isUser = authorities.contains(new SimpleGrantedAuthority("ROLE_USUARIO"));
+    boolean isAdmin = authorities.contains(new SimpleGrantedAuthority("ROLE_ADMINISTRADOR"));
+    boolean isMecanico = authorities.contains(new SimpleGrantedAuthority("ROLE_MECANICO"));
+
+    if ((isUser && loggedInNif.equals(nif)) || isAdmin || isMecanico) {
+        // Si el usuario logueado es 'isUser' y el nif coincide, o si es 'isAdmin' o 'isMecanico', procede como antes
         Optional<User> userOptional = userService.findByNif(nif);
+
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             model.addAttribute("user", user);
@@ -66,7 +77,12 @@ public class UserController {
         } else {
             return "redirect:/error";
         }
+    } else {
+        // Si el usuario logueado no es 'isUser' o el nif no coincide, y tampoco es 'isAdmin' ni 'isMecanico', redirige a la página de error
+        return "redirect:/error";
+    }
 }
+
     
     
 
@@ -164,25 +180,43 @@ public class UserController {
 }
     
     //SHOW User
-    @GetMapping("/users/{nif}")
-    public String viewById(@PathVariable("nif") String nif, Model model, Principal principal) {
-    Optional<User> userOptional = userService.findByNif(nif);
+@GetMapping("/users/{nif}")
+public String viewById(@PathVariable("nif") String nif, Model model, Principal principal) {
+    // Obtén el nombre del usuario logueado
+    String loggedInNif = principal.getName();
 
-    if (userOptional.isPresent()) {
-        User user = userOptional.get();
-        List<Vehicle> vehicles = vehicleService.findByOwner(user);
-        model.addAttribute("user", user);
-        model.addAttribute("vehicles", vehicles);
+    // Comprueba si el usuario logueado tiene el rol 'isUser', 'isAdmin' o 'isMecanico'
+    Collection<? extends GrantedAuthority> authorities = ((UserDetails) ((Authentication) principal).getPrincipal()).getAuthorities();
+    boolean isUser = authorities.contains(new SimpleGrantedAuthority("ROLE_USUARIO"));
+    boolean isAdmin = authorities.contains(new SimpleGrantedAuthority("ROLE_ADMINISTRADOR"));
+    boolean isMecanico = authorities.contains(new SimpleGrantedAuthority("ROLE_MECANICO"));
 
-        addRolesToModel(model, principal);
+    if ((isUser && loggedInNif.equals(nif)) || isAdmin || isMecanico) {
+        // Si el usuario logueado es 'isUser' y el nif coincide, o si es 'isAdmin' o 'isMecanico', procede como antes
+        Optional<User> userOptional = userService.findByNif(nif);
 
-        return "user-details";
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            List<Vehicle> vehicles = vehicleService.findByOwner(user);
+            model.addAttribute("user", user);
+            model.addAttribute("vehicles", vehicles);
+
+            addRolesToModel(model, principal);
+
+            return "user-details";
+        } else {
+            return "redirect:/error";
+        }
     } else {
-        // Manejar el caso en que el usuario no existe
-        // Puedes redirigir a una página de error o hacer algo apropiado
-        return "redirect:/error"; // Cambia a la página de error que desees
+        // Si el usuario logueado no es 'isUser' o el nif no coincide, y tampoco es 'isAdmin' ni 'isMecanico', redirige a la página de error
+        return "redirect:/error";
     }
 }
+
+
+
+
+
 
     
 

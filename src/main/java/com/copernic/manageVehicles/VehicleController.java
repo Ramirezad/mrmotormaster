@@ -182,7 +182,7 @@ public class VehicleController {
     
     
     @GetMapping("/viewVehicle/{numberPlate}")
-public String viewVehicle(@PathVariable("numberPlate") String numberPlate, Model model, Principal principal) {
+    public String viewVehicle(@PathVariable("numberPlate") String numberPlate, Model model, Principal principal) {
     Vehicle vehicle = vehicleService.findByNumberPlate(numberPlate);
     List<Repair> repairs = vehicleService.findRepairsByNumberPlate(numberPlate);
     User user = userService.findByNif(vehicle.getOwner().getNif()).orElse(new User());

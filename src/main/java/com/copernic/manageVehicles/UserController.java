@@ -28,13 +28,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.ModelAttribute;
+
 /**
  *
  * @author rfernandez
  */
 @Controller
 public class UserController {
-    
+
     private void addRolesToModel(Model model, Principal principal) {
         Collection<? extends GrantedAuthority> authorities = ((UserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getAuthorities();
         boolean isAdmin = authorities.contains(new SimpleGrantedAuthority("ROLE_ADMINISTRADOR"));
@@ -52,39 +54,49 @@ public class UserController {
     private VehicleServiceImpl vehicleService;
 
     @GetMapping("/updateUser/{nif}")
-public String update(@PathVariable("nif") String nif, Model model, Principal principal) {
-    // Obtén el nombre del usuario logueado
-    String loggedInNif = principal.getName();
+    public String update(@PathVariable("nif") String nif, Model model, Principal principal) {
+        // Obtén el nombre del usuario logueado
+        String loggedInNif = principal.getName();
 
-    // Comprueba si el usuario logueado tiene el rol 'isUser', 'isAdmin' o 'isMecanico'
-    Collection<? extends GrantedAuthority> authorities = ((UserDetails) ((Authentication) principal).getPrincipal()).getAuthorities();
-    boolean isUser = authorities.contains(new SimpleGrantedAuthority("ROLE_USUARIO"));
-    boolean isAdmin = authorities.contains(new SimpleGrantedAuthority("ROLE_ADMINISTRADOR"));
-    boolean isMecanico = authorities.contains(new SimpleGrantedAuthority("ROLE_MECANICO"));
+        // Comprueba si el usuario logueado tiene el rol 'isUser', 'isAdmin' o 'isMecanico'
+        Collection<? extends GrantedAuthority> authorities = ((UserDetails) ((Authentication) principal).getPrincipal()).getAuthorities();
+        boolean isUser = authorities.contains(new SimpleGrantedAuthority("ROLE_USUARIO"));
+        boolean isAdmin = authorities.contains(new SimpleGrantedAuthority("ROLE_ADMINISTRADOR"));
+        boolean isMecanico = authorities.contains(new SimpleGrantedAuthority("ROLE_MECANICO"));
 
-    if ((isUser && loggedInNif.equals(nif)) || isAdmin || isMecanico) {
-        // Si el usuario logueado es 'isUser' y el nif coincide, o si es 'isAdmin' o 'isMecanico', procede como antes
-        Optional<User> userOptional = userService.findByNif(nif);
+        if ((isUser && loggedInNif.equals(nif)) || isAdmin || isMecanico) {
+            // Si el usuario logueado es 'isUser' y el nif coincide, o si es 'isAdmin' o 'isMecanico', procede como antes
+            Optional<User> userOptional = userService.findByNif(nif);
 
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            model.addAttribute("user", user);
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                model.addAttribute("user", user);
 
-            // Agregar roles al modelo
-            addRolesToModel(model, principal);
+                // Agregar roles al modelo
+                addRolesToModel(model, principal);
 
-            return "user-edit";
+                return "user-edit";
+            } else {
+                System.out.println("pito");
+                return "redirect:/error";
+            }
         } else {
+            // Si el usuario logueado no es 'isUser' o el nif no coincide, y tampoco es 'isAdmin' ni 'isMecanico', redirige a la página de error
             return "redirect:/error";
         }
-    } else {
-        // Si el usuario logueado no es 'isUser' o el nif no coincide, y tampoco es 'isAdmin' ni 'isMecanico', redirige a la página de error
-        return "redirect:/error";
     }
-}
 
-    
-    
+    @PostMapping("/updateUser/update")
+    public String userUpdate(@ModelAttribute User user, Model model, Principal principal) {
+        userService.save(user);
+        List<Vehicle> vehicles = vehicleService.findByOwner(user);
+            model.addAttribute("user", user);
+            model.addAttribute("vehicles", vehicles);
+
+            addRolesToModel(model, principal);
+            userService.save(user);
+            return "user-details";        
+    }
 
     //SHOW FORM User
     @GetMapping("/signin")
@@ -92,28 +104,20 @@ public String update(@PathVariable("nif") String nif, Model model, Principal pri
         model.addAttribute("user", new User());
         return "sign-in";
     }
-    
-    
-    
+
     @PostMapping("/signin")
     public String submitUser(User user, Model model) {
         Optional<User> existingUserOptional = userService.findByNif(user.getNif());
 
         if (existingUserOptional.isPresent()) {
             // Usuario existente, actualiza los detalles
-            User existingUser = existingUserOptional.get();
-            existingUser.setName(user.getName());
-            existingUser.setSurname(user.getSurname());
-            existingUser.setPhone(user.getPhone());
-            existingUser.setEmail(user.getEmail());
-            existingUser.setCargo(user.getCargo());
-            existingUser.setVehicles(user.getVehicles());
-            userService.save(existingUser);
-        } else {
-            // Nuevo usuario, guárdalo
             user.setCargo(User.Rol.USUARIO);
-            userService.save(user);
+        } else {
+            // Nuevo usuario, guárdalo           
+            user.setCargo(User.Rol.ADMINISTRADOR);
+
         }
+        userService.save(user);
 
         return "redirect:/users";
     }
@@ -128,11 +132,12 @@ public String update(@PathVariable("nif") String nif, Model model, Principal pri
             users = userService.getAll();
         }
 
-    addRolesToModel(model, principal);
+        addRolesToModel(model, principal);
 
-    model.addAttribute("users", users);
-    return "user-list";
-}
+        model.addAttribute("users", users);
+        return "user-list";
+    }
+
     @PostMapping("/users")
     public String listarUsers(@RequestParam(required = false) String query, Model model, Principal principal) {
         List<User> users;
@@ -142,13 +147,11 @@ public String update(@PathVariable("nif") String nif, Model model, Principal pri
             users = userService.getAll();
         }
 
-    addRolesToModel(model, principal);
+        addRolesToModel(model, principal);
 
-    model.addAttribute("users", users);
-    return "user-list";
-}
-
-
+        model.addAttribute("users", users);
+        return "user-list";
+    }
 
     //DELETE User solo para administradores
     @GetMapping("/deleteUser/{nif}")
@@ -156,43 +159,10 @@ public String update(@PathVariable("nif") String nif, Model model, Principal pri
         userService.deleteById(nif);
         return "redirect:/users";
     }
-    
-    
+
     //SHOW User
     @PostMapping("/users/{nif}")
     public String viewUser(@PathVariable("nif") String nif, Model model, Principal principal) {
-    Optional<User> userOptional = userService.findByNif(nif);
-
-    if (userOptional.isPresent()) {
-        User user = userOptional.get();
-        List<Vehicle> vehicles = vehicleService.findByOwner(user);
-        model.addAttribute("user", user);
-        model.addAttribute("vehicles", vehicles);
-
-        addRolesToModel(model, principal);
-        userService.save(user);
-        return "user-details";
-    } else {
-        // Manejar el caso en que el usuario no existe
-        // Puedes redirigir a una página de error o hacer algo apropiado
-        return "redirect:/error"; // Cambia a la página de error que desees
-    }
-}
-    
-    //SHOW User
-@GetMapping("/users/{nif}")
-public String viewById(@PathVariable("nif") String nif, Model model, Principal principal) {
-    // Obtén el nombre del usuario logueado
-    String loggedInNif = principal.getName();
-
-    // Comprueba si el usuario logueado tiene el rol 'isUser', 'isAdmin' o 'isMecanico'
-    Collection<? extends GrantedAuthority> authorities = ((UserDetails) ((Authentication) principal).getPrincipal()).getAuthorities();
-    boolean isUser = authorities.contains(new SimpleGrantedAuthority("ROLE_USUARIO"));
-    boolean isAdmin = authorities.contains(new SimpleGrantedAuthority("ROLE_ADMINISTRADOR"));
-    boolean isMecanico = authorities.contains(new SimpleGrantedAuthority("ROLE_MECANICO"));
-
-    if ((isUser && loggedInNif.equals(nif)) || isAdmin || isMecanico) {
-        // Si el usuario logueado es 'isUser' y el nif coincide, o si es 'isAdmin' o 'isMecanico', procede como antes
         Optional<User> userOptional = userService.findByNif(nif);
 
         if (userOptional.isPresent()) {
@@ -202,23 +172,48 @@ public String viewById(@PathVariable("nif") String nif, Model model, Principal p
             model.addAttribute("vehicles", vehicles);
 
             addRolesToModel(model, principal);
-
+            userService.save(user);
             return "user-details";
         } else {
+            // Manejar el caso en que el usuario no existe
+            // Puedes redirigir a una página de error o hacer algo apropiado
+            return "redirect:/error"; // Cambia a la página de error que desees
+        }
+    }
+
+    //SHOW User
+    @GetMapping("/users/{nif}")
+    public String viewById(@PathVariable("nif") String nif, Model model, Principal principal) {
+        // Obtén el nombre del usuario logueado
+        String loggedInNif = principal.getName();
+
+        // Comprueba si el usuario logueado tiene el rol 'isUser', 'isAdmin' o 'isMecanico'
+        Collection<? extends GrantedAuthority> authorities = ((UserDetails) ((Authentication) principal).getPrincipal()).getAuthorities();
+        boolean isUser = authorities.contains(new SimpleGrantedAuthority("ROLE_USUARIO"));
+        boolean isAdmin = authorities.contains(new SimpleGrantedAuthority("ROLE_ADMINISTRADOR"));
+        boolean isMecanico = authorities.contains(new SimpleGrantedAuthority("ROLE_MECANICO"));
+
+        if ((isUser && loggedInNif.equals(nif)) || isAdmin || isMecanico) {
+            // Si el usuario logueado es 'isUser' y el nif coincide, o si es 'isAdmin' o 'isMecanico', procede como antes
+            Optional<User> userOptional = userService.findByNif(nif);
+
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                List<Vehicle> vehicles = vehicleService.findByOwner(user);
+                model.addAttribute("user", user);
+                model.addAttribute("vehicles", vehicles);
+
+                addRolesToModel(model, principal);
+
+                return "user-details";
+            } else {
+                return "redirect:/error";
+            }
+        } else {
+            // Si el usuario logueado no es 'isUser' o el nif no coincide, y tampoco es 'isAdmin' ni 'isMecanico', redirige a la página de error
             return "redirect:/error";
         }
-    } else {
-        // Si el usuario logueado no es 'isUser' o el nif no coincide, y tampoco es 'isAdmin' ni 'isMecanico', redirige a la página de error
-        return "redirect:/error";
     }
-}
-
-
-
-
-
-
-    
 
     /* NO SE USA
     @GetMapping("/session")
@@ -245,5 +240,5 @@ public String viewById(@PathVariable("nif") String nif, Model model, Principal p
         System.out.println(authentication);
         return ResponseEntity.ok(response);
     }
-    */
+     */
 }

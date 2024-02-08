@@ -187,7 +187,6 @@ public String listVehicle(@RequestParam(required = false) String query, Model mo
     Vehicle vehicle = vehicleService.findByNumberPlate(numberPlate);
     List<Repair> repairs = vehicleService.findRepairsByNumberPlate(numberPlate);
     User user = userService.findByNif(vehicle.getOwner().getNif()).orElse(new User());
-
     model.addAttribute("vehicle", vehicle); // Add Vehicle info to the model
     model.addAttribute("user", user); // Add User info to the model
     model.addAttribute("repairs", repairs); // Add Repairs info to the model

@@ -8,7 +8,7 @@
     <h1 class="my-4">Mr. Motor Master</h1>
     <p><a href="/login">Tengo una cuenta</a></p>
     <h2 class="my-4">Nuevo usuario</h2>
-    <form th:action="@{/user}" th:object="${user}" method="post" class="mb-3">
+    <form th:action="@{/signin}" th:object="${user}" method="post" class="mb-3">
         <div class="form-group">
             <label for="nif">NIF:</label>
             <input type="text" id="nif" th:field="*{nif}" class="form-control" pattern="[0-9]{8}[A-Za-z]{1}" required>

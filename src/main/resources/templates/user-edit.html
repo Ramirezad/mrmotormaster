@@ -33,8 +33,8 @@
             </div>
         </nav>
     <h1 class="my-4">Editar Usuario</h1>
-    <form action="#" th:action="${isAdmin || isMecanico} ? @{/users} : @{/users/{nif}(nif=${user.nif})}" th:object="${user}" method="post" class="mb-3">
-
+    <form th:action="@{/updateUser/update}" th:object="${user}" method="post" class="mb-3">
+        <input type="hidden" id="nif" name="nif" th:value="${user.id}" th:field ="*{id}">
         <div class="form-group">
             <label for="nif">NIF:</label>
             <input type="text" id="nif" name="nif" th:value="${user.nif}" pattern="[0-9]{8}[A-Za-z]{1}" readonly class="form-control">
@@ -53,7 +53,7 @@
         </div>
         <div class="form-group">
             <label for="telefono">Teléfono:</label>
-            <input type="tel" id="telefono" name="telefono" pattern="[0-9]{9}" th:value="${user.phone}" required class="form-control">
+            <input type="tel" id="phone" name="phone" pattern="[0-9]{9}" th:value="${user.phone}" required class="form-control">
         </div>
         <div class="form-group">
             <label for="email">Correo Electrónico:</label>

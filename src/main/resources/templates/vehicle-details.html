@@ -10,13 +10,21 @@
                 background-color: #fff;
             }
             body{
-                background-color:#7189c1;
+                background-color:#7189c1 ;
                 border:2px solid #000;
-                
+
+            }
+            
+            /* Estilos adicionales para mejorar la apariencia */
+           
+            th, td {
+                padding: 1%;
+                text-align: center;
+                border: 1px solid #000;
             }
             header>div a{
                 font-weight:bolder;
-               
+
             }
             header{
                 border:1px solid #000;
@@ -25,7 +33,7 @@
                 padding: 5%;
             }
             .navbar{
-                
+
                 padding:0;
             }
             a{
@@ -35,16 +43,16 @@
                 list-style-type: none;
                 margin:4%;
                 font-weight:bolder;
-                
+
             }
             nav .col{
                 background-color:#fff;
                 border:1px solid#000;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             }
             nav .col:nth-child(2) {
                 background-color:#fef8a0 !important;
-                
+
             }
             .navbutton{
                 list-style-type: none;
@@ -58,24 +66,24 @@
                 color:#000 !important;
                 font-weight: bolder;
                 font-size: 1.2em;
-                    
+
             }
-            
-            
-           
+
+
+
 
         </style>
     </head>
-        <!-- Navigation Menu -->
+    <!-- Navigation Menu -->
     <body class="container">
         <header>
             <div class="container text-center">
                 <div class="row">
                     <div class ="col">
-                    <a class="navbar-brand" href="#">
-                        <img src="/images/logo.png" alt="Logo" width="50" height="50" class="d-inline-block align-text-top">
-                        MR. MOTOR MASTER
-                    </a>
+                        <a class="navbar-brand" href="#">
+                            <img src="/images/logo.png" alt="Logo" width="50" height="50" class="d-inline-block align-text-top">
+                            MR. MOTOR MASTER
+                        </a>
                     </div>
                     <div class ="col">
                         <a class="navbar-brand" href="#">LOG OUT ↪</a>
@@ -85,9 +93,9 @@
         </header>
         <nav class="navbar" data-bs-theme="dark">
             <div class="container text-center">
-                    <div class="col">
-                        <li class="nav-item "><a class="navbutton" th:href="@{/users}">Users</a></li>
-                    </div>
+                <div class="col">
+                    <li class="nav-item "><a class="navbutton" th:href="@{/users}">Users</a></li>
+                </div>
                 <div class="col">
                     <li class="nav-item" ><a class="navbutton" th:href="@{/vehicles}">Vehicles</a></li>
                 </div>
@@ -131,17 +139,17 @@
                                 <th scope="col">DATE</th>
                                 <th scope="col">KM</th>
                                 <th scope="col">DETAILS</th>
-                                
-                              
+
+
 
                             </tr>
                         </thead>
                         <tbody>
                             <tr th:each = "repair: ${repairs}">
-                                <th scope="row" th:text="${repair.repairId}"></th>
+                                <td th:text="${repair.repairId}"></th>
                                 <td th:text="${repair.repairDate}"></td>
                                 <td th:text="${repair.km}"></td>
-                            
+
                                 <td>
                                     <a class="btn btn-primary" th:href="@{/repairs/view/{id}(id=${repair.repairId})}">View</a>
                                 </td>

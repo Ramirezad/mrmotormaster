@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import java.util.List;
+import java.util.ArrayList;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -49,24 +50,6 @@ public class RepairController {
     
     @Autowired
     private UserServiceImpl userService;
-
-    //List of repairs
-    @GetMapping("/repairs")
-    public String findAll(Model model) {
-        model.addAttribute("repairs", repairService.getAllRepairs());
-        return "repair-list";
-    }
-    
-        private void addRolesToModel(Model model, Principal principal) {
-        Collection<? extends GrantedAuthority> authorities = ((UserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getAuthorities();
-        boolean isAdmin = authorities.contains(new SimpleGrantedAuthority("ROLE_ADMINISTRADOR"));
-        boolean isUser = authorities.contains(new SimpleGrantedAuthority("ROLE_USUARIO"));
-        boolean isMecanico = authorities.contains(new SimpleGrantedAuthority("ROLE_MECANICO"));
-
-        model.addAttribute("isAdmin", isAdmin);
-        model.addAttribute("isUser", isUser);
-        model.addAttribute("isMecanico", isMecanico);
-    }
         
     //Create Repair
     @GetMapping("/repair-form/{numberPlate}")
@@ -81,7 +64,7 @@ public class RepairController {
                 repair.setVehicle(vehicle);
                 model.addAttribute("numberPlate", numberPlate);
             } else {
-                return "redirect:/repairs";  // o return "error-page";
+                return "redirect:/repairs";// o return "error-page";
             }
         }
 
@@ -89,13 +72,56 @@ public class RepairController {
         return "repair-form";
     }
 
+    
+    
+    //Update a repair
+    @GetMapping("/repairs/edit/{id}")
+    public String editRepair(Model model, @PathVariable Long id) {
+        Repair repair = repairService.findById(id);
+        List<Task> allTasks = taskService.getAllTasks();
+        List<Task> tasksFromRepair = repair.getTasks();
+
+        //OVERKILL**************************************
+        ArrayList<Boolean> areTasksInRepair = new ArrayList<>();
+        for (int i = 0; i < allTasks.size(); i++) {
+            boolean isInRepairs = false;
+            for (int j = 0; j < tasksFromRepair.size(); j++) {
+                if(allTasks.get(i).equals(tasksFromRepair.get(j))){
+                    areTasksInRepair.add(true);
+                    isInRepairs=true;
+                    break;
+                }
+            }
+            if(!isInRepairs)
+                areTasksInRepair.add(false);
+        }
+        //**********************************************
+        //model.addAttribute("areTasksInRepair", areTasksInRepair);
+        model.addAttribute("repair", repair);
+        model.addAttribute("tasks", allTasks);
+        
+        return "repair-edit";
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     //Save a repair
     @PostMapping("/repairs")
     public String saveRepair(@Valid Repair repair, BindingResult result, Model model) {       
-                repairService.saveRepair(repair);                
+        repairService.saveRepair(repair);                
         return "redirect:/repairs";
     }
-
+    //List of repairs
+    @GetMapping("/repairs")
+    public String findAll(Model model) {
+        model.addAttribute("repairs", repairService.getAllRepairs());
+        return "repair-list";
+    }
     //Visualize individual repair    
     @GetMapping("/repairs/view/{id}")
     public String findById(Model model, @PathVariable Long id, Principal principal) {
@@ -122,13 +148,6 @@ public class RepairController {
         return "redirect:/error";
     }
 }
-
-
-
-
-
-
-
     //SHOW USER'S VEHICLES
     @GetMapping("/repairs/viewByNumberPlate/{numberPlate}")
     public String showForm(@PathVariable("numberPlate") Vehicle vehicle, Model model) {
@@ -138,24 +157,21 @@ public class RepairController {
         model.addAttribute("repair", repair);
         return "repair-form";
     }
-
-    //Update a repair
-    @GetMapping("/repairs/edit/{id}")
-    public String editRepair(Model model, @PathVariable Long id) {
-        Repair repair = repairService.findById(id);
-        if (repair != null) {
-            model.addAttribute("repair", repair);
-            model.addAttribute("tasks", taskService.getAllTasks());
-            return "repair-edit";
-        } else {
-            return "redirect:/repairs"; 
-        }
-    }
-
     // Delete a repair
     @GetMapping("/repairs/delete/{id}")
     public String deleteRepair(@PathVariable Long id) {
         repairService.deleteById(id);
         return "redirect:/repairs";
+    }
+    
+    private void addRolesToModel(Model model, Principal principal) {
+        Collection<? extends GrantedAuthority> authorities = ((UserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal()).getAuthorities();
+        boolean isAdmin = authorities.contains(new SimpleGrantedAuthority("ROLE_ADMINISTRADOR"));
+        boolean isUser = authorities.contains(new SimpleGrantedAuthority("ROLE_USUARIO"));
+        boolean isMecanico = authorities.contains(new SimpleGrantedAuthority("ROLE_MECANICO"));
+
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("isUser", isUser);
+        model.addAttribute("isMecanico", isMecanico);
     }
 }

@@ -90,7 +90,7 @@ public String update(@PathVariable("nif") String nif, Model model, Principal pri
     @GetMapping("/signin")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new User());
-        return "sign-in";
+        return "signin";
     }
     
     

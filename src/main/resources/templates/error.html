@@ -17,7 +17,7 @@
                 <h1 class="display-1 fw-bold">ERROR</h1>
                 <p class="fs-3"> <span class="text-danger">Ups!</span> Se nos ha caído un poco de aceite por aqui.</p>
                 
-                
+                <a class="btn btn-primary" th:href="@{/login}" sec:authorize="!isAuthenticated()">Login</a>
                 <a class="btn btn-primary" th:href="@{/users}" th:if="${isAdmin || isMecanico}">Go User List</a>
                 <a class="btn btn-primary" th:href="@{/users/{nif}(nif=${nif})}" th:if="${isUser}">Go User List</a>
 

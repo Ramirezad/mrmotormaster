@@ -115,7 +115,7 @@ public String update(@PathVariable("nif") String nif, Model model, Principal pri
             userService.save(user);
         }
 
-        return "redirect:/users";
+        return "redirect:/login";
     }
 
     //LIST Users
@@ -220,7 +220,7 @@ public String viewById(@PathVariable("nif") String nif, Model model, Principal p
 
     
 
-    /* NO SE USA
+    
     @GetMapping("/session")
     public ResponseEntity<?> getDetailsSession(Authentication authentication) {
         String sessionId = "";
@@ -245,5 +245,5 @@ public String viewById(@PathVariable("nif") String nif, Model model, Principal p
         System.out.println(authentication);
         return ResponseEntity.ok(response);
     }
-    */
+    
 }

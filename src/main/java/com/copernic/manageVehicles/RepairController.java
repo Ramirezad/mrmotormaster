@@ -96,8 +96,13 @@ public class RepairController {
     //Save a repair
     @PostMapping("/repairs")
     public String saveRepair(@Valid Repair repair, BindingResult result, Model model) {       
-        repairService.saveRepair(repair);                
-        return "redirect:/repairs";
+        if(result.hasErrors()){
+            return "repair-form";
+        }
+        else{
+            repairService.saveRepair(repair);
+            return "redirect:/repairs";
+        }
     }
     //List of repairs
     @GetMapping("/repairs")

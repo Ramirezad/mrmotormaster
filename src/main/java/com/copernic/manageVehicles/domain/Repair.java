@@ -14,25 +14,37 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 import java.util.HashSet;
 import java.util.List;
+import org.springframework.validation.annotation.Validated;
 
 /**
  *
  * @author enricledo
  */
+@Validated
 @Data
 @Entity
 @Table(name = "repair")
 public class Repair {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)    
     private Long repairId;
 
+    @Size(max = 255, message = "This field can't have more than 255 characters")
+    @NotBlank(message = "Observation can't be empty!")
     private String observation;
+    
+    @Min(value = 0, message = "Cannot be less that zero!") 
+    @Max(value = 3000000, message ="There's no way you did 3M km on that!")
     private int km;
     
     @DateTimeFormat(pattern = "yyyy-MM-dd")

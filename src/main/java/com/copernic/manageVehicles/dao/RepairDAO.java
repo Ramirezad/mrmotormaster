@@ -16,5 +16,4 @@ public interface RepairDAO extends JpaRepository<Repair, Long> {
         List<Repair> findByVehicle(Vehicle vehicle);        
         Optional<Repair> findById(Long id);
         void deleteById(Long id);
-        
 }

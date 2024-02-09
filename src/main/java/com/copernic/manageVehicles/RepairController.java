@@ -13,6 +13,7 @@ import com.copernic.manageVehicles.services.TaskService;
 import com.copernic.manageVehicles.services.UserServiceImpl;
 import com.copernic.manageVehicles.services.VehicleService;
 import jakarta.validation.Valid;
+import java.util.stream.Collectors;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.Optional;
@@ -31,6 +32,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -79,36 +81,17 @@ public class RepairController {
     public String editRepair(Model model, @PathVariable Long id) {
         Repair repair = repairService.findById(id);
         List<Task> allTasks = taskService.getAllTasks();
-        List<Task> tasksFromRepair = repair.getTasks();
-
-        //OVERKILL**************************************
-        ArrayList<Boolean> areTasksInRepair = new ArrayList<>();
-        for (int i = 0; i < allTasks.size(); i++) {
-            boolean isInRepairs = false;
-            for (int j = 0; j < tasksFromRepair.size(); j++) {
-                if(allTasks.get(i).equals(tasksFromRepair.get(j))){
-                    areTasksInRepair.add(true);
-                    isInRepairs=true;
-                    break;
-                }
-            }
-            if(!isInRepairs)
-                areTasksInRepair.add(false);
-        }
-        //**********************************************
-        //model.addAttribute("areTasksInRepair", areTasksInRepair);
+        
+        List<Long> tasksFromRepair = repair.getTasks().stream()
+                                     .map(Task::getId)
+                                     .collect(Collectors.toList());
+        
         model.addAttribute("repair", repair);
+        model.addAttribute("tasksFromRepair", tasksFromRepair);
         model.addAttribute("tasks", allTasks);
         
         return "repair-edit";
     }
-    
-    
-    
-    
-    
-    
-    
     
     //Save a repair
     @PostMapping("/repairs")
@@ -118,10 +101,17 @@ public class RepairController {
     }
     //List of repairs
     @GetMapping("/repairs")
-    public String findAll(Model model) {
-        model.addAttribute("repairs", repairService.getAllRepairs());
+    public String findAll(@RequestParam(required = false) String query, Model model) {
+        List<Repair> repairs;
+        if (query != null && !query.isEmpty()) {
+            repairs = repairService.searchBar(query);
+        } else {
+            repairs = repairService.getAllRepairs();
+        }
+        model.addAttribute("repairs", repairs);
         return "repair-list";
     }
+    
     //Visualize individual repair    
     @GetMapping("/repairs/view/{id}")
     public String findById(Model model, @PathVariable Long id, Principal principal) {
@@ -174,4 +164,6 @@ public class RepairController {
         model.addAttribute("isUser", isUser);
         model.addAttribute("isMecanico", isMecanico);
     }
+    
+    
 }

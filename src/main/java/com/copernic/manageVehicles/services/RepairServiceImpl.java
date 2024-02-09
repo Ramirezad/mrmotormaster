@@ -10,6 +10,7 @@ import com.copernic.manageVehicles.domain.Task;
 import com.copernic.manageVehicles.domain.User;
 import com.copernic.manageVehicles.domain.Vehicle;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -72,9 +73,42 @@ public class RepairServiceImpl implements RepairService {
             throw new RuntimeException("Repair with ID " + id + " not found.");
         }
     }
-
-  
-}
-
     
+    @Override
+    @Transactional(readOnly = true)
+    public List<Repair> searchBar(String query) {
+        
+        List<Repair> repairs = repairDAO.findAll();
+        List<Repair> result = new ArrayList<>();
+        int km = 0;
+        Long repairId = 0L;
+        boolean canAccessKm = false;
+        boolean canAccessRepairId = false;
+        
+        try {
+            km = Integer.parseInt(query);
+            canAccessKm = true;
+            repairId = Long.parseLong(query);
+            canAccessRepairId = true;
+        } catch (NumberFormatException e) {
+            System.out.println("Query cannot be converted to Km or RepairId.");
+        }
 
+        for (int i = 0; i < repairs.size(); i++) {
+            if(canAccessKm){
+                if(repairs.get(i).getKm() == km)
+                    result.add(repairs.get(i));
+            }
+            if(canAccessRepairId){
+                if(repairs.get(i).getRepairId().equals(repairId))
+                    result.add(repairs.get(i));
+            }
+            if(repairs.get(i).getVehicle().getNumberPlate().contains(query))
+                result.add(repairs.get(i));
+        }
+        if(result.isEmpty())
+            return repairs;
+        else
+            return result;
+    }
+}

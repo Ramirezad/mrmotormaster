@@ -103,7 +103,30 @@
                     <li class="nav-item" th:if="${isAdmin || isMecanico}"><a class="navbutton" th:href="@{/tasks}">Tasks</a></li>
                 </div>
             </div>
-        </nav>
+            <div class="col">
+                <li class="nav-item" th:if="${isUser}"><a class="btn btn-dark" th:href="@{/users/{nif}(nif=${user.nif})}" >Users</a></li>
+            </div>
+            <div class="col">
+                <li class="nav-item" th:if="${isAdmin || isMecanico}"><a class="btn btn-light" th:href="@{/vehicles}">Vehicles</a></li>
+            </div>
+            <div class="col">
+                <li class="nav-item" th:if="${isAdmin || isMecanico}"><a class="btn btn-dark" th:href="@{/repairs}">Repairs</a></li>
+            </div>
+            <div class="col">
+                <li class="nav-item" th:if="${isAdmin || isMecanico}"><a class="btn btn-light" th:href="@{/tasks}">Tasks</a></li>
+            </div>
+            <div class="col">
+                <li class="nav-item">
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" class="btn btn-danger" value="Logout"/>
+    </form>
+</li>
+
+            </div>
+        </ul>
+        </div>
+    </nav>
+
     <h1 class="my-4">Detalles del Usuario</h1>
 
     <!-- User Details -->

@@ -102,7 +102,6 @@
 
         <!-- botón para enviar el correo electrónico -->
         <form th:action="@{/send-email}" method="post">
-            <input type="hidden" name="repairId" th:value="${repair.repairId}" />
             <button class="btn btn-primary" type="submit">Send E-mail</button>
         </form>
     </div>

@@ -102,7 +102,7 @@ public class UserController {
     @GetMapping("/signin")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new User());
-        return "sign-in";
+        return "signin";
     }
 
     @PostMapping("/signin")
@@ -119,7 +119,7 @@ public class UserController {
         }
         userService.save(user);
 
-        return "redirect:/users";
+        return "redirect:/login";
     }
 
     //LIST Users
@@ -215,7 +215,7 @@ public class UserController {
         }
     }
 
-    /* NO SE USA
+    
     @GetMapping("/session")
     public ResponseEntity<?> getDetailsSession(Authentication authentication) {
         String sessionId = "";
@@ -240,5 +240,5 @@ public class UserController {
         System.out.println(authentication);
         return ResponseEntity.ok(response);
     }
-     */
+    
 }

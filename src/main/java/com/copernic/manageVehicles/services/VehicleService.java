@@ -26,6 +26,4 @@ public interface VehicleService {
     List<Repair> findRepairsByNumberPlate(String numberPlate);
     List<Vehicle> searchVehicles(String query);
 }
-
-
     

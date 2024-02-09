@@ -108,12 +108,16 @@
                 </div>
             </div>
         </nav>
-        <h1 class="my-4">Usuarios</h1>
+        <h1 class="my-4">Usuarios</h1>       
         <!-- Search Bar -->
-        <form class="form-inline my-2 my-lg-0" th:action="@{/users}" method="get">
-            <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Buscar" name="query">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
-        </form>
+        <br  />
+        <div class="d-flex justify-content-center">
+            <form class="form-inline my-2 my-lg-0" th:action="@{/users}" method="get">
+                <button type="submit">🔎</button>
+                <input  type="search" placeholder="Search User" aria-label="Search" name="query" >
+            </form>
+        </div>
+        <br />
 
         <table class="table table-striped">
             <thead>

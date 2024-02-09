@@ -77,7 +77,6 @@ public class UserController {
 
                 return "user-edit";
             } else {
-                System.out.println("pito");
                 return "redirect:/error";
             }
         } else {
@@ -109,14 +108,12 @@ public class UserController {
     public String submitUser(User user, Model model) {
         Optional<User> existingUserOptional = userService.findByNif(user.getNif());
 
-        if (existingUserOptional.isPresent()) {
-            // Usuario existente, actualiza los detalles
-            user.setCargo(User.Rol.USUARIO);
-        } else {
-            // Nuevo usuario, guárdalo           
-            user.setCargo(User.Rol.ADMINISTRADOR);
-
-        }
+       if(existingUserOptional != null){
+          // Nuevo usuario, guárdalo           
+            user.setCargo(User.Rol.USUARIO); 
+       }else{
+           user.setCargo(User.Rol.ADMINISTRADOR);
+       }       
         userService.save(user);
 
         return "redirect:/login";

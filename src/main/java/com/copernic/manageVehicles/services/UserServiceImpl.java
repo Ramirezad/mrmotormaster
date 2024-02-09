@@ -30,7 +30,8 @@ public class UserServiceImpl implements ServiceInterface<User> {
             oldUser.setPassword(user.getPassword());
             oldUser.setSurname(user.getSurname());
             oldUser.setPhone(user.getPhone());
-            oldUser.setEmail(user.getEmail());
+            oldUser.setEmail(user.getEmail());            
+            oldUser.setCargo(user.getCargo());
             return userDAO.save(oldUser);
         } else {
             return userDAO.save(user);

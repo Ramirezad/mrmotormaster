@@ -88,7 +88,7 @@ public class CustomErrorController implements ErrorController {
     // Añadir roles al modelo
     addRolesToModel(model, principal);
     
-    return "error"; // Redirige a error404.html en caso de error 404
+    return "error";
     }
 }
 

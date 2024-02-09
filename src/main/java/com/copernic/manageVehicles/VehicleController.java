@@ -153,10 +153,15 @@ public class VehicleController {
     }
 
 
-    //LIST VEHICLES
+ //List Vehicles
    @GetMapping("/vehicles")
-    public String listVehicle(Model model, Principal principal) {
-    List<Vehicle> vehicles = vehicleService.getAllVehicles();
+public String listVehicle(@RequestParam(required = false) String query, Model model, Principal principal) {
+    List<Vehicle> vehicles;
+    if (query != null && !query.isEmpty()) {
+        vehicles = vehicleService.searchVehicles(query);
+    } else {
+        vehicles = vehicleService.getAllVehicles();
+    }
     model.addAttribute("vehicles", vehicles);
 
     // Obtener el nif del usuario actualmente autenticado
@@ -168,6 +173,7 @@ public class VehicleController {
 
     return "vehicle-list";
 }
+
 
 
 

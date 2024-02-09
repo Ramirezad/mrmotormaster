@@ -92,5 +92,12 @@ public class VehicleServiceImpl implements VehicleService {
     public List<Repair> findRepairsByNumberPlate(String numberPlate) {
         return vehicleDAO.findByNumberPlate(numberPlate).getRepairs();
     }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List<Vehicle> searchVehicles(String query) {
+        return vehicleDAO.findByNumberPlateContainingOrBrandContainingOrModelContaining(query, query, query);
+    }
+
    
 }

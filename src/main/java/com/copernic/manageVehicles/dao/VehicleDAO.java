@@ -14,6 +14,6 @@ import org.springframework.data.repository.query.Param;
 public interface VehicleDAO extends JpaRepository<Vehicle, String> {
     List<Vehicle> findByOwner(User Owner);
     Vehicle findByNumberPlate(String numberPlate);
-    
+    List<Vehicle> findByNumberPlateContainingOrBrandContainingOrModelContaining(String numberPlate, String brand, String model);
 }
 

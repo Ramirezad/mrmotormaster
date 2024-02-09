@@ -83,27 +83,36 @@
                         </a>
                     </div>
                     <div class ="col">
-                        <a class="navbar-brand" href="#">LOG OUT ↪</a>
+                        <li class="nav-item">
+                            <form th:action="@{/logout}" method="post">
+                                <input type="submit" class="btn btn-danger" value="Logout"/>
+                            </form>
+                        </li>
                     </div>
                 </div>
             </div>
         </header>
         <nav class="navbar" data-bs-theme="dark">
             <div class="container text-center">
-                <div class="col">
-                    <li class="nav-item "><a class="navbutton" th:href="@{/users}">Users</a></li>
+                <div class="col" th:if="${isUser}">
+                    <li class="nav-item " th:if="${isUser}"><a class="navbutton" th:href="@{/users/{nif}(nif=${user.nif})}">Users</a></li>
                 </div>
-                <div class="col">
-                    <li class="nav-item" ><a class="navbutton" th:href="@{/vehicles}">Vehicles</a></li>
+                <div class="col" th:if="${isAdmin || isMecanico}">
+                    <li class="nav-item " th:if="${isAdmin || isMecanico}"><a class="navbutton" th:href="@{/users}">Users</a></li>
                 </div>
-                <div class="col">
+                <div class="col" >
+                    <li class="nav-item" th:if="${isAdmin || isMecanico}"><a class="navbutton" th:href="@{/vehicles}">Vehicles</a></li>
+                </div>
+                <div class="col" >
                     <li class="nav-item" th:if="${isAdmin || isMecanico}"><a class="navbutton" th:href="@{/repairs}">Repairs</a></li>
                 </div>
-                <div class="col">
+                <div class="col" >
                     <li class="nav-item" th:if="${isAdmin || isMecanico}"><a class="navbutton" th:href="@{/tasks}">Tasks</a></li>
                 </div>
             </div>
-        </nav>
+            
+    </nav>
+
     <h1 class="my-4">Detalles del Usuario</h1>
 
     <!-- User Details -->
@@ -131,8 +140,8 @@
                 <th>Color</th>
                 <th>FabricationYear</th>
                 <th>Km</th>
-                <th></th>
-                <th></th>
+                <th>Details</th>
+                
             </tr>
         </thead>
         <tbody>
@@ -146,10 +155,10 @@
                 <td>
                     <a class="btn btn-primary" th:href="@{'/viewVehicle/' + ${vehicle.numberPlate}}">View</a>
                 </td>
-               <td>
+                <!-- comment<td>
                     <a class="btn btn-danger" th:href="@{'/deleteVehicle/' + ${vehicle.numberPlate}}" th:if="${isAdmin || isMecanico}" onclick="return confirm('Are you sure to delete this vehicle?');">Delete</a>
                </td>
-
+                   -->
             </tr>
         </tbody>
     </table>

@@ -83,7 +83,11 @@
                         </a>
                     </div>
                     <div class ="col">
-                        <a class="navbar-brand" href="#">LOG OUT ↪</a>
+                        <li class="nav-item">
+                            <form th:action="@{/logout}" method="post">
+                                <input type="submit" class="btn btn-danger" value="Logout"/>
+                            </form>
+                        </li>
                     </div>
                 </div>
             </div>

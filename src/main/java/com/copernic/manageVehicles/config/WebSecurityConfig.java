@@ -43,39 +43,39 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        return http.authorizeHttpRequests(authorize -> authorize
-         
-        
+    return http.authorizeHttpRequests(authorize -> authorize
         .requestMatchers("/deleteUser/*", "/tasks/edit/*","/task-form", "/tasks/delete/*").hasRole("ADMINISTRADOR")
-                
         .requestMatchers("/repairs/edit/*", "/repairs/delete/*","/repair-form/*","/repairs/viewByNumberPlate/*",
-                "/updateVehicle/*","/vehicle/*", "/vehicles", "/deleteVehicle/*",               
-                "/users","/vehicle", "/tasks","/repairs")            
-                .hasAnyRole("ADMINISTRADOR", "MECANICO")         
-                
-        
+            "/updateVehicle/*","/vehicle/*", "/vehicles", "/deleteVehicle/*",               
+            "/users","/vehicle", "/tasks","/repairs")            
+            .hasAnyRole("ADMINISTRADOR", "MECANICO")         
         .requestMatchers("/updateUser/*").hasAnyRole("ADMINISTRADOR", "USUARIO")
-                
         .requestMatchers("/signin", "/login", "/error", "/error404", "/repairs/view/*", "/users/{nif}", "/logout", "/viewVehicle/*","/repairs/view/*").permitAll()
         .anyRequest().authenticated())
-                
-                
-        .formLogin(formLogin -> formLogin
-            .successHandler(successHandler)) // Aquí se configura el AuthenticationSuccessHandler personalizado
-            .sessionManagement(session -> session
-            .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-                    .invalidSessionUrl("/login").maximumSessions(1)
-                    .expiredUrl("/login")
-                    .sessionRegistry(sessionRegistry())
-                    .and().sessionFixation().migrateSession())
-        .build();
-    }
+    .formLogin(formLogin -> formLogin
+        .loginPage("/login")
+        .successHandler(successHandler)) // Aquí se configura el AuthenticationSuccessHandler personalizado
+    .logout(logout -> logout
+        .logoutUrl("/logout")
+        .logoutSuccessUrl("/login")
+        .invalidateHttpSession(true)
+        .deleteCookies())
+    .sessionManagement(session -> session
+        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+        .invalidSessionUrl("/login").maximumSessions(1)
+        .expiredUrl("/login")
+        .sessionRegistry(sessionRegistry())
+        .and().sessionFixation().migrateSession())
+    .build();
+}
+
  
         
     @Bean
     public SessionRegistry sessionRegistry(){
         return new SessionRegistryImpl();
     }
+    
 }

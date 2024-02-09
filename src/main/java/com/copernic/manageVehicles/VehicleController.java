@@ -152,7 +152,8 @@ public class VehicleController {
     }
     }
 
-//List Vehicles
+
+ //List Vehicles
    @GetMapping("/vehicles")
 public String listVehicle(@RequestParam(required = false) String query, Model model, Principal principal) {
     List<Vehicle> vehicles;
@@ -172,6 +173,10 @@ public String listVehicle(@RequestParam(required = false) String query, Model mo
 
     return "vehicle-list";
 }
+
+
+
+
     // DELETE VEHICLE
     @GetMapping("/deleteVehicle/{numberPlate}")
     public String delete(@PathVariable("numberPlate") String numberPlate) {

@@ -124,7 +124,7 @@
 
         <!-- Buttons -->
         <a th:href="@{/deleteUser/{nif}(nif=${user.nif})}" class="btn btn-danger mr-2" th:if="${isAdmin}">DELETE</a>
-        <a th:href="@{/updateUser/{nif}(nif=${user.nif})}" class="btn btn-warning">EDIT</a>
+        <a th:href="@{/updateUser/{nif}(nif=${user.nif})}" class="btn btn-warning" th:if="${isAdmin || isUser}">EDIT</a>
     </div>
 
     <!-- Vehicle Details -->

@@ -45,8 +45,9 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public void deleteVehicleById(String numberPlate) {
-        vehicleDAO.deleteById(numberPlate);
+    @Transactional
+    public void deleteById(String numberPlate) {
+        vehicleDAO.deleteByNumberPlate(numberPlate);
     }
 
     @Override

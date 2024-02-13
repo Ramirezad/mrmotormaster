@@ -180,7 +180,7 @@ public String listVehicle(@RequestParam(required = false) String query, Model mo
     // DELETE VEHICLE
     @GetMapping("/deleteVehicle/{numberPlate}")
     public String delete(@PathVariable("numberPlate") String numberPlate) {
-        vehicleService.deleteVehicleById(numberPlate);
+        vehicleService.deleteById(numberPlate);
         return "redirect:/vehicles";
     }
     

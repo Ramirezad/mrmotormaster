@@ -48,4 +48,22 @@ public class User {
     private Rol cargo;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "owner")
     private List<Vehicle> vehicles;
+    
+    
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", nif='" + nif + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", phone=" + phone +
+                ", email='" + email + '\'' +
+                ", cargo=" + cargo +
+                // 'vehicles' field is not included to avoid potential circular dependency
+                '}';
+    }
+
 }
+

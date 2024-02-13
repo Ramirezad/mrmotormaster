@@ -76,7 +76,7 @@ public class RepairController {
 
     
     
-    //Update a repair
+    //Edit-Update a repair
     @GetMapping("/repairs/edit/{id}")
     public String editRepair(Model model, @PathVariable Long id) {
         Repair repair = repairService.findById(id);
@@ -168,7 +168,5 @@ public class RepairController {
         model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("isUser", isUser);
         model.addAttribute("isMecanico", isMecanico);
-    }
-    
-    
+    }   
 }

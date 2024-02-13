@@ -67,5 +67,18 @@ public class Vehicle {
  
     @OneToMany(fetch = FetchType.EAGER ,mappedBy = "vehicle",cascade = CascadeType.REMOVE)
     private List<Repair> repairs;
-   
+    
+    @Override
+    public String toString() {
+        return "Vehicle {" +
+            "numberPlate='" + numberPlate + '\'' +
+            ", brand='" + brand + '\'' +
+            ", model='" + model + '\'' +
+            ", color='" + color + '\'' +
+            ", fabricationYear=" + fabricationYear +
+            ", km=" + km +
+            ", owner=" + (owner != null ? owner.getNif() : "null") +
+            ", repairs=" + (repairs != null ? repairs.size() : "0") +
+            '}';
+    }   
 }

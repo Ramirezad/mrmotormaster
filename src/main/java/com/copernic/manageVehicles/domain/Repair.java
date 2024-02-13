@@ -64,4 +64,17 @@ public class Repair {
         inverseJoinColumns = @JoinColumn(name = "task_id")
     )
     public List<Task> tasks;
+    
+    @Override
+    public String toString() {
+        return "Repair{" +
+                "repairId=" + repairId +
+                ", observation='" + observation + '\'' +
+                ", km=" + km +
+                ", repairDate=" + repairDate +
+                ", vehicle=" + (vehicle != null ? vehicle.getNumberPlate() : null) +
+                // 'tasks' field is not included to avoid potential circular dependency
+                '}';
+    }
+
 }

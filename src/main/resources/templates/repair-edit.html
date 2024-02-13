@@ -129,7 +129,7 @@
         <h2>Tasks:</h2>
         <div id="tasksContainer">
             <div th:each="task : ${tasks}">
-                <input type="checkbox" th:if="${tasksFromRepair.contains(task.id)}" th:value="${task.id}" />
+                <input type="checkbox" th:checked="${tasksFromRepair.contains(task.id)}" th:value="${task.id}" name="tasks"/>
                 <label th:for="${'task-' + task.id}" th:text="${task.name}"></label>
             </div>
         </div>

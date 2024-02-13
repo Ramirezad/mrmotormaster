@@ -168,7 +168,5 @@ public class RepairController {
         model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("isUser", isUser);
         model.addAttribute("isMecanico", isMecanico);
-    }
-    
-    
+    }   
 }

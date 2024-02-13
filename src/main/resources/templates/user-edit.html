@@ -98,7 +98,7 @@
                     <li class="nav-item "><a class="navbutton" th:href="@{/users}">Users</a></li>
                 </div>
                 <div class="col">
-                    <li class="nav-item" ><a class="navbutton" th:href="@{/vehicles}">Vehicles</a></li>
+                    <li class="nav-item" th:if="${isAdmin || isMecanico}"><a class="navbutton" th:href="@{/vehicles}">Vehicles</a></li>
                 </div>
                 <div class="col">
                     <li class="nav-item" th:if="${isAdmin || isMecanico}"><a class="navbutton" th:href="@{/repairs}">Repairs</a></li>

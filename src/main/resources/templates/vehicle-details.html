@@ -50,10 +50,10 @@
                 border:1px solid#000;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             }
-            nav .col:nth-child(2) {
-                background-color:#fef8a0 !important;
+                nav .col:nth-child(2) {
+                    background-color:#fef8a0 !important;
 
-            }
+                }
             .navbutton{
                 list-style-type: none;
                 text-decoration: none;
@@ -97,11 +97,14 @@
         </header>
         <nav class="navbar" data-bs-theme="dark">
             <div class="container text-center">
-                <div class="col">
-                    <li class="nav-item "><a class="navbutton" th:href="@{/users}">Users</a></li>
+                <div class="col" th:if="${isAdmin || isMecanico}">
+                    <li class="nav-item " th:if="${isAdmin || isMecanico}"><a class="navbutton" th:href="@{/users}">Users</a></li>
+                </div>
+                <div class="col" th:if="${isUser}">
+                    <li class="nav-item " th:if="${isUser}"><a class="navbutton" th:href="@{/users/{nif}(nif=${user.nif})}">Users</a></li>
                 </div>
                 <div class="col">
-                    <li class="nav-item" ><a class="navbutton" th:href="@{/vehicles}">Vehicles</a></li>
+                    <li class="nav-item" th:if="${isAdmin || isMecanico}"><a class="navbutton" th:href="@{/vehicles}">Vehicles</a></li>
                 </div>
                 <div class="col">
                     <li class="nav-item" th:if="${isAdmin || isMecanico}"><a class="navbutton" th:href="@{/repairs}">Repairs</a></li>

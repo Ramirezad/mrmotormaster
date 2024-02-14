@@ -8,6 +8,7 @@ package com.copernic.manageVehicles.services;
  *
  * @author rfernandez
  */
+import com.copernic.manageVehicles.dao.UserDAO;
 import com.copernic.manageVehicles.domain.Vehicle;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.copernic.manageVehicles.dao.VehicleDAO;
 import com.copernic.manageVehicles.domain.Repair;
+import com.copernic.manageVehicles.domain.Task;
 import com.copernic.manageVehicles.domain.User;
 import jakarta.persistence.EntityNotFoundException;
 
@@ -24,6 +26,9 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Autowired
     private VehicleDAO vehicleDAO;
+    
+    @Autowired
+    private UserDAO userDAO;
 
     @Override
     @Transactional
@@ -47,6 +52,10 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     @Transactional
     public void deleteById(String numberPlate) {
+        Vehicle vehicle = vehicleDAO.findByNumberPlate(numberPlate);
+        User user = vehicle.getOwner();
+        user.getVehicles().remove(vehicle);
+        userDAO.save(user);
         vehicleDAO.deleteByNumberPlate(numberPlate);
     }
 

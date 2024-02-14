@@ -65,7 +65,7 @@ public class Vehicle {
     @JoinColumn(name = "nif", referencedColumnName = "nif")
     private User owner;
  
-    @OneToMany(fetch = FetchType.EAGER ,mappedBy = "vehicle",cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.EAGER ,mappedBy = "vehicle",cascade = CascadeType.ALL)
     private List<Repair> repairs;
     
     @Override

@@ -144,7 +144,7 @@
                         <a th:href="@{/updateUser/{nif}(nif=${user.nif})}" class="btn btn-warning">EDIT</a>
                     </td>
                     <td>
-                        <a class="Delete" th:href="@{/deleteUser/{nif}(nif=${user.nif})}"  onclick="return confirm('Are you sure to delete this User?');">DELETE</a>
+                        <a class="Delete" th:href="@{/deleteUser/{nif}(nif=${user.nif})}"  onclick="return confirm('Are you sure to delete this User, this will remove all its vehicles?');">DELETE</a>
                     </td>
                 </tr>
             </tbody>

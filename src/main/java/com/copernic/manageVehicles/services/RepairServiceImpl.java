@@ -5,6 +5,8 @@
 package com.copernic.manageVehicles.services;
 
 import com.copernic.manageVehicles.dao.RepairDAO;
+import com.copernic.manageVehicles.dao.TasksDAO;
+import com.copernic.manageVehicles.dao.VehicleDAO;
 import com.copernic.manageVehicles.domain.Repair;
 import com.copernic.manageVehicles.domain.Task;
 import com.copernic.manageVehicles.domain.User;
@@ -25,6 +27,12 @@ public class RepairServiceImpl implements RepairService {
 
     @Autowired
     private RepairDAO repairDAO;
+    
+    @Autowired
+    private TasksDAO taskDAO;
+    
+    @Autowired
+    private VehicleDAO vehicleDAO;
 
     @Override
     @Transactional
@@ -47,6 +55,16 @@ public class RepairServiceImpl implements RepairService {
     
     @Transactional
     public void deleteById(Long id) {
+        Repair repair = repairDAO.findById(id).orElse(null);
+        for(Task task : repair.getTasks()){
+            task.getRepairs().remove(repair);
+            System.out.println(task);
+            taskDAO.save(task);
+        }
+        Vehicle vehicle = repair.getVehicle();
+        vehicle.getRepairs().remove(repair);
+        vehicleDAO.save(vehicle);
+        System.out.println(vehicle);
         repairDAO.deleteById(id);
     }
 

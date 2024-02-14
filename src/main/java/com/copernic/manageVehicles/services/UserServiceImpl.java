@@ -44,9 +44,9 @@ public class UserServiceImpl implements ServiceInterface<User> {
         return userDAO.findAll();
     }
 
-    public Optional<User> findByNif(String nif) {
-        return userDAO.findByNif(nif);
-    }
+        public Optional<User> findByNif(String nif) {
+            return userDAO.findByNif(nif);
+        }
 
     @Override
     public Optional<User> find(User user) {

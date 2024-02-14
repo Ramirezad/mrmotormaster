@@ -127,7 +127,7 @@
                     <th>Surname</th>
                     <th>Role</th>
                     <th>Details</th>
-                    <th>Edit</th>
+                    <th th:if="${isAdmin}">Edit</th>
                     <th>Delete</th>
                 </tr>
             </thead>
@@ -140,8 +140,8 @@
                     <td>
                         <a th:href="@{/users/{nif}(nif=${user.nif})}" class="btn btn-primary">VIEW</a>
                     </td>
-                    <td>
-                        <a th:href="@{/updateUser/{nif}(nif=${user.nif})}" class="btn btn-warning">EDIT</a>
+                    <td th:if="${isAdmin}">
+                        <a th:href="@{/updateUser/{nif}(nif=${user.nif})}" th:if="${isAdmin}" class="btn btn-warning">EDIT</a>
                     </td>
                     <td>
                         <a class="Delete" th:href="@{/deleteUser/{nif}(nif=${user.nif})}"  onclick="return confirm('Are you sure to delete this User, this will remove all its vehicles?');">DELETE</a>

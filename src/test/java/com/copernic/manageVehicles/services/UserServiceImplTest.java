@@ -19,12 +19,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import static org.mockito.Mockito.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootTest
 public class UserServiceImplTest {
 
     @Mock
     private UserDAO userDAO;
+    
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -42,8 +46,9 @@ public class UserServiceImplTest {
         user.setCargo(User.Rol.ADMINISTRADOR);
 
         when(userDAO.findByNif(user.getNif())).thenReturn(Optional.of(user));
+        when(passwordEncoder.encode(any())).thenReturn("encodedPassword");
         when(userDAO.save(any(User.class))).thenReturn(user);
-
+        
         userService.save(user);
 
         verify(userDAO, times(1)).findByNif(user.getNif());

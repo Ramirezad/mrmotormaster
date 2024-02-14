@@ -95,6 +95,10 @@ public class UserController {
         List<Vehicle> vehicles = vehicleService.findByOwner(user);
         model.addAttribute("user", user);
         model.addAttribute("vehicles", vehicles);
+        
+        if (user.getCargo() == null) {
+            user.setCargo(User.Rol.USUARIO); // Establece el cargo al cargo actual
+        }
 
         addRolesToModel(model, principal);
         userService.save(user);

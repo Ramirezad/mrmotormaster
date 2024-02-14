@@ -13,6 +13,7 @@ import com.copernic.manageVehicles.domain.User;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,19 +22,27 @@ public class UserServiceImpl implements ServiceInterface<User> {
 
     @Autowired
     private UserDAO userDAO;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public User save(User user) {
+        
+        String pass = user.getPassword();
+        String passEncript = passwordEncoder.encode(pass);
+        
         if (user.getId() != 0) {
             User oldUser = userDAO.findByNif(user.getNif()).orElse(null);
             oldUser.setName(user.getName());
-            oldUser.setPassword(user.getPassword());
+            oldUser.setPassword(passEncript);
             oldUser.setSurname(user.getSurname());
             oldUser.setPhone(user.getPhone());
             oldUser.setEmail(user.getEmail());            
             oldUser.setCargo(user.getCargo());
             return userDAO.save(oldUser);
         } else {
+            user.setPassword(passEncript);
             return userDAO.save(user);
         }
 

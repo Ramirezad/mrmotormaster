@@ -44,7 +44,7 @@ public class Repair {
     private String observation;
     
     @Min(value = 0, message = "Cannot be less that zero!") 
-    @Max(value = 3000000, message ="There's no way you did 3M km on that!")
+    @Max(value = 3000000, message ="There is no way you did 3M km on that!")
     private int km;
     
     @DateTimeFormat(pattern = "yyyy-MM-dd")

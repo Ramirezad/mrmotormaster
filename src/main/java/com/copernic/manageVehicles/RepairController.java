@@ -97,13 +97,27 @@ public class RepairController {
     @PostMapping("/repairs")
     public String saveRepair(@Valid Repair repair, BindingResult result, Model model) {       
         if(result.hasErrors()){
-            return "repair-form";
+            List<Task> allTasks = taskService.getAllTasks();
+            List<Long> tasksFromRepair = repair.getTasks().stream()
+                                             .map(Task::getId)
+                                             .collect(Collectors.toList());
+
+            model.addAttribute("repair", repair);
+            model.addAttribute("tasksFromRepair", tasksFromRepair);
+            model.addAttribute("tasks", allTasks);
+
+            if (repair.getRepairId() != null) {
+                return "repair-edit";
+            } else {
+                return "repair-form";
+            }
         }
         else{
             repairService.saveRepair(repair);
             return "redirect:/repairs";
         }
     }
+
     //List of repairs
     @GetMapping("/repairs")
     public String findAll(@RequestParam(required = false) String query, Model model) {

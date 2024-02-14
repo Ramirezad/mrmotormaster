@@ -114,15 +114,21 @@ public class RepairServiceImpl implements RepairService {
 
         for (int i = 0; i < repairs.size(); i++) {
             if(canAccessKm){
-                if(repairs.get(i).getKm() == km)
+                if(repairs.get(i).getKm() == km){
                     result.add(repairs.get(i));
+                }
             }
             if(canAccessRepairId){
-                if(repairs.get(i).getRepairId().equals(repairId))
+                if(repairs.get(i).getRepairId().equals(repairId)){
                     result.add(repairs.get(i));
+                }
             }
-            if(repairs.get(i).getVehicle().getNumberPlate().contains(query))
+            if(repairs.get(i).getVehicle().getNumberPlate().contains(query)){
                 result.add(repairs.get(i));
+            }
+            if(repairs.get(i).getObservation().contains(query))
+                result.add(repairs.get(i));
+            
         }
         if(result.isEmpty())
             return repairs;

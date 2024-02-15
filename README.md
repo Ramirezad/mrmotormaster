@@ -12,6 +12,6 @@ Some of its main features are:
 
 First view (Images taken from the application)
 
-Demo video 🎬:
+Demo video 🎬: https://drive.google.com/file/d/1i3_Z7VMYMMwEKt13b1rk3jOfDhI-hKFk/view?usp=sharing
 
 More information 📎:

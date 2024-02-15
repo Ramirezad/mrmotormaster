@@ -14,4 +14,4 @@ First view (Images taken from the application)
 
 Demo video 🎬: https://drive.google.com/file/d/1i3_Z7VMYMMwEKt13b1rk3jOfDhI-hKFk/view?usp=sharing
 
-More information 📎:
+More information 📎: https://docs.google.com/document/d/113qIGIfOEtS4uHZqnR0cTihzaMODGKvKQoOECfjcQek/edit?usp=sharing
